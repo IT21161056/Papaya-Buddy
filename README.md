@@ -1,2 +1,2 @@
 # Papaya-Buddy
-research project
+Research Project (IT4010)
