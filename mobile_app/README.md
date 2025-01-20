@@ -1,4 +1,8 @@
-# flutter mobile_app
+# Flutter Mobile App
 
-# after cloning run in terminal:
-- flutter pub get
+## Getting Started
+
+After cloning the repository, run the following command in the terminal to fetch the necessary dependencies:
+
+```bash
+flutter pub get
