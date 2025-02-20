@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../views/home_view.dart';
 import '../views/splash_view.dart';
+import '../views/diseaseView/disease_view.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -9,6 +10,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SplashView());
       case '/home':
         return MaterialPageRoute(builder: (_) => const HomeView());
+      case '/diseaseView':
+        return MaterialPageRoute(builder: (_) => DiseaseView());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
