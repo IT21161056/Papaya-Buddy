@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/views/auth/login_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -15,7 +16,7 @@ class _HomeViewState extends State<HomeView> {
   static const List<Widget> _pages = <Widget>[
     Center(child: Text('Home Page', style: TextStyle(fontSize: 20))),
     Center(child: Text('Disease View', style: TextStyle(fontSize: 20))),
-    Center(child: Text('Profile Page', style: TextStyle(fontSize: 20))),
+    LoginView()
   ];
 
   void _onItemTapped(int index) {
