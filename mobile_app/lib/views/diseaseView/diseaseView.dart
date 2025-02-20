@@ -81,7 +81,10 @@ class DiseaseScreen extends StatelessWidget {
             ),
             SizedBox(
               height: 24,
-            )
+            ),
+            DiseaseButton(title: 'What caused it?'),
+            DiseaseButton(title: 'Symptoms'),
+            DiseaseButton(title: 'Treatment Instructions'),
           ],
         ),
       ),
