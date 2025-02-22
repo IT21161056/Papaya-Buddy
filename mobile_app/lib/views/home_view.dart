@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/auth/login_view.dart';
 import 'package:mobile_app/views/diagonosisView/diagnosis_list.dart';
+import 'package:mobile_app/views/treatment_view.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/imagepicker.dart';
 
 class HomeView extends StatefulWidget {
@@ -15,7 +16,7 @@ class _HomeViewState extends State<HomeView> {
 
   static final List<Widget> _pages = <Widget>[
     const Dashboard(),
-    const Center(child: Text('Disease View', style: TextStyle(fontSize: 20))),
+    TreatmentScreen(),
     const LoginView(),
   ];
 
