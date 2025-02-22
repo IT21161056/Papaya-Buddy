@@ -80,7 +80,7 @@ class _LoginViewState extends State<LoginView> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  // Login logic
+                  Navigator.pushNamed(context, '/login');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
