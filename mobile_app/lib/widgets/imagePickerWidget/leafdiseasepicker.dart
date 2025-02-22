@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
-class ImagePickerPage extends StatefulWidget {
-  const ImagePickerPage({super.key});
+class LeafDiseasePicker extends StatefulWidget {
+  const LeafDiseasePicker({super.key});
 
   @override
-  _ImagePickerPageState createState() => _ImagePickerPageState();
+  _LeafDiseasePickerState createState() => _LeafDiseasePickerState();
 }
 
-class _ImagePickerPageState extends State<ImagePickerPage> {
+class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
   File? _image;
   String? _category;
   String? _predictionLabel;
@@ -46,7 +46,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://10.0.2.2:8000/predict'),
+        Uri.parse('http://10.0.2.2:8000/predict'), // Ensure the URL is correct for your server
       );
       request.files.add(await http.MultipartFile.fromPath('file', _image!.path));
 
@@ -82,7 +82,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Image Picker"),
+        title: const Text("Leaf Disease Detection"),
         backgroundColor: Colors.green,
       ),
       body: SingleChildScrollView(
@@ -92,7 +92,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Mite and Mealy bug Detection",
+                "Leaf Disease Detection",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
