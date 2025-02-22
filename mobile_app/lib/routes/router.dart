@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/views/auth/signup_view.dart';
 import '../views/home_view.dart';
 import '../views/splash_view.dart';
 import '../views/auth/login_view.dart';
@@ -10,6 +11,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SplashView());
       case '/home':
         return MaterialPageRoute(builder: (_) => const HomeView());
+      case '/signup':
+        return MaterialPageRoute(builder: (_) => const SignupView());
       case '/login':
         return MaterialPageRoute(
             builder: (_) => const LoginView()); // Added login route

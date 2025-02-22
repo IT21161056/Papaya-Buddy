@@ -16,7 +16,7 @@ class _HomeViewState extends State<HomeView> {
   static final List<Widget> _pages = <Widget>[
     const Dashboard(),
     const Center(child: Text('Disease View', style: TextStyle(fontSize: 20))),
-    const Center(child: Text('Profile Page', style: TextStyle(fontSize: 20))),
+    const LoginView(),
   ];
 
   void _onItemTapped(int index) {

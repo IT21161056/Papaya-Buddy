@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class SignupView extends StatefulWidget {
+  const SignupView({super.key});
 
   @override
-  _LoginViewState createState() => _LoginViewState();
+  _SignupViewState createState() => _SignupViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _SignupViewState extends State<SignupView> {
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +24,28 @@ class _LoginViewState extends State<LoginView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Welcome Back!",
+              "Create an Account",
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             const Text(
-              "Login to continue",
+              "Sign up to get started",
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
             const SizedBox(height: 30),
+
+            // Full Name Field
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: "Full Name",
+                prefixIcon: const Icon(Icons.person),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
 
             // Email Field
             TextField(
@@ -57,30 +73,29 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
 
-            // Forgot Password
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  // Forgot password logic
-                },
-                child: const Text(
-                  "Forgot Password?",
-                  style: TextStyle(color: Colors.blue),
+            // Confirm Password Field
+            TextField(
+              controller: _confirmPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: "Confirm Password",
+                prefixIcon: const Icon(Icons.lock_outline),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
             const SizedBox(height: 20),
 
-            // Sign In Button
+            // Sign Up Button
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/login');
+                  // Signup logic
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
@@ -89,24 +104,24 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
                 child: const Text(
-                  "Sign In",
+                  "Sign Up",
                   style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
             ),
             const SizedBox(height: 20),
 
-            // Sign Up Link
+            // Sign In Link
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("Don't have an account?"),
+                const Text("Already have an account?"),
                 TextButton(
                   onPressed: () {
-                    // Navigate to sign-up page
+                    Navigator.pushNamed(context, '/login');
                   },
                   child: const Text(
-                    "Sign Up",
+                    "Sign In",
                     style: TextStyle(color: Colors.blue),
                   ),
                 ),
