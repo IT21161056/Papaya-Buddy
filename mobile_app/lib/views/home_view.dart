@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/auth/login_view.dart';
 import 'package:mobile_app/views/diagonosisView/diagnosis_list.dart';
+import 'package:mobile_app/views/treatment_view.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/fruitdiseasepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/imagepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/leafdiseasepicker.dart';
@@ -15,10 +16,26 @@ class HomeView extends StatefulWidget {
 
 // Crop Cards Data
 final List<Map<String, dynamic>> cropCards = [
-  {'name': 'Fruit Disease Detection', 'icon': Icons.bug_report, 'picker': FruitDiseasePicker()},
-  {'name': 'Leaf Disease Detection', 'icon': Icons.grass, 'picker': LeafDiseasePicker()},
-  {'name': 'Maturity Level', 'icon': Icons.agriculture, 'picker': MaturityPicker()},
-  {'name': 'Fruit/Leaf Detection', 'icon': Icons.bar_chart, 'picker': ImagePickerPage()},
+  {
+    'name': 'Fruit Disease Detection',
+    'icon': Icons.bug_report,
+    'picker': FruitDiseasePicker()
+  },
+  {
+    'name': 'Leaf Disease Detection',
+    'icon': Icons.grass,
+    'picker': LeafDiseasePicker()
+  },
+  {
+    'name': 'Maturity Level',
+    'icon': Icons.agriculture,
+    'picker': MaturityPicker()
+  },
+  {
+    'name': 'Fruit/Leaf Detection',
+    'icon': Icons.bar_chart,
+    'picker': ImagePickerPage()
+  },
 ];
 
 class _HomeViewState extends State<HomeView> {
@@ -26,7 +43,7 @@ class _HomeViewState extends State<HomeView> {
 
   static final List<Widget> _pages = <Widget>[
     const Dashboard(),
-    const Center(child: Text('Disease View', style: TextStyle(fontSize: 20))),
+    TreatmentScreen(),
     const LoginView(),
   ];
 
