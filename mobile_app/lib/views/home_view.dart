@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/auth/login_view.dart';
 import 'package:mobile_app/views/diagonosisView/diagnosis_list.dart';
+import 'package:mobile_app/widgets/imagePickerWidget/fruitdiseasepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/imagepicker.dart';
+import 'package:mobile_app/widgets/imagePickerWidget/leafdiseasepicker.dart';
+import 'package:mobile_app/widgets/imagePickerWidget/maturitypicker.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -9,6 +12,14 @@ class HomeView extends StatefulWidget {
   @override
   _HomeViewState createState() => _HomeViewState();
 }
+
+// Crop Cards Data
+final List<Map<String, dynamic>> cropCards = [
+  {'name': 'Fruit Disease Detection', 'icon': Icons.bug_report, 'picker': FruitDiseasePicker()},
+  {'name': 'Leaf Disease Detection', 'icon': Icons.grass, 'picker': LeafDiseasePicker()},
+  {'name': 'Maturity Level', 'icon': Icons.agriculture, 'picker': MaturityPicker()},
+  {'name': 'Fruit/Leaf Detection', 'icon': Icons.bar_chart, 'picker': ImagePickerPage()},
+];
 
 class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
@@ -72,7 +83,7 @@ class Dashboard extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ImagePickerPage(),
+                        builder: (context) => cropCards[index]['picker'],
                       ),
                     );
                   },
@@ -90,14 +101,6 @@ class Dashboard extends StatelessWidget {
     );
   }
 }
-
-// Crop Cards Data
-final List<Map<String, dynamic>> cropCards = [
-  {'name': 'Fruit Disease Detection', 'icon': Icons.bug_report},
-  {'name': 'Leaf Disease Detection', 'icon': Icons.grass},
-  {'name': 'Maturity Level', 'icon': Icons.agriculture},
-  {'name': 'Fruit/Leaf Detection', 'icon': Icons.bar_chart},
-];
 
 // Crop Card Widget
 class CropCard extends StatelessWidget {
