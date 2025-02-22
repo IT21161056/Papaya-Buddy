@@ -39,7 +39,20 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Cure Your Crop')),
+      appBar: AppBar(
+        automaticallyImplyLeading: false, // Removes the leading button (back)
+        flexibleSpace: Padding(
+          padding: const EdgeInsets.only(top: 29.0), // Adds a top margin
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Image.asset(
+              'assets/papaya.png', // Image location
+              width: 80, // Increased width size
+              height: 90, // Increased height size
+            ),
+          ),
+        ),
+      ),
       body: _pages[_selectedIndex], // Show selected page
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -66,13 +79,26 @@ class Dashboard extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
+          // Add "Cure Your Crop" title above the cards
+          const Padding(
+            padding: EdgeInsets.only(bottom: 16.0),
+            child: Text(
+              'Cure Your Crop',
+              style: TextStyle(
+                fontSize: 21,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 9, 11, 9),
+              ),
+            ),
+          ),
           Expanded(
             flex: 2,
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 10,
+                crossAxisSpacing: 5,
                 mainAxisSpacing: 10,
+                mainAxisExtent: 150,
               ),
               itemCount: cropCards.length,
               itemBuilder: (context, index) {
@@ -121,6 +147,7 @@ class CropCard extends StatelessWidget {
       onTap: onTap,
       child: Card(
         elevation: 4,
+        color: const Color.fromARGB(255, 218, 255, 218),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -133,8 +160,8 @@ class CropCard extends StatelessWidget {
               child: Text(
                 cropName,
                 style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.normal),
-                textAlign: TextAlign.center,
+                    fontSize: 16, fontWeight: FontWeight.normal),
+                textAlign: TextAlign.justify,
               ),
             ),
           ],
