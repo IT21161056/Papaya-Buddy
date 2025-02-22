@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
-class ImagePickerPage extends StatefulWidget {
-  const ImagePickerPage({super.key});
+class MaturityPicker extends StatefulWidget {
+  const MaturityPicker({super.key});
 
   @override
-  _ImagePickerPageState createState() => _ImagePickerPageState();
+  _MaturityPickerState createState() => _MaturityPickerState();
 }
 
-class _ImagePickerPageState extends State<ImagePickerPage> {
+class _MaturityPickerState extends State<MaturityPicker> {
   File? _image;
   String? _category;
   String? _predictionLabel;
@@ -35,7 +35,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
     _confidence = null;
   }
 
-  Future<void> _predictDisease() async {
+  Future<void> _predictMaturity() async {
     if (_image == null) return;
 
     setState(() {
@@ -46,7 +46,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://10.0.2.2:8000/predict'),
+        Uri.parse('http://10.0.2.2:8000/predict'), // Ensure the URL is correct for your server
       );
       request.files.add(await http.MultipartFile.fromPath('file', _image!.path));
 
@@ -55,12 +55,12 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(await response.stream.bytesToString());
         setState(() {
-          _category = jsonResponse['EfficientNet']['label'];
-          _predictionLabel = jsonResponse['DenseNet']['label'];
-          _confidence = jsonResponse['DenseNet']['confidence'];
+          _category = jsonResponse['EfficientNet']['label']; // Adjust based on your model's response
+          _predictionLabel = jsonResponse['DenseNet']['label']; // Adjust based on your model's response
+          _confidence = jsonResponse['DenseNet']['confidence']; // Adjust based on your model's response
         });
       } else {
-        _handleError("Error predicting disease");
+        _handleError("Error predicting maturity");
       }
     } catch (e) {
       _handleError("Network error");
@@ -82,7 +82,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Image Picker"),
+        title: const Text("Maturity Detection"),
         backgroundColor: Colors.green,
       ),
       body: SingleChildScrollView(
@@ -92,7 +92,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Mite and Mealy bug Detection",
+                "Fruit Maturity Detection",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
@@ -124,7 +124,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
 
               // Predict button
               ElevatedButton.icon(
-                onPressed: _isLoading ? null : _predictDisease,
+                onPressed: _isLoading ? null : _predictMaturity,
                 icon: const Icon(Icons.search),
                 label: const Text("Predict"),
               ),

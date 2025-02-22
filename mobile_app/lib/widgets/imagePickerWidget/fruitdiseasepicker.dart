@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
-class ImagePickerPage extends StatefulWidget {
-  const ImagePickerPage({super.key});
+class FruitDiseasePicker extends StatefulWidget {
+  const FruitDiseasePicker({super.key});
 
   @override
-  _ImagePickerPageState createState() => _ImagePickerPageState();
+  _FruitDiseasePickerState createState() => _FruitDiseasePickerState();
 }
 
-class _ImagePickerPageState extends State<ImagePickerPage> {
+class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
   File? _image;
   String? _category;
   String? _predictionLabel;
@@ -82,7 +82,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Image Picker"),
+        title: const Text("Fruit Disease Picker"),
         backgroundColor: Colors.green,
       ),
       body: SingleChildScrollView(
@@ -92,7 +92,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Mite and Mealy bug Detection",
+                "Fruit Disease Detection",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
