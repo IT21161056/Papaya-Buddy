@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/views/auth/signup_view.dart';
 import 'package:mobile_app/views/diagonosisView/diagnosis_list.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/imagepicker.dart';
 
@@ -15,7 +16,7 @@ class _HomeViewState extends State<HomeView> {
   static final List<Widget> _pages = <Widget>[
     const Dashboard(),
     const Center(child: Text('Disease View', style: TextStyle(fontSize: 20))),
-    const Center(child: Text('Profile Page', style: TextStyle(fontSize: 20))),
+    const SignupView(),
   ];
 
   void _onItemTapped(int index) {
@@ -32,7 +33,8 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.local_hospital), label: 'Diseases'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.local_hospital), label: 'Diseases'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         currentIndex: _selectedIndex,
@@ -127,7 +129,8 @@ class CropCard extends StatelessWidget {
             Center(
               child: Text(
                 cropName,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                style: const TextStyle(
+                    fontSize: 18, fontWeight: FontWeight.normal),
                 textAlign: TextAlign.center,
               ),
             ),
