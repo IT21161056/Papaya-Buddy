@@ -33,7 +33,7 @@ final List<Map<String, dynamic>> cropCards = [
     'picker': MaturityPicker()
   },
   {
-    'name': 'Fruit/Leaf Detection',
+    'name': 'Pest Detection',
     'icon': Icons.bar_chart,
     'picker': ImagePickerPage()
   },
@@ -43,7 +43,7 @@ class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
 
   static final List<Widget> _pages = <Widget>[
-    const Dashboard(),
+    const Dashboard(showImage: true),
     TreatmentScreen(),
     const LoginView(),
   ];
@@ -58,20 +58,10 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Removes the leading button (back)
-        flexibleSpace: Padding(
-          padding: const EdgeInsets.only(top: 29.0), // Adds a top margin
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Image.asset(
-              'assets/papaya.png', // Image location
-              width: 80, // Increased width size
-              height: 90, // Increased height size
-            ),
-          ),
-        ),
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 215, 240, 216),
       ),
-      body: _pages[_selectedIndex], // Show selected page
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
@@ -89,7 +79,8 @@ class _HomeViewState extends State<HomeView> {
 
 // Dashboard UI
 class Dashboard extends StatelessWidget {
-  const Dashboard({super.key});
+  final bool showImage;
+  const Dashboard({super.key, required this.showImage});
 
   @override
   Widget build(BuildContext context) {
@@ -97,9 +88,20 @@ class Dashboard extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          // Add "Cure Your Crop" title above the cards
+          if (showImage)
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2.0),
+                child: Image.asset(
+                  'assets/papaya.png',
+                  width: 70,
+                  height: 70,
+                ),
+              ),
+            ),
           const Padding(
-            padding: EdgeInsets.only(bottom: 16.0),
+            padding: EdgeInsets.only(top: 0.0, bottom: 5.0),
             child: Text(
               'Cure Your Crop',
               style: TextStyle(
