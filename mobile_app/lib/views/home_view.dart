@@ -33,7 +33,7 @@ final List<Map<String, dynamic>> cropCards = [
     'picker': MaturityPicker()
   },
   {
-    'name': 'Fruit/Leaf Detection',
+    'name': 'Pest Detection',
     'icon': Icons.bar_chart,
     'picker': ImagePickerPage()
   },
