@@ -60,7 +60,12 @@ final List<Map<String, dynamic>> pastDiagnoses = [
     'result': 'High Risk',
     'description': 'Mites cause leaf discoloration and stunted growth.',
     'remedy': 'Use neem oil or sulfur-based sprays. Introduce predatory mites.',
-    'images': ['assets/bg.jpg', 'assets/bg.jpg'],
+    'images': [
+      'assets/img_1.jpg',
+      'assets/img_2.jpg',
+      'assets/img_3.jpg',
+      'assets/img_4.jpg',
+    ],
   },
   {
     'title': 'Black Spot Fungus',
@@ -69,7 +74,12 @@ final List<Map<String, dynamic>> pastDiagnoses = [
     'description':
         'Black spots on leaves lead to defoliation and reduced yield.',
     'remedy': 'Apply copper-based fungicides and improve air circulation.',
-    'images': ['assets/fox.jpg', 'assets/c.jpg'],
+    'images': [
+      'assets/img_1.jpg',
+      'assets/img_2.jpg',
+      'assets/img_3.jpg',
+      'assets/img_4.jpg',
+    ],
   },
 ];
 
