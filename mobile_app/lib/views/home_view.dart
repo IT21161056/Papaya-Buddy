@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/views/auth/login_view.dart';
 import 'package:mobile_app/views/diagonosisView/diagnosis_list.dart';
 import 'package:mobile_app/views/treatment_view.dart';
+import 'package:mobile_app/widgets/home.widgets/homeWidget.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/fruitdiseasepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/imagepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/leafdiseasepicker.dart';
@@ -140,49 +141,6 @@ class Dashboard extends StatelessWidget {
             child: DiagnosisList(),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// Crop Card Widget
-class CropCard extends StatelessWidget {
-  final String cropName;
-  final IconData icon;
-  final VoidCallback onTap;
-
-  const CropCard({
-    super.key,
-    required this.cropName,
-    required this.icon,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        elevation: 4,
-        color: const Color.fromARGB(255, 218, 255, 218),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 50, color: Colors.green),
-            const SizedBox(height: 10),
-            Center(
-              child: Text(
-                cropName,
-                style: const TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.normal),
-                textAlign: TextAlign.justify,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

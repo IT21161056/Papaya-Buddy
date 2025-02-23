@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/diagonosisView/disease_details.dart';
 
-
 class DiagnosisList extends StatelessWidget {
   const DiagnosisList({super.key});
 
@@ -61,10 +60,7 @@ final List<Map<String, dynamic>> pastDiagnoses = [
     'result': 'High Risk',
     'description': 'Mites cause leaf discoloration and stunted growth.',
     'remedy': 'Use neem oil or sulfur-based sprays. Introduce predatory mites.',
-    'images': [
-      'assets/bg.jpg',
-      'assets/bg.jpg'
-    ],
+    'images': ['assets/bg.jpg', 'assets/bg.jpg'],
   },
   {
     'title': 'Black Spot Fungus',
@@ -73,10 +69,7 @@ final List<Map<String, dynamic>> pastDiagnoses = [
     'description':
         'Black spots on leaves lead to defoliation and reduced yield.',
     'remedy': 'Apply copper-based fungicides and improve air circulation.',
-    'images': [
-      'assets/fox.jpg',
-      'assets/c.jpg'
-    ],
+    'images': ['assets/fox.jpg', 'assets/c.jpg'],
   },
 ];
 
@@ -97,41 +90,88 @@ class DiagnosisListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-      child: ListTile(
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: SizedBox(
-            width: 50, // Same width as before
-            height: 50, // Reduced height for the image
-            child: Image.asset(
-              'assets/bg.jpg', // Correct path to your local image
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text("$date"),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      color: const Color(0xFFF7F5FC), // Soft background color
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        child: Row(
           children: [
-            Text(
-              result,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: result == "High Risk"
-                    ? Colors.red
-                    : result == "Moderate Risk"
-                        ? Colors.orange
-                        : Colors.green,
+            // Left side image
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                width: 55,
+                height: 55,
+                child: Image.asset(
+                  'assets/bg.jpg',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-            const SizedBox(width: 8),
-            IconButton(
-              onPressed: onDetailsPressed,
-              icon: const Icon(Icons.arrow_forward, color: Colors.green),
-              tooltip: "View Details",
+            const SizedBox(width: 12), // Space between image and text
+
+            // Middle content (Title and Date)
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    date,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Right side (Risk Level + Arrow Button)
+            Row(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: result == "High Risk"
+                        ? Colors.red.shade100
+                        : result == "Moderate Risk"
+                            ? Colors.orange.shade100
+                            : Colors.green.shade100,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    result,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: result == "High Risk"
+                          ? Colors.red
+                          : result == "Moderate Risk"
+                              ? Colors.orange
+                              : Colors.green,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                InkWell(
+                  onTap: onDetailsPressed,
+                  borderRadius: BorderRadius.circular(20),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Icon(Icons.arrow_forward, color: Colors.green),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -139,5 +179,3 @@ class DiagnosisListItem extends StatelessWidget {
     );
   }
 }
-
-
