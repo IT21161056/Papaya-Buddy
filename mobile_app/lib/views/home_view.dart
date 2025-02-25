@@ -7,6 +7,7 @@ import 'package:mobile_app/widgets/imagePickerWidget/fruitdiseasepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/imagepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/leafdiseasepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/maturitypicker.dart';
+import 'package:mobile_app/widgets/whether-widgets/whetherWidget.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -93,11 +94,7 @@ class Dashboard extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
-                child: Image.asset(
-                  'assets/papaya.png',
-                  width: 70,
-                  height: 70,
-                ),
+                child: const WeatherWidget()
               ),
             ),
           const Padding(
