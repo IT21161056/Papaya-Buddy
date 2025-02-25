@@ -4,72 +4,104 @@ import 'package:flutter_svg/flutter_svg.dart';
 class TreatmentCard extends StatelessWidget {
   final String iconPath;
   final String title;
+  final Color titleColor;
   final String methodLabel;
   final String methodIconPath;
+  final Color methodColor;
   final String description;
+  final Color cardBackgroundColor;
   final Widget? extraContent;
 
   const TreatmentCard({
     super.key,
     required this.iconPath,
     required this.title,
+    required this.titleColor,
     required this.methodLabel,
     required this.methodIconPath,
+    required this.methodColor,
     required this.description,
+    required this.cardBackgroundColor,
     this.extraContent,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color.fromRGBO(115, 236, 139, 1)),
-        borderRadius: BorderRadius.circular(10),
+        color: cardBackgroundColor,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              SvgPicture.asset(iconPath, height: 20, width: 20),
+              Container(
+                padding: EdgeInsets.all(8), // Adjust padding as needed
+                decoration: BoxDecoration(
+                  color:
+                      titleColor.withOpacity(0.1), // Same color but low opacity
+                  borderRadius: BorderRadius.circular(8), // Rounded corners
+                ),
+                child: SvgPicture.asset(
+                  iconPath,
+                  height: 24,
+                  width: 24,
+                  color: titleColor, // Keep icon color the same
+                ),
+              ),
               SizedBox(width: 8),
               Text(
                 title,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
             ],
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 16),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-                color: const Color.fromARGB(103, 203, 255, 144),
-                borderRadius: BorderRadius.circular(100),
-                border:
-                    Border.all(color: const Color.fromARGB(255, 10, 194, 16))),
+              color: methodColor.withOpacity(0.10),
+              borderRadius: BorderRadius.circular(50),
+            ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(methodLabel,
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: const Color.fromARGB(255, 19, 126, 22))),
+                SvgPicture.asset(methodIconPath,
+                    height: 14, width: 16, color: methodColor),
+                SizedBox(width: 6),
+                Text(
+                  methodLabel,
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: methodColor),
+                ),
               ],
             ),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 12),
           Text(
             description,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
-          // Container(
-          //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          //   decoration:
-          //       BoxDecoration(color: const Color.fromARGB(84, 195, 147, 1)),
-          //   child:
-          // ),
-          if (extraContent != null) extraContent!,
+          if (extraContent != null) ...[
+            SizedBox(height: 12),
+            extraContent!,
+          ],
         ],
       ),
     );
