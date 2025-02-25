@@ -58,10 +58,9 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF8FAFC),
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromARGB(255, 215, 240, 216),
-      ),
+          automaticallyImplyLeading: false, backgroundColor: Colors.white),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -88,14 +87,14 @@ class Dashboard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (showImage)
             Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: const EdgeInsets.only(left: 2.0),
-                child: const WeatherWidget()
-              ),
+                  padding: const EdgeInsets.only(left: 2.0),
+                  child: const WeatherWidget()),
             ),
           const Padding(
             padding: EdgeInsets.only(top: 0.0, bottom: 5.0),
@@ -107,6 +106,9 @@ class Dashboard extends StatelessWidget {
                 color: Color.fromARGB(255, 9, 11, 9),
               ),
             ),
+          ),
+          SizedBox(
+            height: 10,
           ),
           Expanded(
             flex: 2,
