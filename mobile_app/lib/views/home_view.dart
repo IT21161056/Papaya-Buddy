@@ -19,12 +19,12 @@ class HomeView extends StatefulWidget {
 // Crop Cards Data
 final List<Map<String, dynamic>> cropCards = [
   {
-    'name': 'Fruit Disease Detection',
+    'name': 'Fruit Disease',
     'icon': Icons.bug_report,
     'picker': FruitDiseasePicker()
   },
   {
-    'name': 'Leaf Disease Detection',
+    'name': 'Leaf Disease',
     'icon': Icons.grass,
     'picker': LeafDiseasePicker()
   },
@@ -61,6 +61,14 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 215, 240, 216),
+        title: const Text(
+          'Papaya buddy',
+          style: TextStyle(
+            color: Color.fromARGB(255, 9, 11, 9),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: false,
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

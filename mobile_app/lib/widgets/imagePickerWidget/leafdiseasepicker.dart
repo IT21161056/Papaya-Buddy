@@ -83,7 +83,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Leaf Disease Detection"),
-        backgroundColor: Colors.green,
+        backgroundColor: const Color.fromARGB(255, 190, 245, 192),
       ),
       body: SingleChildScrollView(
         child: Padding(
