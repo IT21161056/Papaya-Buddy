@@ -10,11 +10,10 @@ class WeatherWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16.0),
         child: Container(
-          width: 200,
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(10.0),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.green),
-            borderRadius: BorderRadius.circular(50),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
