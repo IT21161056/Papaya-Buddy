@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class DiseaseView extends StatelessWidget {
   @override
@@ -12,6 +13,13 @@ class DiseaseView extends StatelessWidget {
 }
 
 class DiseaseScreen extends StatelessWidget {
+  final List<String> imagePaths = [
+    'assets/r2.jpg',
+    'assets/r2.jpg',
+  ];
+
+  final String causedBy =
+      "Caused by a single-stranded RNA virus belonging to the Potyvirus genus in the family Potyviridae.";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,8 +29,8 @@ class DiseaseScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Image.asset('assets/icons/icons8-virus-48.png',
-                width: 28, height: 28),
+            child:
+                Image.asset('assets/icons/disease.png', width: 28, height: 28),
           ),
         ],
       ),
@@ -31,57 +39,56 @@ class DiseaseScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      Image.asset('assets/icons/icons8-virus-48.png',
-                          width: 140, height: 140),
-                      SizedBox(height: 8),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF73EC8B),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          'Your Image',
-                          style: TextStyle(color: Colors.black45, fontSize: 16),
-                        ),
-                      ),
-                    ],
+            CarouselSlider(
+              options: CarouselOptions(
+                height: 240,
+                enlargeCenterPage: true,
+                enableInfiniteScroll: true,
+                autoPlay: true,
+                scrollDirection: Axis.horizontal,
+              ),
+              items: imagePaths.map((path) {
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    image: DecorationImage(
+                      image: AssetImage(path),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Image.asset('assets/icons/icons8-virus-48.png',
-                          width: 140, height: 140),
-                      SizedBox(height: 8),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF73EC8B),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          'Your Image',
-                          style: TextStyle(color: Colors.black45, fontSize: 16),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                );
+              }).toList(),
             ),
             SizedBox(
-              height: 24,
-            )
+              height: 16,
+            ),
+            Container(
+              padding: EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.green[100],
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.info, color: Colors.green),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      causedBy,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'Moon',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 8),
+            DiseaseButton(title: 'What caused it?'),
+            DiseaseButton(title: 'Symptoms'),
+            DiseaseButton(title: 'Treatment Instructions'),
           ],
         ),
       ),
