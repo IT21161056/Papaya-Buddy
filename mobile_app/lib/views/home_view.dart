@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/auth/login_view.dart';
 import 'package:mobile_app/views/diagonosisView/diagnosis_list.dart';
+import 'package:mobile_app/views/diseaseView/disease_view.dart';
 import 'package:mobile_app/views/treatment_view.dart';
 import 'package:mobile_app/widgets/home.widgets/homeWidget.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/fruitdiseasepicker.dart';
@@ -45,7 +46,7 @@ class _HomeViewState extends State<HomeView> {
 
   static final List<Widget> _pages = <Widget>[
     const Dashboard(showImage: true),
-    TreatmentScreen(),
+    DiseaseView(),
     const LoginView(),
   ];
 

@@ -35,7 +35,7 @@ class TreatmentScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,8 +119,7 @@ class TreatmentScreen extends StatelessWidget {
                         // Add your action here
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            Color.fromRGBO(37, 100, 235, 1), // Deep blue color
+                        backgroundColor: Colors.green,
                         padding: EdgeInsets.symmetric(
                             vertical: 20), // Adjust vertical padding
                         shape: RoundedRectangleBorder(

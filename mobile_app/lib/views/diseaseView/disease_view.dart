@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:mobile_app/views/treatment_view.dart';
 
 class DiseaseView extends StatelessWidget {
   @override
@@ -23,6 +24,14 @@ class DiseaseScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Diagnosis"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+          iconSize: 16,
+          alignment: Alignment.center,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.share),
@@ -34,7 +43,7 @@ class DiseaseScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,21 +58,35 @@ class DiseaseScreen extends StatelessWidget {
               style: TextStyle(fontSize: 16, color: Colors.green),
             ),
             SizedBox(height: 12),
-            CarouselSlider(
-              options: CarouselOptions(
-                  height: 180,
-                  enableInfiniteScroll: true,
-                  enlargeCenterPage: true),
-              items: imagePaths.map((path) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    path,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+            Stack(
+              children: [
+                CarouselSlider(
+                  options: CarouselOptions(
+                      height: 180,
+                      enableInfiniteScroll: true,
+                      enlargeCenterPage: true,
+                      autoPlay: true),
+                  items: imagePaths.map((path) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        path,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  }).toList(),
+                ),
+                Positioned(
+                  bottom: 8,
+                  right: 8,
+                  child: Icon(
+                    Icons.swipe, // Hand icon for scroll indicator
+                    color: Colors.white,
+                    size: 24,
                   ),
-                );
-              }).toList(),
+                ),
+              ],
             ),
             SizedBox(height: 8),
             Row(
@@ -114,13 +137,18 @@ class DiseaseScreen extends StatelessWidget {
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: () {},
             ),
-            Spacer(),
+            SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 minimumSize: Size(double.infinity, 50),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TreatmentScreen()),
+                );
+              },
               child: Text(
                 "Confirm & see treatment",
                 style: TextStyle(color: Colors.white),
