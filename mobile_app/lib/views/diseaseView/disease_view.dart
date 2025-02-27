@@ -6,7 +6,6 @@ class DiseaseView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.green),
       home: DiseaseScreen(),
     );
   }
@@ -16,111 +15,117 @@ class DiseaseScreen extends StatelessWidget {
   final List<String> imagePaths = [
     'assets/r2.jpg',
     'assets/r2.jpg',
+    'assets/r2.jpg',
   ];
 
-  final String causedBy =
-      "Caused by a single-stranded RNA virus belonging to the Potyvirus genus in the family Potyviridae.";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () {}),
-        title: Text('Disease'),
+        title: Text("Diagnosis"),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child:
-                Image.asset('assets/icons/disease.png', width: 28, height: 28),
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {},
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              "Ring Spot Virus",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 4),
+            Text(
+              "Virus",
+              style: TextStyle(fontSize: 16, color: Colors.green),
+            ),
+            SizedBox(height: 12),
             CarouselSlider(
               options: CarouselOptions(
-                height: 240,
-                enlargeCenterPage: true,
-                enableInfiniteScroll: true,
-                autoPlay: true,
-                scrollDirection: Axis.horizontal,
-              ),
+                  height: 180,
+                  enableInfiniteScroll: true,
+                  enlargeCenterPage: true),
               items: imagePaths.map((path) {
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 5.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    image: DecorationImage(
-                      image: AssetImage(path),
-                      fit: BoxFit.cover,
-                    ),
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    path,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
                 );
               }).toList(),
             ),
-            SizedBox(
-              height: 16,
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text("${imagePaths.length} photos",
+                    style: TextStyle(color: Colors.grey)),
+              ],
             ),
+            SizedBox(height: 12),
             Container(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.green[100],
-                borderRadius: BorderRadius.circular(8.0),
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info, color: Colors.green),
+                  Icon(Icons.info, color: Colors.blue),
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      causedBy,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'Moon',
-                      ),
+                      "Virus caused by Aphids, treat this pest to cure the disease.",
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                 ],
               ),
             ),
+            SizedBox(height: 12),
+            Text(
+              "What caused it?",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             SizedBox(height: 8),
-            DiseaseButton(title: 'What caused it?'),
-            DiseaseButton(title: 'Symptoms'),
-            DiseaseButton(title: 'Treatment Instructions'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DiseaseButton extends StatelessWidget {
-  final String title;
-  DiseaseButton({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(
-          minimumSize: Size(double.infinity, 60),
-          backgroundColor: Colors.white,
-          foregroundColor: const Color.fromARGB(255, 25, 99, 28),
-          textStyle: TextStyle(fontSize: 18),
-          side: BorderSide(color: Color.fromARGB(255, 30, 246, 199)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title),
-            Icon(Icons.arrow_forward, color: Color(0xFF15B392)),
+            ListTile(
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  'assets/r2.jpg',
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              title: Text("Aphids"),
+              subtitle: Text("Insect"),
+              trailing: Icon(Icons.arrow_forward_ios),
+              onTap: () {},
+            ),
+            Spacer(),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                minimumSize: Size(double.infinity, 50),
+              ),
+              onPressed: () {},
+              child: Text(
+                "Confirm & see treatment",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ],
         ),
       ),
