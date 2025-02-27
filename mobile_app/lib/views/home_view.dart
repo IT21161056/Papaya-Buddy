@@ -19,15 +19,11 @@ class HomeView extends StatefulWidget {
 // Crop Cards Data
 final List<Map<String, dynamic>> cropCards = [
   {
-    'name': 'Fruit Disease Detection',
+    'name': 'Fruit Disease ',
     'icon': Icons.bug_report,
     'picker': FruitDiseasePicker()
   },
-  {
-    'name': 'Leaf Disease Detection',
-    'icon': Icons.grass,
-    'picker': LeafDiseasePicker()
-  },
+  {'name': 'Leaf Disease ', 'icon': Icons.grass, 'picker': LeafDiseasePicker()},
   {
     'name': 'Maturity Level',
     'icon': Icons.agriculture,
