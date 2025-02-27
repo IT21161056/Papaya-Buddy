@@ -24,11 +24,7 @@ final List<Map<String, dynamic>> cropCards = [
     'icon': Icons.bug_report,
     'picker': FruitDiseasePicker()
   },
-  {
-    'name': 'Leaf Disease',
-    'icon': Icons.grass,
-    'picker': LeafDiseasePicker()
-  },
+  {'name': 'Leaf Disease', 'icon': Icons.grass, 'picker': LeafDiseasePicker()},
   {
     'name': 'Maturity Level',
     'icon': Icons.agriculture,

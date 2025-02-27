@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_svg/flutter_svg.dart';
 
 class FruitDiseasePicker extends StatefulWidget {
   const FruitDiseasePicker({super.key});
@@ -48,7 +49,8 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
         'POST',
         Uri.parse('http://10.0.2.2:8000/predict'),
       );
-      request.files.add(await http.MultipartFile.fromPath('file', _image!.path));
+      request.files
+          .add(await http.MultipartFile.fromPath('file', _image!.path));
 
       var response = await request.send();
 
@@ -81,120 +83,279 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Fruit Disease Picker"),
-        backgroundColor: const Color.fromARGB(255, 190, 245, 192),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.black,
+              size: 16,
+            ),
+          ),
+        ),
+        title: Text(
+          "Disease Detection",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: 20,
+          ),
+        ),
+        centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                "Fruit Disease Detection",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image Placeholder
+            Container(
+              width: double.infinity,
+              height: 300,
+              decoration: BoxDecoration(
+                color: Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(20),
               ),
-              const SizedBox(height: 20),
-
-              // Display larger image
-              _image != null
-                  ? Image.file(_image!, height: 350)
-                  : const Icon(Icons.image, size: 200, color: Colors.grey),
-              const SizedBox(height: 20),
-
-              // Buttons for picking image
-              Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton.icon(
-                    onPressed: () => _pickImage(ImageSource.camera),
-                    icon: const Icon(Icons.camera_alt),
-                    label: const Text("Capture"),
+                  SvgPicture.asset(
+                    'assets/icons/capture.svg', // Use correct asset
+                    height: 40,
+                    width: 40,
+                    color: Colors.grey.shade400,
                   ),
-                  const SizedBox(width: 10),
-                  ElevatedButton.icon(
-                    onPressed: () => _pickImage(ImageSource.gallery),
-                    icon: const Icon(Icons.image),
-                    label: const Text("Gallery"),
+                  SizedBox(height: 8),
+                  Text(
+                    "No image selected",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    "Take a photo or choose from gallery",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey.shade500,
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+            ),
+            SizedBox(height: 20),
 
-              // Predict button
-              ElevatedButton.icon(
-                onPressed: _isLoading ? null : _predictDisease,
-                icon: const Icon(Icons.search),
-                label: const Text("Predict"),
+            // Image Selection Options
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(20),
               ),
-              const SizedBox(height: 20),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFDDEEFF), // Light blue background
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/icons/camera.svg',
+                          height: 24,
+                          width: 24,
+                          color: Color(0xFF1A73E8), // Blue icon color
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Take Photo",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "Use your camera to capture the disease",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Divider(),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFE5F8E6), // Light green background
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/icons/gallery.svg',
+                          height: 24,
+                          width: 24,
+                          color: Color(0xFF23C55E), // Green icon color
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Choose from Gallery",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "Select an existing photo from your device",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
 
-              // Show loading or prediction results
-              _isLoading
-                  ? const CircularProgressIndicator()
-                  : _category != null
-                      ? PredictionCard(
-                          category: _category!,
-                          predictionLabel: _predictionLabel!,
-                          confidence: _confidence,
-                        )
-                      : Container(),
-            ],
-          ),
+            // Tips for Better Detection
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Tips for better detection",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  _buildTip(1, "Ensure good lighting conditions"),
+                  _buildTip(2, "Keep the camera steady and focused"),
+                  _buildTip(3, "Capture the affected area clearly"),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              width: double.infinity, // Makes button full width
+              child: ElevatedButton(
+                onPressed: () {
+                  // Add your action here
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Color.fromRGBO(37, 100, 235, 1), // Deep blue color
+                  padding: EdgeInsets.symmetric(
+                      vertical: 20), // Adjust vertical padding
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // Rounded corners
+                  ),
+                  elevation: 0, // Removes shadow for flat design
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center, // Center content
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Predict",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(width: 6),
+                    SvgPicture.asset(
+                      'assets/icons/magic.svg',
+                      height: 16,
+                      width: 16,
+                      color: Colors.grey.shade100, // Blue icon color
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
-}
 
-class PredictionCard extends StatelessWidget {
-  final String category;
-  final String predictionLabel;
-  final double? confidence;
-
-  const PredictionCard({
-    super.key,
-    required this.category,
-    required this.predictionLabel,
-    this.confidence,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      color: Colors.grey[100],
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Prediction Results",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+  Widget _buildTip(int number, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              color: Colors.blue.shade100,
+              shape: BoxShape.circle,
             ),
-            const SizedBox(height: 10),
-            Text("• Category: $category", style: const TextStyle(fontSize: 16)),
-            const SizedBox(height: 5),
-            Text("• Prediction: $predictionLabel",
-                style: const TextStyle(fontSize: 16)),
-            if (confidence != null) ...[
-              const SizedBox(height: 10),
-              const Text("Confidence:", style: TextStyle(fontSize: 16)),
-              const SizedBox(height: 5),
-              LinearProgressIndicator(
-                value: confidence! / 100,
-                backgroundColor: Colors.grey[300],
-                color: confidence! > 75 ? Colors.green : Colors.orange,
-                minHeight: 10,
+            child: Center(
+              child: Text(
+                number.toString(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue.shade800,
+                ),
               ),
-              const SizedBox(height: 5),
-              Text("${confidence!.toStringAsFixed(2)}%",
-                  style: const TextStyle(fontSize: 16)),
-            ],
-          ],
-        ),
+            ),
+          ),
+          SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
