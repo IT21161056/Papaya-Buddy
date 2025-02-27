@@ -83,7 +83,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Fruit Disease Picker"),
-        backgroundColor: Colors.green,
+        backgroundColor: const Color.fromARGB(255, 190, 245, 192),
       ),
       body: SingleChildScrollView(
         child: Padding(
