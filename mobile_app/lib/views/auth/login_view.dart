@@ -43,7 +43,7 @@ class _LoginViewState extends State<LoginView> {
 
             // Title
             const Text(
-              "Plant Doctor",
+              "PapayaBuddy",
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
