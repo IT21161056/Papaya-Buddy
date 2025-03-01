@@ -3,21 +3,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mobile_app/views/treatment_view.dart';
 
 class DiseaseView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: DiseaseScreen(),
-    );
-  }
-}
-
-class DiseaseScreen extends StatelessWidget {
+  final String diseaseName; // Add this line
   final List<String> imagePaths = [
     'assets/r2.jpg',
     'assets/r2.jpg',
     'assets/r2.jpg',
   ];
+
+  // Add a constructor to accept diseaseName
+  DiseaseView({this.diseaseName = 'UNKNOWN'});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +43,7 @@ class DiseaseScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Ring Spot Virus",
+              diseaseName, // Use the diseaseName parameter here
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 4),
