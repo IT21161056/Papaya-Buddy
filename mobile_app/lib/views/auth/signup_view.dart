@@ -259,7 +259,10 @@ class _SignupViewState extends State<SignupView> {
                 children: [
                   Text(
                     "Create Account",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600),
                   ),
                   SizedBox(width: 8), // Space between text and icon
                   Icon(Icons.arrow_right_alt,
