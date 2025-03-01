@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -11,52 +12,128 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool _isPasswordVisible = false;
+
+  void _signIn() {
+    // Handle sign-in logic
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Sign In Successful!')),
+    );
+    Navigator.pushReplacementNamed(context, '/home');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              "Welcome Back!",
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            const SizedBox(height: 60),
+
+            // Profile Image
+            CircleAvatar(
+              radius: 50,
+              backgroundImage: AssetImage('assets/papaya.png'),
             ),
-            const SizedBox(height: 10),
+
+            const SizedBox(height: 20),
+
+            // Title
             const Text(
-              "Login to continue",
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              "PapayaBuddy",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
+
+            const SizedBox(height: 5),
+
+            // Subtitle
+            const Text(
+              "Sign in to access your plant health diagnostics",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+
             const SizedBox(height: 30),
 
             // Email Field
             TextField(
               controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                labelText: "Email",
-                prefixIcon: const Icon(Icons.email),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: SvgPicture.asset(
+                    'assets/icons/lucide_mail.svg',
+                    height: 18,
+                    width: 18,
+                    color: const Color(0xFF64748B),
+                  ),
+                ),
+                hintText: "Email",
+                filled: true,
+                fillColor: const Color(0xFFF8FAFC),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide:
+                      const BorderSide(color: Color(0xFFE2E8F0), width: 2),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+
+            const SizedBox(height: 15),
 
             // Password Field
             TextField(
               controller: _passwordController,
-              obscureText: true,
+              obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
-                labelText: "Password",
-                prefixIcon: const Icon(Icons.lock),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: SvgPicture.asset(
+                    'assets/icons/lucide_lock.svg',
+                    height: 18,
+                    width: 18,
+                    color: const Color(0xFF64748B),
+                  ),
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    color: const Color(0xFF64748B),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
+                ),
+                hintText: "Password",
+                filled: true,
+                fillColor: const Color(0xFFF8FAFC),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide:
+                      const BorderSide(color: Color(0xFFE2E8F0), width: 2),
                 ),
               ),
             ),
+
             const SizedBox(height: 10),
 
             // Forgot Password
@@ -64,53 +141,67 @@ class _LoginViewState extends State<LoginView> {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
-                  // Forgot password logic
+                  // Forgot password action
                 },
                 child: const Text(
                   "Forgot Password?",
-                  style: TextStyle(color: Colors.blue),
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
+
             const SizedBox(height: 20),
 
             // Sign In Button
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/login');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text(
-                  "Sign In",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
+              onPressed: _signIn,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Sign In",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(Icons.arrow_right_alt, color: Colors.white),
+                ],
+              ),
             ),
-            const SizedBox(height: 20),
+
+            const SizedBox(height: 15),
 
             // Sign Up Link
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Don't have an account?"),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/signup');
-                  },
-                  child: const Text(
-                    "Sign Up",
-                    style: TextStyle(color: Colors.blue),
+            RichText(
+              text: TextSpan(
+                text: "Don't have an account? ",
+                style: const TextStyle(color: Colors.black),
+                children: [
+                  WidgetSpan(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/signup');
+                      },
+                      child: const Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
