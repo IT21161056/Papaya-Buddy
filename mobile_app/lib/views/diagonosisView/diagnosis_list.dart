@@ -99,92 +99,98 @@ class DiagnosisListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      color: Colors.white, // Soft background color
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        child: Row(
-          children: [
-            // Left side image
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: SizedBox(
-                width: 55,
-                height: 55,
-                child: Image.asset(
-                  'assets/bg.jpg',
-                  fit: BoxFit.cover,
-                ),
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 5,
+              offset: const Offset(0, 2),
+            ),
+          ]),
+      // Soft background color
+      child: Row(
+        children: [
+          // Left side image
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              width: 55,
+              height: 55,
+              child: Image.asset(
+                'assets/bg.jpg',
+                fit: BoxFit.cover,
               ),
             ),
-            const SizedBox(width: 12), // Space between image and text
+          ),
+          const SizedBox(width: 12), // Space between image and text
 
-            // Middle content (Title and Date)
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    date,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Right side (Risk Level + Arrow Button)
-            Row(
+          // Middle content (Title and Date)
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  decoration: BoxDecoration(
-                    color: result == "High Risk"
-                        ? Colors.red.shade100
-                        : result == "Moderate Risk"
-                            ? Colors.orange.shade100
-                            : Colors.green.shade100,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    result,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: result == "High Risk"
-                          ? Colors.red
-                          : result == "Moderate Risk"
-                              ? Colors.orange
-                              : Colors.green,
-                    ),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
                   ),
                 ),
-                const SizedBox(width: 8),
-                InkWell(
-                  onTap: onDetailsPressed,
-                  borderRadius: BorderRadius.circular(20),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Icon(Icons.arrow_forward, color: Colors.green),
+                const SizedBox(height: 4),
+                Text(
+                  date,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade600,
                   ),
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+
+          // Right side (Risk Level + Arrow Button)
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                decoration: BoxDecoration(
+                  color: result == "High Risk"
+                      ? Colors.red.shade100
+                      : result == "Moderate Risk"
+                          ? Colors.orange.shade100
+                          : Colors.green.shade100,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  result,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: result == "High Risk"
+                        ? Colors.red
+                        : result == "Moderate Risk"
+                            ? Colors.orange
+                            : Colors.green,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              InkWell(
+                onTap: onDetailsPressed,
+                borderRadius: BorderRadius.circular(20),
+                child: const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Icon(Icons.arrow_forward, color: Colors.green),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
