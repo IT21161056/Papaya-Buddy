@@ -10,9 +10,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Papaya Buddy',
       initialRoute: '/',
       onGenerateRoute: AppRouter.generateRoute,
     );
