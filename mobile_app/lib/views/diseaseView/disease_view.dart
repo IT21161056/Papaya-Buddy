@@ -126,7 +126,7 @@ class DiseaseView extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              title: Text("Aphids"),
+              title: Text(diseaseName),
               subtitle: Text("Insect"),
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: () {},
