@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
+import 'package:mobile_app/views/healthyView/healthy_view.dart';
 
 class ImagePickerPage extends StatefulWidget {
   const ImagePickerPage({super.key});
@@ -62,13 +63,23 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
         String diseaseName =
             jsonResponse['DenseNet']['label']; // Extract disease name
 
-        // Navigate to DiseaseScreen with the disease name
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DiseaseView(diseaseName: diseaseName),
-          ),
-        );
+        // Navigate after Healthy prediction
+          if (diseaseName == "Healthy Leaf" || diseaseName == "Healthy Fruit") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HealthyView(diseaseName: diseaseName),
+            ),
+          );
+        } else {
+          // Navigate to DiseaseView for disease predictions
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DiseaseView(diseaseName: diseaseName),
+            ),
+          );
+        }
       } else {
         _handleError("Error predicting disease");
       }
