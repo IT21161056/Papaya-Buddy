@@ -37,6 +37,7 @@ class DiseaseView extends StatelessWidget {
           ),
         ],
       ),
+      backgroundColor: Color(0xFFF8FAFC),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
