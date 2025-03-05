@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/auth/login_view.dart';
+import 'package:mobile_app/views/auth/profile_view.dart';
+import 'package:mobile_app/views/auth/signup_view.dart';
 import 'package:mobile_app/views/dashboard_view.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
 
@@ -17,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     const DashboardView(),
     DiseaseView(),
-    const LoginView(),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -31,13 +33,29 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.comment), label: 'Community'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Me'),
+              icon: Icon(
+                Icons.home,
+                color: Color.fromRGBO(100, 116, 139, 1),
+              ),
+              label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.comment,
+              color: Color.fromRGBO(100, 116, 139, 1),
+            ),
+            label: ('Community'),
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person,
+                color: Color.fromRGBO(100, 116, 139, 1),
+              ),
+              label: 'Me'),
         ],
       ),
     );

@@ -126,7 +126,7 @@ class _DashboardViewState extends State<DashboardView> {
                         crossAxisCount: 2,
                         mainAxisSpacing: 12,
                         crossAxisSpacing: 12,
-                        childAspectRatio: 1.5, //2, 1.8
+                        childAspectRatio: 1.8, //2, 1.8
                       ),
                       itemCount: cropCards.length,
                       itemBuilder: (context, index) {
