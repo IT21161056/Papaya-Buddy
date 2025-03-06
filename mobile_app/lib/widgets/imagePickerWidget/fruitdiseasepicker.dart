@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile_app/views/diseaseView/disease_view.dart';
 
 class FruitDiseasePicker extends StatefulWidget {
   const FruitDiseasePicker({super.key});
@@ -31,9 +32,11 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
   }
 
   void _resetPrediction() {
-    _category = null;
-    _predictionLabel = null;
-    _confidence = null;
+    setState(() {
+      _category = null;
+      _predictionLabel = null;
+      _confidence = null;
+    });
   }
 
   Future<void> _predictDisease() async {
@@ -47,8 +50,10 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://10.0.2.2:8000/predict'),
+        Uri.parse(
+            'http://10.0.2.2:8000/predict/'), // Added trailing slash to match your FastAPI endpoint
       );
+
       request.files
           .add(await http.MultipartFile.fromPath('file', _image!.path));
 
@@ -56,16 +61,24 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
 
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(await response.stream.bytesToString());
-        setState(() {
-          _category = jsonResponse['EfficientNet']['label'];
-          _predictionLabel = jsonResponse['DenseNet']['label'];
-          _confidence = jsonResponse['DenseNet']['confidence'];
-        });
+
+        // Use 'disease_prediction' instead of 'CNN' to match your FastAPI response
+        String diseaseName = jsonResponse['disease_prediction'];
+
+        // Navigate to Disease Details Screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DiseaseView(
+              diseaseName: diseaseName,
+            ),
+          ),
+        );
       } else {
-        _handleError("Error predicting disease");
+        _handleError("Error predicting disease: ${response.statusCode}");
       }
     } catch (e) {
-      _handleError("Network error");
+      _handleError("Network error: ${e.toString()}");
     } finally {
       setState(() {
         _isLoading = false;
@@ -92,19 +105,19 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
             Navigator.pop(context);
           },
           child: Container(
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.grey.shade200,
               shape: BoxShape.circle,
             ),
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back_ios_new,
               color: Colors.black,
               size: 16,
             ),
           ),
         ),
-        title: Text(
+        title: const Text(
           "Disease Detection",
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -115,79 +128,89 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image Placeholder
             Container(
               width: double.infinity,
-              height: 300,
+              height: 290,
               decoration: BoxDecoration(
-                color: Color(0xFFF8FAFC),
+                color: const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    'assets/icons/capture.svg', // Use correct asset
-                    height: 40,
-                    width: 40,
-                    color: Colors.grey.shade400,
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    "No image selected",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade600,
+              child: _image == null
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/capture.svg',
+                          height: 20,
+                          width: 40,
+                          color: Colors.grey.shade400,
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          "No image selected",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "Take a photo or choose from gallery",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey.shade500,
+                          ),
+                        ),
+                      ],
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.file(
+                        _image!,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    "Take a photo or choose from gallery",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade500,
-                    ),
-                  ),
-                ],
-              ),
             ),
-            SizedBox(height: 20),
-
+            const SizedBox(height: 10),
             // Image Selection Options
             Container(
               width: double.infinity,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Color(0xFFF8FAFC),
+                color: const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
                 children: [
                   Row(
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFDDEEFF), // Light blue background
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/icons/camera.svg',
-                          height: 24,
-                          width: 24,
-                          color: Color(0xFF1A73E8), // Blue icon color
+                      GestureDetector(
+                        onTap: () => _pickImage(ImageSource.camera),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFDDEEFF),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/icons/camera.svg',
+                            height: 20,
+                            width: 24,
+                            color: const Color(0xFF1A73E8),
+                          ),
                         ),
                       ),
-                      SizedBox(width: 12),
+                      const SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Take Photo",
                             style: TextStyle(
                               fontSize: 16,
@@ -205,29 +228,31 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
-                  Divider(),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 10),
+                  const Divider(),
                   Row(
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFE5F8E6), // Light green background
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/icons/gallery.svg',
-                          height: 24,
-                          width: 24,
-                          color: Color(0xFF23C55E), // Green icon color
+                      GestureDetector(
+                        onTap: () => _pickImage(ImageSource.gallery),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE5F8E6),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/icons/gallery.svg',
+                            height: 24,
+                            width: 24,
+                            color: const Color(0xFF23C55E),
+                          ),
                         ),
                       ),
-                      SizedBox(width: 12),
+                      const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Choose from Gallery",
                             style: TextStyle(
                               fontSize: 16,
@@ -248,72 +273,94 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
-
+            const SizedBox(height: 10),
             // Tips for Better Detection
             Container(
               width: double.infinity,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Color(0xFFF8FAFC),
+                color: const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Tips for better detection",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
                   _buildTip(1, "Ensure good lighting conditions"),
                   _buildTip(2, "Keep the camera steady and focused"),
                   _buildTip(3, "Capture the affected area clearly"),
                 ],
               ),
             ),
+            const SizedBox(height: 20),
+            // Predict Button
             SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              width: double.infinity, // Makes button full width
+              width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // Add your action here
-                },
+                onPressed: _isLoading ? null : _predictDisease,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Color.fromRGBO(37, 100, 235, 1), // Deep blue color
-                  padding: EdgeInsets.symmetric(
-                      vertical: 20), // Adjust vertical padding
+                  backgroundColor: Color.fromRGBO(37, 100, 235, 1),
+                  padding: EdgeInsets.symmetric(vertical: 20),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // Rounded corners
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  elevation: 0, // Removes shadow for flat design
+                  elevation: 0,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center, // Center content
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "Predict",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(width: 6),
-                    SvgPicture.asset(
-                      'assets/icons/magic.svg',
-                      height: 16,
-                      width: 16,
-                      color: Colors.grey.shade100, // Blue icon color
-                    )
-                  ],
+                child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 300), // Smooth transition
+                  child: _isLoading
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            ),
+                            SizedBox(
+                                width:
+                                    10), // Add spacing between loader and text
+                            Text(
+                              "Predicting...",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Predict",
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 150, 215, 255),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(width: 6),
+                            SvgPicture.asset(
+                              'assets/icons/magic.svg',
+                              height: 16,
+                              width: 16,
+                              color: const Color.fromARGB(255, 150, 215, 255),
+                            ),
+                          ],
+                        ),
                 ),
               ),
             ),
@@ -330,7 +377,6 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
         children: [
           Container(
             width: 24,
-            height: 24,
             decoration: BoxDecoration(
               color: Colors.blue.shade100,
               shape: BoxShape.circle,
@@ -339,19 +385,18 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
               child: Text(
                 number.toString(),
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue.shade800,
-                ),
+                    fontWeight: FontWeight.bold,
+                    color: const Color.fromARGB(255, 176, 176, 176)),
               ),
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               text,
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey.shade600,
+                color: const Color.fromARGB(255, 162, 161, 161),
               ),
             ),
           ),
