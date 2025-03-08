@@ -1,200 +1,199 @@
-import 'dart:convert';
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../../views/maturityView/PapayaMaturityInfoScreen.dart';
 
-class MaturityPicker extends StatefulWidget {
-  const MaturityPicker({super.key});
-
+class MaturityScreen extends StatefulWidget {
   @override
-  _MaturityPickerState createState() => _MaturityPickerState();
+  _MaturityScreenState createState() => _MaturityScreenState();
 }
 
-class _MaturityPickerState extends State<MaturityPicker> {
-  File? _image;
-  String? _category;
-  String? _predictionLabel;
-  double? _confidence;
-  bool _isLoading = false;
+class _MaturityScreenState extends State<MaturityScreen> {
+  Uint8List? _imageBytes;
+  String? _result;
   final ImagePicker _picker = ImagePicker();
+  bool _isLoading = false;
 
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-        _resetPrediction();
-      });
+  // Function to get ripeness color based on the prediction
+  Color _getRipenessColor(String ripeness) {
+    switch (ripeness.toLowerCase()) {
+      case "not_mature":
+        return Colors.teal;
+      case "partially_mature":
+        return Colors.lightGreen;
+      case "mature":
+        return Colors.green;
+      case "rotten":
+        return Colors.yellowAccent;
+      default:
+        return Colors.grey;
     }
   }
 
-  void _resetPrediction() {
-    _category = null;
-    _predictionLabel = null;
-    _confidence = null;
-  }
+  Future<void> _uploadImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-  Future<void> _predictMaturity() async {
-    if (_image == null) return;
+    if (image != null) {
+      Uint8List imageBytes = await image.readAsBytes();
+      setState(() {
+        _imageBytes = imageBytes;
+        _result = null; // Reset result when a new image is picked
+        _isLoading = true;
+      });
 
-    setState(() {
-      _isLoading = true;
-      _resetPrediction();
-    });
-
-    try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://10.0.2.2:8000/predict'), // Ensure the URL is correct for your server
+        Uri.parse(
+          'http://127.0.0.1:5000/predict',
+        ), // Replace with your backend URL
       );
-      request.files.add(await http.MultipartFile.fromPath('file', _image!.path));
+
+      request.files.add(
+        http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg'),
+      );
 
       var response = await request.send();
+      var responseData = await response.stream.bytesToString();
 
-      if (response.statusCode == 200) {
-        var jsonResponse = jsonDecode(await response.stream.bytesToString());
-        setState(() {
-          _category = jsonResponse['EfficientNet']['label']; // Adjust based on your model's response
-          _predictionLabel = jsonResponse['DenseNet']['label']; // Adjust based on your model's response
-          _confidence = jsonResponse['DenseNet']['confidence']; // Adjust based on your model's response
-        });
-      } else {
-        _handleError("Error predicting maturity");
-      }
-    } catch (e) {
-      _handleError("Network error");
-    } finally {
       setState(() {
+        _result = jsonDecode(responseData)['predicted_class'];
         _isLoading = false;
       });
     }
-  }
-
-  void _handleError(String message) {
-    setState(() {
-      _category = message;
-      _predictionLabel = message;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Maturity Detection"),
-        backgroundColor: const Color.fromARGB(255, 190, 245, 192),
+        title: Text(
+          "Papaya Maturity",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        leading: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Image.asset("assets/Papaya.png"), // Add an icon for branding
+        ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                "Fruit Maturity Detection",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // const Text(
+            //   "Fruit Maturity Detection",
+            //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            // ),
+            // const SizedBox(height: 20),
 
-              // Display larger image
-              _image != null
-                  ? Image.file(_image!, height: 350)
-                  : const Icon(Icons.image, size: 200, color: Colors.grey),
-              const SizedBox(height: 20),
+            // Display image
+            _imageBytes != null
+                ? Image.memory(_imageBytes!, height: 200)
+                : const Icon(Icons.image, size: 150, color: Colors.grey),
+            const SizedBox(height: 20),
 
-              // Buttons for picking image
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () => _pickImage(ImageSource.camera),
-                    icon: const Icon(Icons.camera_alt),
-                    label: const Text("Capture"),
+            // Buttons for picking image
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () => _uploadImage(),
+                  icon: const Icon(Icons.camera_alt),
+                  label: const Text("Capture"),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton.icon(
+                  onPressed: () => _uploadImage(),
+                  icon: const Icon(Icons.image),
+                  label: const Text("Gallery"),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            // Predict button
+            ElevatedButton.icon(
+              onPressed: _isLoading ? null : _uploadImage,
+              icon: const Icon(Icons.search),
+              label: const Text("Predict"),
+            ),
+            const SizedBox(height: 20),
+
+            // Show loading or prediction results
+            _isLoading
+                ? const CircularProgressIndicator()
+                : _result != null
+                    ? Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: _getRipenessColor(_result!),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          _result!,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    : Container(),
+
+            const SizedBox(height: 30),
+
+            // Ripeness Levels Legend
+            Column(
+              children: [
+                const Text(
+                  "Ripeness Levels",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                _buildLegend("Not Ripe", Colors.teal),
+                _buildLegend("Partially Ripe", Colors.lightGreen),
+                _buildLegend("Ripe", Colors.green),
+                _buildLegend("Rotten", Colors.yellowAccent),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PapayaMaturityInfoScreen(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
                   ),
-                  const SizedBox(width: 10),
-                  ElevatedButton.icon(
-                    onPressed: () => _pickImage(ImageSource.gallery),
-                    icon: const Icon(Icons.image),
-                    label: const Text("Gallery"),
+                  child: const Text(
+                    "Learn About Maturity Levels",
+                    style: TextStyle(color: Colors.white),
                   ),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              // Predict button
-              ElevatedButton.icon(
-                onPressed: _isLoading ? null : _predictMaturity,
-                icon: const Icon(Icons.search),
-                label: const Text("Predict"),
-              ),
-              const SizedBox(height: 20),
-
-              // Show loading or prediction results
-              _isLoading
-                  ? const CircularProgressIndicator()
-                  : _category != null
-                      ? PredictionCard(
-                          category: _category!,
-                          predictionLabel: _predictionLabel!,
-                          confidence: _confidence,
-                        )
-                      : Container(),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
-}
 
-class PredictionCard extends StatelessWidget {
-  final String category;
-  final String predictionLabel;
-  final double? confidence;
-
-  const PredictionCard({
-    super.key,
-    required this.category,
-    required this.predictionLabel,
-    this.confidence,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      color: Colors.grey[100],
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Prediction Results",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text("• Category: $category", style: const TextStyle(fontSize: 16)),
-            const SizedBox(height: 5),
-            Text("• Prediction: $predictionLabel",
-                style: const TextStyle(fontSize: 16)),
-            if (confidence != null) ...[
-              const SizedBox(height: 10),
-              const Text("Confidence:", style: TextStyle(fontSize: 16)),
-              const SizedBox(height: 5),
-              LinearProgressIndicator(
-                value: confidence! / 100,
-                backgroundColor: Colors.grey[300],
-                color: confidence! > 75 ? Colors.green : Colors.orange,
-                minHeight: 10,
-              ),
-              const SizedBox(height: 5),
-              Text("${confidence!.toStringAsFixed(2)}%",
-                  style: const TextStyle(fontSize: 16)),
-            ],
-          ],
-        ),
+  Widget _buildLegend(String label, Color color) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(width: 20, height: 10, color: color),
+          const SizedBox(width: 10),
+          Text(label, style: const TextStyle(fontSize: 14)),
+        ],
       ),
     );
   }

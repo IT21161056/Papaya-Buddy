@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/diagonosisView/diagnosis_list.dart';
 import 'package:mobile_app/views/diagonosisView/disease_details.dart';
+import 'package:mobile_app/views/maturityView/PapayaMaturityInfoScreen.dart';
 import 'package:mobile_app/widgets/dashboard.widgets/crop_card.dart';
 import 'package:mobile_app/widgets/dashboard.widgets/weather_widget.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/fruitdiseasepicker.dart';
@@ -31,7 +32,7 @@ final List<Map<String, dynamic>> cropCards = [
   {
     'name': 'Maturity Level',
     'icon': 'assets/icons/lucide_chart.svg',
-    'picker': MaturityPicker(),
+    'picker': MaturityScreen(),
     'color': Colors.blue
   },
   {
