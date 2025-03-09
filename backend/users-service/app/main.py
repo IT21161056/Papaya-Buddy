@@ -2,87 +2,70 @@ from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 from typing import List, Optional
 import uuid
-from datetime import datetime
 
-app = FastAPI(title="Orders Service")
+app = FastAPI(title="Users Service")
 
-# Simple in-memory database for demo
-orders_db = {}
+# Simple in-memory database for demo purposes
+users_db = {}
 
-class OrderItem(BaseModel):
-    product_id: str
-    quantity: int
-    price: float
+class UserCreate(BaseModel):
+    username: str
+    email: str
+    full_name: Optional[str] = None
 
-class OrderCreate(BaseModel):
-    user_id: str
-    items: List[OrderItem]
-
-class Order(BaseModel):
+class User(BaseModel):
     id: str
-    user_id: str
-    items: List[OrderItem]
-    total_amount: float
-    status: str
-    created_at: datetime
+    username: str
+    email: str
+    full_name: Optional[str] = None
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to Orders Service"}
+    return {"message": "Welcome to Users Service"}
 
-@app.post("/orders/", response_model=Order)
-def create_order(order: OrderCreate):
-    order_id = str(uuid.uuid4())
-    
-    # Calculate total amount
-    total_amount = sum(item.price * item.quantity for item in order.items)
-    
-    new_order = Order(
-        id=order_id,
-        user_id=order.user_id,
-        items=order.items,
-        total_amount=total_amount,
-        status="pending",
-        created_at=datetime.now()
+@app.post("/users/", response_model=User)
+def create_user(user: UserCreate):
+    user_id = str(uuid.uuid4())
+    new_user = User(
+        id=user_id,
+        username=user.username,
+        email=user.email,
+        full_name=user.full_name
     )
+    users_db[user_id] = new_user
+    return new_user
+
+@app.get("/users/", response_model=List[User])
+def read_users():
+    return list(users_db.values())
+
+@app.get("/users/{user_id}", response_model=User)
+def read_user(user_id: str):
+    if user_id not in users_db:
+        raise HTTPException(status_code=404, detail="User not found")
+    return users_db[user_id]
+
+@app.put("/users/{user_id}", response_model=User)
+def update_user(user_id: str, user: UserCreate):
+    if user_id not in users_db:
+        raise HTTPException(status_code=404, detail="User not found")
     
-    orders_db[order_id] = new_order
-    return new_order
+    updated_user = User(
+        id=user_id,
+        username=user.username,
+        email=user.email,
+        full_name=user.full_name
+    )
+    users_db[user_id] = updated_user
+    return updated_user
 
-@app.get("/orders/", response_model=List[Order])
-def read_orders():
-    return list(orders_db.values())
-
-@app.get("/orders/{order_id}", response_model=Order)
-def read_order(order_id: str):
-    if order_id not in orders_db:
-        raise HTTPException(status_code=404, detail="Order not found")
-    return orders_db[order_id]
-
-@app.get("/users/{user_id}/orders", response_model=List[Order])
-def read_user_orders(user_id: str):
-    user_orders = [order for order in orders_db.values() if order.user_id == user_id]
-    return user_orders
-
-@app.put("/orders/{order_id}/status")
-def update_order_status(order_id: str, status: str):
-    if order_id not in orders_db:
-        raise HTTPException(status_code=404, detail="Order not found")
+@app.delete("/users/{user_id}")
+def delete_user(user_id: str):
+    if user_id not in users_db:
+        raise HTTPException(status_code=404, detail="User not found")
     
-    valid_statuses = ["pending", "processing", "shipped", "delivered", "cancelled"]
-    if status not in valid_statuses:
-        raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of {valid_statuses}")
-    
-    orders_db[order_id].status = status
-    return {"message": f"Order status updated to {status}"}
-
-@app.delete("/orders/{order_id}")
-def delete_order(order_id: str):
-    if order_id not in orders_db:
-        raise HTTPException(status_code=404, detail="Order not found")
-    
-    del orders_db[order_id]
-    return {"message": "Order deleted successfully"}
+    del users_db[user_id]
+    return {"message": "User deleted successfully"}
 
 @app.get("/health")
 def health_check():
