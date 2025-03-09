@@ -1,0 +1,27 @@
+# Main proxy: Port 5000
+# HTTPS proxy: Port 5443
+# Admin API: Port 5003
+# Admin API HTTPS: Port 5444
+
+# Users Service -> Direct access: Port 5001
+# Orders Service -> Direct access: Port 5002
+
+
+# API Gateway: 
+GET http://localhost:5000/api/users/ 
+# 
+
+GET http://localhost:5000/api/orders/
+
+# Users Service directly: 
+GET http://localhost:5001
+
+# Orders Service directly: 
+GET http://localhost:5002
+
+# Kong Admin API: 
+GET http://localhost:5003
+
+
+###
+GET http://localhost:5000/api/users/1/orders
