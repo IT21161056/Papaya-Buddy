@@ -15,7 +15,7 @@ services:
       retries: 3
 
   api-gateway:
-    build: ./api-gateway
+    build: ./gateway
     container_name: api-gateway
     environment:
       - KONG_DATABASE=off
