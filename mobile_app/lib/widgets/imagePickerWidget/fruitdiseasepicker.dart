@@ -51,7 +51,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(
-            'http://10.0.2.2:8000/predict/'), // Added trailing slash to match your FastAPI endpoint
+            'http://10.0.2.2:8000/predict'), // Added trailing slash to match your FastAPI endpoint
       );
 
       request.files
