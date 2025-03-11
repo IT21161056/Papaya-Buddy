@@ -19,6 +19,7 @@ dependencies:
   lucide_icons: ^0.257.0
   cloudinary_flutter: ^1.0.0
   cloudinary_url_gen: ^1.0.0
+  flutter_animate: ^4.5.0
 
 dev_dependencies:
   flutter_test:
