@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "605393192584",
+    "project_id": "papayabuddy-cecbc",
+    "storage_bucket": "papayabuddy-cecbc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605393192584:android:9a6ebda5e288db8d6bc13d",
+        "android_client_info": {
+          "package_name": "com.example.mobile_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANT6ybyk3XBUIYQ3rumDHKdffYvIIc_Ig"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
