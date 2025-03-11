@@ -18,3 +18,11 @@ services:
         paths:
           - /predict # define a base path in your API
         strip_path: false
+
+  - name: fruit-disease-service
+    url: http://host.docker.internal:8000 # run your application in a selected port.
+    routes:
+      - name: fruit-disease-route
+        paths:
+          - /predict # define a base path in your API
+        strip_path: false
