@@ -7,6 +7,8 @@ class Weather {
   final int humidity;
   final double windSpeed;
   final int uvIndex;
+  final String description;
+  final int conditionCode;
 
   Weather({
     required this.cityName,
@@ -17,6 +19,8 @@ class Weather {
     required this.humidity,
     required this.windSpeed,
     required this.uvIndex,
+    required this.description,
+    required this.conditionCode,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json) {
@@ -29,6 +33,8 @@ class Weather {
       humidity: json['main']['humidity'] as int,
       windSpeed: (json['wind']['speed'] as num).toDouble(),
       uvIndex: json['uvi'] != null ? (json['uvi'] as num).toInt() : 0,
+      description: json['weather'][0]['description'],
+      conditionCode: json['weather'][0]['id'],
     );
   }
 

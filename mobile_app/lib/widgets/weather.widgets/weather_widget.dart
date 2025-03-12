@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -17,9 +18,11 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
   // API key for OpenWeatherMap
   final _weatherService = WeatherService(ApiConstants.OPENWEATHERMAP_API_KEY);
   Weather? _weather;
+  Timer? _weatherUpdateTimer;
+  bool isExpanded = false;
 
   // fetch weather data
-  _fetchWeatherData() async {
+  Future<void> _fetchWeatherData() async {
     // Get the current city
     final cityName = await _weatherService.getCurrentCity();
 
@@ -40,6 +43,18 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
 
     // Fetch weather on startup
     _fetchWeatherData();
+
+    // Set timer to fetch weather every 15 minutes
+    _weatherUpdateTimer = Timer.periodic(const Duration(minutes: 15), (_) {
+      _fetchWeatherData();
+    });
+  }
+
+  @override
+  void dispose() {
+    // Cancel the timer when the widget is disposed
+    _weatherUpdateTimer?.cancel();
+    super.dispose();
   }
 
   String getFormattedDate() {
@@ -48,7 +63,100 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
     return 'Today, $formattedDate';
   }
 
-  bool isExpanded = false;
+  // Format the weather description to capitalize first letter of each word
+  String formatDescription(String description) {
+    if (description.isEmpty) return '';
+
+    return description.split(' ').map((word) {
+      if (word.isEmpty) return '';
+      return word[0].toUpperCase() + word.substring(1);
+    }).join(' ');
+  }
+
+  // Get the weather icon based on the condition code
+  String getWeatherIcon() {
+    if (_weather == null) {
+      return 'assets/icons/lucide_sun.svg';
+    }
+
+    final conditionCode = _weather!.conditionCode;
+    final iconName = getIconNameFromConditionCode(conditionCode);
+
+    return 'assets/icons/$iconName.svg';
+  }
+
+  // Get icon color based on weather condition
+  Color getWeatherIconColor() {
+    if (_weather == null) {
+      return Colors.amber;
+    }
+
+    final conditionCode = _weather!.conditionCode;
+
+    // Thunderstorm
+    if (conditionCode >= 200 && conditionCode < 300) {
+      return Colors.deepPurple;
+    }
+    // Drizzle or Rain
+    else if ((conditionCode >= 300 && conditionCode < 400) ||
+        (conditionCode >= 500 && conditionCode < 600)) {
+      return Colors.blue;
+    }
+    // Snow
+    else if (conditionCode >= 600 && conditionCode < 700) {
+      return Colors.lightBlue;
+    }
+    // Atmosphere (fog, mist, etc.)
+    else if (conditionCode >= 700 && conditionCode < 800) {
+      return Colors.blueGrey;
+    }
+    // Clear
+    else if (conditionCode == 800) {
+      return Colors.amber;
+    }
+    // Clouds
+    else {
+      return Colors.grey;
+    }
+  }
+
+  // Get icon background color
+  Color getWeatherIconBgColor() {
+    final iconColor = getWeatherIconColor();
+    return iconColor;
+  }
+
+  // Map OpenWeatherMap condition codes to icon names
+  String getIconNameFromConditionCode(int conditionCode) {
+    // Thunderstorm
+    if (conditionCode >= 200 && conditionCode < 300) {
+      return 'lucide_cloud-lightning';
+    }
+    // Drizzle
+    else if (conditionCode >= 300 && conditionCode < 400) {
+      return 'lucide_cloud-drizzle';
+    }
+    // Rain
+    else if (conditionCode >= 500 && conditionCode < 600) {
+      return 'lucide_cloud-rain';
+    }
+    // Snow
+    else if (conditionCode >= 600 && conditionCode < 700) {
+      return 'lucide_cloud-snow';
+    }
+    // Atmosphere (fog, mist, etc.)
+    else if (conditionCode >= 700 && conditionCode < 800) {
+      return 'lucide_cloud-fog';
+    }
+    // Clear
+    else if (conditionCode == 800) {
+      return 'lucide_sun';
+    }
+    // Clouds
+    else {
+      return 'lucide_cloud';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,15 +195,15 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.amber.shade100,
+                      color: getWeatherIconBgColor(),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: SvgPicture.asset(
-                        'assets/icons/lucide_sun.svg',
+                        getWeatherIcon(),
                         height: 24,
                         width: 24,
-                        color: Colors.amber,
+                        color: getWeatherIconColor(),
                       ),
                     ),
                   ),
@@ -103,6 +211,16 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (_weather != null)
+                        Text(
+                          formatDescription(_weather?.description ?? ""),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Color.fromRGBO(27, 106, 216, 1),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       Text(
                         getFormattedDate(),
                         style: TextStyle(
@@ -179,6 +297,14 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
                                   iconColor: Colors.blueGrey,
                                 ),
                               ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Last updated: ${DateFormat('h:mm a').format(DateTime.now())}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
                             ),
                           ],
                         )
