@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/auth/login_view.dart';
 import 'package:mobile_app/views/auth/profile_view.dart';
@@ -19,7 +20,9 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     const DashboardView(),
     DiseaseView(),
-    ProfileScreen(),
+    FirebaseAuth.instance.currentUser == null
+        ? const LoginView()
+        : const ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
