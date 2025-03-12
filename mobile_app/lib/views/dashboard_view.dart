@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/views/diagonosisView/diagnosis_list.dart';
 import 'package:mobile_app/views/diagonosisView/disease_details.dart';
 import 'package:mobile_app/widgets/dashboard.widgets/crop_card.dart';
-import 'package:mobile_app/widgets/dashboard.widgets/weather_widget.dart';
+import 'package:mobile_app/widgets/weather.widgets/weather_widget.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/fruitdiseasepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/imagepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/leafdiseasepicker.dart';
