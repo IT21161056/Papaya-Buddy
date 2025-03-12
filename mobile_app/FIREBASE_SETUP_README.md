@@ -99,3 +99,10 @@ flutterfire configure
 After configuring Firebase, you can proceed with integrating Firebase services like Authentication, Firestore, or Storage into your Flutter app.
 
 For further details, refer to the [FlutterFire Documentation](https://firebase.flutter.dev/). 🚀
+
+Platform Firebase App Id
+web 1:605393192584:web:16b672c8265fa6cc6bc13d
+android 1:605393192584:android:9a6ebda5e288db8d6bc13d
+ios 1:605393192584:ios:720d8997ed452d626bc13d
+macos 1:605393192584:ios:720d8997ed452d626bc13d
+windows 1:605393192584:web:62d4bbe438dd66c36bc13d
