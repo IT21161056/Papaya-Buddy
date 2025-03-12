@@ -64,7 +64,7 @@ packages:
       sha256: cb6d7f03e1de671e34607e909a7213e31d7752be4fb66a86d29fe1eb14bfb5cf
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.1.1"
   cloud_firestore:
     dependency: "direct main"
     description:
@@ -766,5 +766,5 @@ packages:
     source: hosted
     version: "6.5.0"
 sdks:
-  dart: ">=3.7.0-0 <4.0.0"
+  dart: ">=3.6.1 <4.0.0"
   flutter: ">=3.27.0"

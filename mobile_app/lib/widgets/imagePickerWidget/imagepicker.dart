@@ -51,7 +51,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://10.0.2.2:8000/predict'),
+        Uri.parse('http://10.0.2.2:5000/predict'),
       );
       request.files
           .add(await http.MultipartFile.fromPath('file', _image!.path));
@@ -194,11 +194,11 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
               ),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => _pickImage(ImageSource.camera),
-                        child: Container(
+                  GestureDetector(
+                    onTap: () => _pickImage(ImageSource.camera),
+                    child: Row(
+                      children: [
+                        Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: const Color(0xFFDDEEFF),
@@ -211,36 +211,36 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                             color: const Color(0xFF1A73E8),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Take Photo",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Take Photo",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "Use your camera to capture the disease",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade600,
+                            Text(
+                              "Use your camera to capture the disease",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.shade600,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 10),
                   const Divider(),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => _pickImage(ImageSource.gallery),
-                        child: Container(
+                  GestureDetector(
+                    onTap: () => _pickImage(ImageSource.gallery),
+                    child: Row(
+                      children: [
+                        Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: const Color(0xFFE5F8E6),
@@ -253,28 +253,28 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                             color: const Color(0xFF23C55E),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Choose from Gallery",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Choose from Gallery",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "Select an existing photo from your device",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade600,
+                            Text(
+                              "Select an existing photo from your device",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.shade600,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
