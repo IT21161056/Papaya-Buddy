@@ -28,7 +28,7 @@ services:
   #     retries: 3
 
   api-gateway:
-    build: ./api-gateway
+    build: ./gateway
     container_name: api-gateway
     environment:
       - KONG_DATABASE=off
@@ -48,7 +48,7 @@ services:
       - microservices-network
     depends_on:
       - users-service
-      - orders-service
+      # - orders-service
 
 networks:
   microservices-network:

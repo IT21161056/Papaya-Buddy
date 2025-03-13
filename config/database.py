@@ -4,4 +4,6 @@ client = MongoClient("mongodb+srv://admin:admin123@cluster0.jxoyh.mongodb.net/?r
 
 db = client.papaya_buddy_db
 
-collection_name = db["papaya_collection"]
+# Define collections separately
+papaya_collection = db["papaya_collection"]
+disease_collection = db["disease_collection"]
