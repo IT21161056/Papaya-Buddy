@@ -10,7 +10,8 @@ class AuthService {
       {required String email,
       required String password,
       required String fullName,
-      required String phoneNumber}) async {
+      required String phoneNumber,
+      required String city}) async {
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -25,6 +26,7 @@ class AuthService {
           "fullName": fullName,
           "email": email,
           "phoneNumber": phoneNumber,
+          "city": city,
           "uid": user.uid,
         });
       }
@@ -53,6 +55,23 @@ class AuthService {
   // Sign Out
   Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  User? getCurrentUser() {
+    return _auth.currentUser;
+  }
+
+  // Get user details from Firestore
+  Future<Map<String, dynamic>?> getUserDetails() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentSnapshot doc =
+          await _firestore.collection("users").doc(user.uid).get();
+      if (doc.exists) {
+        return doc.data() as Map<String, dynamic>;
+      }
+    }
+    return null;
   }
 
   // Google Sign-In

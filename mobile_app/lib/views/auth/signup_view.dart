@@ -21,6 +21,7 @@ class _SignupScreenState extends State<SignUpScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
@@ -34,6 +35,7 @@ class _SignupScreenState extends State<SignUpScreen> {
     _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _cityController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -60,11 +62,11 @@ class _SignupScreenState extends State<SignUpScreen> {
 
       try {
         final user = await _authService.signUp(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-          fullName: _nameController.text.trim(),
-          phoneNumber: _phoneController.text.trim(),
-        );
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+            fullName: _nameController.text.trim(),
+            phoneNumber: _phoneController.text.trim(),
+            city: _cityController.text.trim());
 
         _signupTimeout?.cancel();
 
@@ -79,6 +81,7 @@ class _SignupScreenState extends State<SignUpScreen> {
             _nameController.clear();
             _emailController.clear();
             _phoneController.clear();
+            _cityController.clear();
             _passwordController.clear();
             _confirmPasswordController.clear();
 
@@ -174,6 +177,20 @@ class _SignupScreenState extends State<SignUpScreen> {
                       }
                       if (!ValidationPatterns.phonePattern.hasMatch(value)) {
                         return "Please enter a valid phone number";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  _buildTextField(
+                    controller: _cityController,
+                    hintText: "City",
+                    iconPath: 'assets/icons/lucide_pin.svg',
+                    keyboardType: TextInputType.text,
+                    enabled: !_isLoading,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "City is required";
                       }
                       return null;
                     },
