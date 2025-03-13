@@ -76,6 +76,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  void _updateProfilePicture(String newImageUrl) {
+    if (userData != null) {
+      setState(() {
+        userData!['profilePicture'] = newImageUrl;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,10 +117,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 children: [
                   ProfileCard(
-                      userName: userData?['fullName'] ?? 'User',
-                      description: 'Plant enthusiast & organic farmer',
-                      profilePicture: userData?['image_url'] ??
-                          'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80'),
+                    userName: userData?['fullName'] ?? 'User',
+                    description: 'Plant enthusiast & organic farmer',
+                    profilePicture: userData?['image_url'] ??
+                        'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80',
+                    onProfilePictureUpdated: _updateProfilePicture,
+                  ),
+
                   const SizedBox(height: 24),
                   ContactInfoCard(
                     email: userData?['email'] ?? 'Not available',
