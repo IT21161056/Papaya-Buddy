@@ -22,7 +22,7 @@ class CropCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(16),
             gradient: const LinearGradient(
               colors: [
                 Color(0xFFE9F5E9),
@@ -58,10 +58,7 @@ class CropCard extends StatelessWidget {
                       child: Icon(icon, size: 34, color: Colors.green.shade700),
                     ),
                   ),
-                  // Icon inside a circle
-
-                  const SizedBox(height: 12), // Spacing
-
+                  const SizedBox(height: 12),
                   Text(cropName,
                       style: const TextStyle(
                         fontSize: 16,
@@ -70,7 +67,6 @@ class CropCard extends StatelessWidget {
                       )),
                 ],
               ),
-              // Arrow Icon
               InkWell(
                 borderRadius: BorderRadius.circular(20),
                 onTap: onTap,
