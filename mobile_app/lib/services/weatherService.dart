@@ -34,12 +34,9 @@ class WeatherService {
 
         // Add UV index to the original data
         jsonData['uvi'] = oneCallData['current']['uvi'];
-
-        return Weather.fromJson(jsonData);
-      } else {
-        // If One Call API fails, still return weather without UV index
-        return Weather.fromJson(jsonData);
       }
+
+      return Weather.fromJson(jsonData);
     } else {
       throw Exception(
           'Failed to load weather data. Status code: ${response.statusCode}');
@@ -47,21 +44,33 @@ class WeatherService {
   }
 
   Future<String> getCurrentCity() async {
-    // Get permission for user
-    LocationPermission permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+    try {
+      // Request location permission
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        return 'Permission Denied';
+      }
+
+      // Get current position
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      // Convert location into a list of placemarks
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      if (placemarks.isNotEmpty && placemarks[0].locality != null) {
+        return placemarks[0].locality!;
+      } else {
+        return 'Unknown';
+      }
+    } catch (e) {
+      print("Error fetching city: $e");
+      return 'Unknown';
     }
-
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    // Convert the location into a list of placemark objects
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-
-    // Extract the city name from the first placemark
-    String? city = placemarks[0].locality;
-    return city ?? 'Unknown';
   }
 }
