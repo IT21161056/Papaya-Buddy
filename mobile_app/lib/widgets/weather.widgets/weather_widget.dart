@@ -45,7 +45,7 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
     _fetchWeatherData();
 
     // Set timer to fetch weather every 15 minutes
-    _weatherUpdateTimer = Timer.periodic(const Duration(minutes: 15), (_) {
+    _weatherUpdateTimer = Timer.periodic(const Duration(minutes: 10), (_) {
       _fetchWeatherData();
     });
   }
