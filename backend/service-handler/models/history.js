@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const historySchema = new Schema({
@@ -10,18 +10,18 @@ const historySchema = new Schema({
         type: String,
         required: true
     },
-    treatment: [{
+    treatmentId: [{
         type: mongoose.Types.ObjectId,
         ref: 'Treatment'
     }],
-    disease: {
+    diseaseId: {
         type: mongoose.Types.ObjectId,
         ref: 'Disease'
     },
-    suggested_images: [{
+    suggested_image_list_id: {
         type: mongoose.Types.ObjectId,
         ref: 'Suggested_Image'
-    }],
+    },
     created_at: {
         type: Date,
         default: Date.now
@@ -29,4 +29,4 @@ const historySchema = new Schema({
 });
 
 
-export default mongoose.model("History",historySchema);
+module.exports = mongoose.model("History",historySchema);

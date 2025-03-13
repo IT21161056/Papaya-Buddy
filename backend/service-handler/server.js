@@ -8,6 +8,9 @@ const cloudinaryRoutes = require("./routes/cloudinaryRoutes");
 const errorMiddleware = require("./middleware/errorMiddleware");
 const diseaseRoutes = require("./routes/diseaseRoutes");
 const connectMongoDb = require("./config/dbConnection");
+const suggestedImageRoutes = require("./routes/suggestedImageRoute");
+const treatmentRoutes = require("./routes/treatmentRoutes");
+const historyRoutes = require("./routes/historyRoutes");
 
 connectMongoDb()
 
@@ -27,11 +30,24 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
 }
 
-// Routes
+// external services routes
 app.use("/api", cloudinaryRoutes);
+
+
 
 //disease routes
 app.use("/disease", diseaseRoutes);
+
+//suggested image routes
+app.use("/suggested_image",suggestedImageRoutes);
+
+//treatment routes
+app.use("/treatment", treatmentRoutes);
+
+//history routes
+app.use("/history", historyRoutes);
+
+
 
 // Error handling middleware
 app.use(errorMiddleware);

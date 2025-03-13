@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const suggestedImagesSchema = new Schema({
-    Disease: {
+    diseaseId: {
         type: mongoose.Types.ObjectId,
         ref: 'Disease',
         required: true
@@ -13,4 +13,4 @@ const suggestedImagesSchema = new Schema({
     }],
 });
 
-export default mongoose.model("Suggested_Image", suggestedImagesSchema);
+module.exports = mongoose.model("Suggested_Image",suggestedImagesSchema);

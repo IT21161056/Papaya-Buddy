@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const treatmentSchema = new Schema({
@@ -10,12 +10,12 @@ const treatmentSchema = new Schema({
         type: String,
         required: true
     },
-    Disease: {
+    diseaseId: {
         type: mongoose.Types.ObjectId,
         ref: 'Disease',
         required: true
     },
-    History: {
+    historyId: {
         type: mongoose.Types.ObjectId,
         ref: 'History',
         required: true
@@ -26,4 +26,4 @@ const treatmentSchema = new Schema({
     }
 });
 
-export default mongoose.model("Treatment",treatmentSchema);
+module.exports = mongoose.model("Treatment",treatmentSchema);
