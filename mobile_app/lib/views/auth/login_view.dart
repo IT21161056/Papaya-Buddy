@@ -103,7 +103,7 @@ class _LoginViewState extends State<LoginView> {
                 // Image component
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage('assets/papaya.png'),
+                  backgroundImage: AssetImage('assets/papaya_buddy.png'),
                 ),
 
                 const SizedBox(height: 20),
