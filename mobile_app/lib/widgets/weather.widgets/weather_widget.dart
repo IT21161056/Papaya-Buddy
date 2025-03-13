@@ -230,7 +230,7 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
                       ),
                       Text(
                         _weather != null
-                            ? '${_weather?.temperature.round()}°C'
+                            ? '${_weather?.getFormattedTemperature()}'
                             : 'Loading Temperature...',
                         style: TextStyle(
                           fontSize: 16,
@@ -280,7 +280,8 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
                               children: [
                                 WeatherInfo(
                                   title: "UV Index",
-                                  value: "${_weather?.uvIndex ?? 0}",
+                                  value:
+                                      _weather?.getUvIndexCategory() ?? "Low",
                                   iconPath: 'assets/icons/lucide_sun.svg',
                                   iconColor: Colors.amber,
                                 ),
