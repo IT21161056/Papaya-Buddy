@@ -6,6 +6,10 @@ const fs = require("fs");
 const path = require("path");
 const cloudinaryRoutes = require("./routes/cloudinaryRoutes");
 const errorMiddleware = require("./middleware/errorMiddleware");
+const diseaseRoutes = require("./routes/diseaseRoutes");
+const connectMongoDb = require("./config/dbConnection");
+
+connectMongoDb()
 
 // Load environment variables
 dotenv.config();
@@ -25,6 +29,9 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Routes
 app.use("/api", cloudinaryRoutes);
+
+//disease routes
+app.use("/disease", diseaseRoutes);
 
 // Error handling middleware
 app.use(errorMiddleware);
