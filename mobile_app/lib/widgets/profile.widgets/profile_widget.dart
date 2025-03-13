@@ -8,6 +8,8 @@ import 'package:flutter/widgets.dart';
 import 'package:mobile_app/theme/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ProfileCard extends StatefulWidget {
   final String userName;
@@ -33,7 +35,6 @@ class _ProfileCardState extends State<ProfileCard> {
 
   Future<void> _uploadProfilePicture() async {
     try {
-      // Pick image from gallery
       final XFile? pickedFile = await _picker.pickImage(
         source: ImageSource.gallery,
         maxWidth: 800,
@@ -57,15 +58,23 @@ class _ProfileCardState extends State<ProfileCard> {
       File imageFile = File(pickedFile.path);
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://localhost:5080/api/upload'),
+        Uri.parse('http://192.168.1.100:5080/api/upload'),
       );
 
-      request.files
-          .add(await http.MultipartFile.fromPath('file', imageFile.path));
+      // Detect and set the MIME type
+      final mimeType = lookupMimeType(imageFile.path);
+      request.files.add(await http.MultipartFile.fromPath(
+        'image',
+        imageFile.path,
+        contentType: mimeType != null
+            ? MediaType.parse(mimeType)
+            : MediaType('image', 'jpeg'),
+      ));
 
       var response = await request.send();
       if (response.statusCode != 200) {
-        throw Exception("Failed to upload image");
+        final responseStr = await response.stream.bytesToString();
+        throw Exception("Failed to upload image: $responseStr");
       }
 
       var responseData = await response.stream.bytesToString();
