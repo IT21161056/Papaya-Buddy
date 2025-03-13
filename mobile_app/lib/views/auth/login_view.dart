@@ -269,11 +269,13 @@ class _LoginViewState extends State<LoginView> {
                           children: [
                             Text(
                               "Sign In",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
                             ),
                             SizedBox(width: 8),
-                            Icon(Icons.arrow_right_alt, color: Colors.white),
+                            Icon(Icons.arrow_forward, color: Colors.white),
                           ],
                         ),
                 ),
