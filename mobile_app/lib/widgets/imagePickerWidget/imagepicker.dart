@@ -20,13 +20,22 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   String? _predictionLabel;
   double? _confidence;
   bool _isLoading = false;
+  bool _isImageLoading = false; // New variable to track image loading state
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
+        _isImageLoading = true; // Start loading
+      });
+
+      // Simulate a delay for image processing (replace with actual logic if needed)
+      await Future.delayed(Duration(seconds: 2)); // Simulate a 2-second delay
+
+      setState(() {
         _image = File(pickedFile.path);
+        _isImageLoading = false; // Stop loading
         _resetPrediction();
       });
     }
@@ -64,7 +73,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
             jsonResponse['DenseNet']['label']; // Extract disease name
 
         // Navigate after Healthy prediction
-          if (diseaseName == "Healthy Leaf" || diseaseName == "Healthy Fruit") {
+        if (diseaseName == "Healthy Leaf" || diseaseName == "Healthy Fruit") {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -146,42 +155,48 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                 color: const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: _image == null
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/icons/capture.svg',
-                          height: 20,
-                          width: 40,
-                          color: Colors.grey.shade400,
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          "No image selected",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          "Take a photo or choose from gallery",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey.shade500,
-                          ),
-                        ),
-                      ],
-                    )
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.file(
-                        _image!,
-                        fit: BoxFit.cover,
+              child: _isImageLoading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
                       ),
-                    ),
+                    )
+                  : _image == null
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/capture.svg',
+                              height: 20,
+                              width: 40,
+                              color: Colors.grey.shade400,
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              "No image selected",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "Take a photo or choose from gallery",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.shade500,
+                              ),
+                            ),
+                          ],
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.file(
+                            _image!,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
             ),
             const SizedBox(height: 10),
             // Image Selection Options
@@ -194,11 +209,11 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
               ),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => _pickImage(ImageSource.camera),
-                        child: Container(
+                  GestureDetector(
+                    onTap: () => _pickImage(ImageSource.camera),
+                    child: Row(
+                      children: [
+                        Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: const Color(0xFFDDEEFF),
@@ -211,36 +226,36 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                             color: const Color(0xFF1A73E8),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Take Photo",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Take Photo",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "Use your camera to capture the disease",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade600,
+                            Text(
+                              "Use your camera to capture the disease",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.shade600,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 10),
                   const Divider(),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => _pickImage(ImageSource.gallery),
-                        child: Container(
+                  GestureDetector(
+                    onTap: () => _pickImage(ImageSource.gallery),
+                    child: Row(
+                      children: [
+                        Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: const Color(0xFFE5F8E6),
@@ -253,28 +268,28 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                             color: const Color(0xFF23C55E),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Choose from Gallery",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Choose from Gallery",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "Select an existing photo from your device",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade600,
+                            Text(
+                              "Select an existing photo from your device",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.shade600,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

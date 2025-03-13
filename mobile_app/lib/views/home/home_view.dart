@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/auth/login_view.dart';
 import 'package:mobile_app/views/auth/profile_view.dart';
@@ -19,7 +20,9 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     const DashboardView(),
     DiseaseView(),
-    ProfileScreen(),
+    FirebaseAuth.instance.currentUser == null
+        ? const LoginView()
+        : const ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -31,32 +34,72 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex], // Display the selected page
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-                color: Color.fromRGBO(100, 116, 139, 1),
-              ),
-              label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.comment,
-              color: Color.fromRGBO(100, 116, 139, 1),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 5,
+              offset: const Offset(0, 2),
             ),
-            label: ('Community'),
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person,
-                color: Color.fromRGBO(100, 116, 139, 1),
+          ],
+        ),
+        child: ClipRRect(
+          // borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          child: BottomNavigationBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            selectedItemColor: Color.fromRGBO(100, 116, 139, 1),
+            unselectedItemColor: Color(0xFFCBD5E1),
+            selectedLabelStyle: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+            ),
+            unselectedLabelStyle: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 11,
+            ),
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.home_rounded),
+                ),
+                activeIcon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.home_rounded),
+                ),
+                label: 'Home',
               ),
-              label: 'Me'),
-        ],
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.chat_bubble_outline_rounded),
+                ),
+                activeIcon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.chat_bubble_rounded),
+                ),
+                label: 'Community',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.person_outline_rounded),
+                ),
+                activeIcon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.person_rounded),
+                ),
+                label: 'Me',
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

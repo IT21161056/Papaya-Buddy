@@ -12,10 +12,9 @@ class AppRouter {
       case '/home':
         return MaterialPageRoute(builder: (_) => const HomePage());
       case '/signup':
-        return MaterialPageRoute(builder: (_) => const SignupView());
-      case '/login':
-        return MaterialPageRoute(
-            builder: (_) => const LoginView()); // Added login route
+        return MaterialPageRoute(builder: (_) => SignUpScreen());
+      case '/signin':
+        return MaterialPageRoute(builder: (_) => const LoginView());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

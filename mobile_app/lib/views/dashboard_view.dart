@@ -3,7 +3,7 @@ import 'package:mobile_app/views/diagonosisView/diagnosis_list.dart';
 import 'package:mobile_app/views/diagonosisView/disease_details.dart';
 import 'package:mobile_app/views/maturityView/PapayaMaturityInfoScreen.dart';
 import 'package:mobile_app/widgets/dashboard.widgets/crop_card.dart';
-import 'package:mobile_app/widgets/dashboard.widgets/weather_widget.dart';
+import 'package:mobile_app/widgets/weather.widgets/weather_widget.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/fruitdiseasepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/imagepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/leafdiseasepicker.dart';
@@ -127,7 +127,7 @@ class _DashboardViewState extends State<DashboardView> {
                         crossAxisCount: 2,
                         mainAxisSpacing: 12,
                         crossAxisSpacing: 12,
-                        childAspectRatio: 1.8, //2, 1.8
+                        childAspectRatio: 1.6, //2, 1.8
                       ),
                       itemCount: cropCards.length,
                       itemBuilder: (context, index) {
