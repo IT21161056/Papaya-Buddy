@@ -48,7 +48,7 @@ class ContactInfoCard extends StatelessWidget {
               'assets/icons/lucide_phone.svg', Colors.blue, "Phone", phone),
           const SizedBox(height: 12),
           _buildContactItem(
-              'assets/icons/lucide_pin.svg', Colors.red, "Location", address),
+              'assets/icons/lucide_pin.svg', Colors.red, "City", address),
           const SizedBox(height: 12),
         ],
       ),
