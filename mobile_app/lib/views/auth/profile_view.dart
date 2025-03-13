@@ -111,13 +111,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ProfileCard(
                       userName: userData?['fullName'] ?? 'User',
                       description: 'Plant enthusiast & organic farmer',
-                      profilePicture:
+                      profilePicture: userData?['image_url'] ??
                           'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80'),
                   const SizedBox(height: 24),
                   ContactInfoCard(
                     email: userData?['email'] ?? 'Not available',
                     phone: userData?['phoneNumber'] ?? 'Not available',
-                    address: "Portland, Oregon",
+                    address: userData?['city'] ?? 'Not available',
                   ),
                   const SizedBox(height: 24),
                   AccountSettingsCard(),
