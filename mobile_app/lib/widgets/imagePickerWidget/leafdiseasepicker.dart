@@ -15,9 +15,9 @@ class LeafDiseasePicker extends StatefulWidget {
 
 class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
   File? _image;
-  String? _category;
-  String? _predictionLabel;
-  double? _confidence;
+  String _healthStatus = '';
+  String _disease = '';
+  double _confidence = 0;
   bool _isLoading = false;
   final ImagePicker _picker = ImagePicker();
 
@@ -33,9 +33,9 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
 
   void _resetPrediction() {
     setState(() {
-      _category = null;
-      _predictionLabel = null;
-      _confidence = null;
+      _disease = '';
+      _healthStatus = '';
+      _confidence = 0;
     });
   }
 
@@ -51,7 +51,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(
-            'http://10.0.2.2:8000/predict'), // Added trailing slash to match your FastAPI endpoint
+            'http://192.168.1.100:5000/predict'), // Added trailing slash to match your FastAPI endpoint
       );
 
       request.files
@@ -63,16 +63,22 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
         var jsonResponse = jsonDecode(await response.stream.bytesToString());
 
         // Use 'disease_prediction' instead of 'CNN' to match your FastAPI response
-        String diseaseName = jsonResponse['disease_prediction'];
+        _healthStatus = jsonResponse['health_status'];
+        _disease = jsonResponse['disease'];
+        _confidence = jsonResponse['confidence'];
 
         // Navigate to Disease Details Screen
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => DiseaseView(
-              diseaseName: diseaseName,
+              diseaseName: _disease,
             ),
           ),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Disease: $_disease')),
         );
       } else {
         _handleError("Error predicting disease: ${response.statusCode}");
@@ -88,8 +94,9 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
 
   void _handleError(String message) {
     setState(() {
-      _category = "Error";
-      _predictionLabel = message;
+      _healthStatus = "";
+      _disease = "";
+      _confidence = 0;
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
