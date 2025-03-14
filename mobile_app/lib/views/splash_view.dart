@@ -39,33 +39,32 @@ class _SplashScreenState extends State<SplashView> {
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            padding: const EdgeInsets.symmetric(horizontal: 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 96,
-                  height: 96,
+                  width: 150,
+                  height: 150,
                   decoration: BoxDecoration(
-                    color: Colors.green.shade100,
+                    // color: Colors.green.shade100,
                     shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: Colors.black.withOpacity(0.1),
+                    //     blurRadius: 12,
+                    //     offset: const Offset(0, 4),
+                    //   ),
+                    // ],
                   ),
                   child: Center(
-                    child: SvgPicture.asset(
-                      'assets/icons/leaf.svg', // Replace with actual asset
-                      height: 48,
-                      width: 48,
-                      colorFilter: const ColorFilter.mode(
-                        Colors.green,
-                        BlendMode.srcIn,
-                      ),
+                    child: Image.asset(
+                      'assets/app_icon_3.png', // Replace with actual asset path
+                      // height: 100,
+                      // width: 100,
+                      // color:
+                      // Colors.green, // If you want to apply a color overlay
+                      // colorBlendMode: BlendMode.srcIn, // Apply the blend mode
                     ),
                   ),
                 )
@@ -74,7 +73,7 @@ class _SplashScreenState extends State<SplashView> {
                     .fadeIn(duration: 500.ms)
                     .moveY(begin: 20, end: 0, duration: 500.ms),
 
-                const SizedBox(height: 32), // Spacing
+                const SizedBox(height: 12), // Spacing
 
                 const Text(
                   "PapayaBuddy",
