@@ -105,7 +105,6 @@ class _SignupScreenState extends State<SignUpScreen> {
     }
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -120,171 +119,181 @@ class _SignupScreenState extends State<SignUpScreen> {
         title: const Text(
           "Create Account",
           style: TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: 20,
+          ),
         ),
       ),
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Center(
-                    child: Text(
-                      "Join PapayaBuddy to diagnose and treat plant diseases",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(
+                      child: Text(
+                        "Join PapayaBuddy to diagnose and treat plant diseases",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 14, color: Colors.blue),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 30),
-                  _buildTextField(
-                    controller: _nameController,
-                    hintText: "Full Name",
-                    iconPath: 'assets/icons/user.svg',
-                    enabled: !_isLoading,
-                    validator: (value) =>
-                        value!.isEmpty ? "Full name is required" : null,
-                  ),
-                  const SizedBox(height: 15),
-                  _buildTextField(
-                    controller: _emailController,
-                    hintText: "Email",
-                    iconPath: 'assets/icons/lucide_mail.svg',
-                    keyboardType: TextInputType.emailAddress,
-                    enabled: !_isLoading,
-                    validator: (value) {
-                      if (value!.isEmpty) return "Email is required";
-                      if (!ValidationPatterns.emailPattern.hasMatch(value)) {
-                        return "Enter a valid email";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  _buildTextField(
-                    controller: _phoneController,
-                    hintText: "Phone",
-                    iconPath: 'assets/icons/lucide_phone.svg',
-                    keyboardType: TextInputType.phone,
-                    enabled: !_isLoading,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Phone number is required";
-                      }
-                      if (!ValidationPatterns.phonePattern.hasMatch(value)) {
-                        return "Please enter a valid phone number";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  _buildTextField(
-                    controller: _cityController,
-                    hintText: "City",
-                    iconPath: 'assets/icons/lucide_pin.svg',
-                    keyboardType: TextInputType.text,
-                    enabled: !_isLoading,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "City is required";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  _buildPasswordField(
-                    controller: _passwordController,
-                    hintText: "Password",
-                    isVisible: _isPasswordVisible,
-                    toggleVisibility: () => setState(
-                        () => _isPasswordVisible = !_isPasswordVisible),
-                    enabled: !_isLoading,
-                    validator: (value) {
-                      if (value!.isEmpty) return "Password is required";
-                      if (!ValidationPatterns.passwordPattern.hasMatch(value)) {
-                        return "Password must be at least 6 characters";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  _buildPasswordField(
-                    controller: _confirmPasswordController,
-                    hintText: "Confirm Password",
-                    isVisible: _isConfirmPasswordVisible,
-                    toggleVisibility: () => setState(() =>
-                        _isConfirmPasswordVisible = !_isConfirmPasswordVisible),
-                    enabled: !_isLoading,
-                    validator: (value) {
-                      if (value!.isEmpty) return "Please confirm your password";
-                      if (value != _passwordController.text) {
-                        return "Passwords do not match";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                    const SizedBox(height: 30),
+                    _buildTextField(
+                      controller: _nameController,
+                      hintText: "Full Name",
+                      iconPath: 'assets/icons/user.svg',
+                      enabled: !_isLoading,
+                      validator: (value) =>
+                          value!.isEmpty ? "Full name is required" : null,
                     ),
-                    onPressed: _isLoading ? null : _signUp,
-                    child: const Row(
+                    const SizedBox(height: 15),
+                    _buildTextField(
+                      controller: _emailController,
+                      hintText: "Email",
+                      iconPath: 'assets/icons/lucide_mail.svg',
+                      keyboardType: TextInputType.emailAddress,
+                      enabled: !_isLoading,
+                      validator: (value) {
+                        if (value!.isEmpty) return "Email is required";
+                        if (!ValidationPatterns.emailPattern.hasMatch(value)) {
+                          return "Enter a valid email";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    _buildTextField(
+                      controller: _phoneController,
+                      hintText: "Phone",
+                      iconPath: 'assets/icons/lucide_phone.svg',
+                      keyboardType: TextInputType.phone,
+                      enabled: !_isLoading,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Phone number is required";
+                        }
+                        if (!ValidationPatterns.phonePattern.hasMatch(value)) {
+                          return "Please enter a valid phone number";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    _buildTextField(
+                      controller: _cityController,
+                      hintText: "City",
+                      iconPath: 'assets/icons/lucide_pin.svg',
+                      keyboardType: TextInputType.text,
+                      enabled: !_isLoading,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "City is required";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    _buildPasswordField(
+                      controller: _passwordController,
+                      hintText: "Password",
+                      isVisible: _isPasswordVisible,
+                      toggleVisibility: () => setState(
+                          () => _isPasswordVisible = !_isPasswordVisible),
+                      enabled: !_isLoading,
+                      validator: (value) {
+                        if (value!.isEmpty) return "Password is required";
+                        if (!ValidationPatterns.passwordPattern
+                            .hasMatch(value)) {
+                          return "Password must be at least 6 characters";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    _buildPasswordField(
+                      controller: _confirmPasswordController,
+                      hintText: "Confirm Password",
+                      isVisible: _isConfirmPasswordVisible,
+                      toggleVisibility: () => setState(() =>
+                          _isConfirmPasswordVisible =
+                              !_isConfirmPasswordVisible),
+                      enabled: !_isLoading,
+                      validator: (value) {
+                        if (value!.isEmpty)
+                          return "Please confirm your password";
+                        if (value != _passwordController.text) {
+                          return "Passwords do not match";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: _isLoading ? null : _signUp,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Create Account",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(width: 8),
+                          Icon(Icons.arrow_forward, color: Colors.white),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Create Account",
+                          "Already have an account?",
                           style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600),
+                            color: AppColors.textSecondary,
+                          ),
                         ),
-                        SizedBox(width: 8),
-                        Icon(Icons.arrow_forward, color: Colors.white),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginView()),
+                            );
+                          },
+                          child: Text(
+                            "Login",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Already have an account?",
-                        style: TextStyle(
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginView()),
-                          );
-                        },
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.blue),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
 
-          // Overlay loading indicator
-          LoadingOverlay(isLoading: _isLoading, message: "Please wait..."),
-        ],
+            // Overlay loading indicator
+            LoadingOverlay(isLoading: _isLoading, message: "Please wait..."),
+          ],
+        ),
       ),
     );
   }

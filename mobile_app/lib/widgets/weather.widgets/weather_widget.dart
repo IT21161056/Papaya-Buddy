@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/models/weatherModel.dart';
+import 'package:mobile_app/theme/colors.dart';
 import 'package:mobile_app/widgets/weather.widgets/weather_info.dart';
 import '../../services/weatherService.dart';
 import '../../utils/constants.dart';
@@ -195,7 +196,7 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: getWeatherIconBgColor(),
+                      color: Colors.white,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -215,9 +216,9 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
                         Text(
                           formatDescription(_weather?.description ?? ""),
                           style: const TextStyle(
-                            fontSize: 16,
-                            color: Color.fromRGBO(27, 106, 216, 1),
-                          ),
+                              fontSize: 12,
+                              color: Color.fromRGBO(27, 106, 216, 1),
+                              fontWeight: FontWeight.w500),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -230,7 +231,7 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
                       ),
                       Text(
                         _weather != null
-                            ? '${_weather?.temperature.round()}°C'
+                            ? '${_weather?.getFormattedTemperature()}'
                             : 'Loading Temperature...',
                         style: TextStyle(
                           fontSize: 16,
@@ -280,7 +281,8 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
                               children: [
                                 WeatherInfo(
                                   title: "UV Index",
-                                  value: "${_weather?.uvIndex ?? 0}",
+                                  value:
+                                      _weather?.getUvIndexCategory() ?? "Low",
                                   iconPath: 'assets/icons/lucide_sun.svg',
                                   iconColor: Colors.amber,
                                 ),
@@ -293,17 +295,17 @@ class _ExpandableWeatherCardState extends State<ExpandableWeatherCard> {
                                 WeatherInfo(
                                   title: "Wind Speed",
                                   value: "${_weather?.windSpeed ?? 0} km/h",
-                                  iconPath: 'assets/icons/lucide_cloud.svg',
+                                  iconPath: 'assets/icons/lucide_wind.svg',
                                   iconColor: Colors.blueGrey,
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 12),
                             Text(
                               'Last updated: ${DateFormat('h:mm a').format(DateTime.now())}',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey,
+                                color: AppColors.textSecondary.withOpacity(0.8),
                               ),
                             ),
                           ],

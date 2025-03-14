@@ -88,9 +88,13 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
 
   void _handleError(String message) {
     setState(() {
-      _category = message;
+      _category = "Error";
       _predictionLabel = message;
     });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   @override
@@ -127,7 +131,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,11 +286,10 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
             const SizedBox(height: 10),
             // Tips for Better Detection
             Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,9 +301,53 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  _buildTip(1, "Ensure good lighting conditions"),
-                  _buildTip(2, "Keep the camera steady and focused"),
-                  _buildTip(3, "Capture the affected area clearly"),
+                  const SizedBox(height: 12),
+                  ...List.generate(
+                    3,
+                    (index) {
+                      final tips = [
+                        'Ensure good lighting conditions',
+                        'Keep the camera steady and focused',
+                        'Capture the affected area clearly',
+                      ];
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFE0F2FE),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '${index + 1}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF0284C7),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                tips[index],
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF1A1A1A),
+                                  height: 1.4,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -383,6 +430,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
         children: [
           Container(
             width: 24,
+            height: 24,
             decoration: BoxDecoration(
               color: Colors.blue.shade100,
               shape: BoxShape.circle,
