@@ -10,7 +10,7 @@ const {
 const router = express.Router();
 
 // POST /api/upload
-router.post("/upload", upload.single("image"), uploadImage);
+router.post("/images", upload.single("image"), uploadImage);
 
 // GET /api/images/:publicId
 router.get("/images/:publicId", getImageById);

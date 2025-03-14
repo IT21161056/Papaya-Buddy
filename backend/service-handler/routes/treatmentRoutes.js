@@ -1,8 +1,13 @@
 const express = require("express");
-const treatmentController = require("../controllers/treatmentController");
+const {
+  createNewTreatment,
+  getTreatmentById,
+  getTreatmentsByDisease,
+} = require("../controllers/treatmentController");
 const router = express.Router();
 
-router.route("/create_treatment").post(treatmentController.createNewTreatment);
-
+router.post("/", createNewTreatment);
+router.get("/:id", getTreatmentById);
+router.get("/by-disease/:id", getTreatmentsByDisease);
 
 module.exports = router;
