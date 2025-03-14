@@ -10,18 +10,18 @@ const historySchema = new Schema({
         type: String,
         required: true
     },
-    treatmentId: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'Treatment'
-    }],
+    // treatmentId: [{
+    //     type: mongoose.Types.ObjectId,
+    //     ref: 'Treatment'
+    // }],
     diseaseId: {
         type: mongoose.Types.ObjectId,
         ref: 'Disease'
     },
-    suggested_image_list_id: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Suggested_Image'
-    },
+    // suggested_image_list_id: {
+    //     type: mongoose.Types.ObjectId,
+    //     ref: 'Suggested_Image'
+    // },
     created_at: {
         type: Date,
         default: Date.now

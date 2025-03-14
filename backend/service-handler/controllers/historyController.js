@@ -2,9 +2,9 @@ const History = require("../models/History");
 
 const createNewPredictionHistory = async (req, res) => {
     try {
-        const { uploaded_img_url, userid, treatmentId, diseaseId, suggested_image_list_id } = req.body;
-        if (!uploaded_img_url || !userid) {
-            return res.status(400).json({ message: "uploaded_img_url and userid are required" });
+        const { userid, treatmentId, diseaseId, suggested_image_list_id } = req.body;
+        if (!diseaseId || !userid) {
+            return res.status(400).json({ message: "diseaseId and userid are required" });
         }
         const historyObject = {
             uploaded_img_url,
