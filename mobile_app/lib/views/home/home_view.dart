@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/views/auth/login_view.dart';
 import 'package:mobile_app/views/auth/profile_view.dart';
 import 'package:mobile_app/views/auth/signup_view.dart';
+import 'package:mobile_app/views/community/community.dart';
 import 'package:mobile_app/views/dashboard_view.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
 
@@ -19,7 +20,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pages = [
     const DashboardView(),
-    DiseaseView(),
+    CommunityView(),
     FirebaseAuth.instance.currentUser == null
         ? const LoginView()
         : const ProfileScreen(),

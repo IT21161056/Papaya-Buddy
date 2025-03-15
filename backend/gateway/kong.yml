@@ -12,7 +12,7 @@ services:
 
   # Refer this section add your service (personal Fast API)
   - name: disease-service
-    url: http://host.docker.internal:5050 # run your application in a selected port.
+    url: http://host.docker.internal:5040 # run your application in a selected port.
     routes:
       - name: disease-route
         paths:
@@ -20,9 +20,9 @@ services:
         strip_path: false
 
   - name: fruit-disease-service
-    url: http://host.docker.internal:8000 # run your application in a selected port.
+    url: http://host.docker.internal:8000
     routes:
       - name: fruit-disease-route
         paths:
-          - /predict # define a base path in your API
+          - /predict
         strip_path: false

@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:mobile_app/models/diseaseModel.dart';
+import 'package:mobile_app/theme/colors.dart';
 import 'package:mobile_app/views/treatment_view.dart';
 
 class DiseaseView extends StatelessWidget {
-  final String diseaseName; // Add this line
-  final List<String> imagePaths = [
-    'assets/r2.jpg',
-    'assets/r2.jpg',
-    'assets/r2.jpg',
-  ];
+  final DiseaseDisplayModel? disease; // Add this line
 
   // Add a constructor to accept diseaseName
-  DiseaseView({this.diseaseName = 'UNKNOWN'});
+  DiseaseView({required this.disease});
 
   @override
   Widget build(BuildContext context) {
+    print(disease);
     return Scaffold(
       appBar: AppBar(
         title: Text("Diagnosis"),
@@ -44,12 +42,13 @@ class DiseaseView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              diseaseName, // Use the diseaseName parameter here
+              disease?.name ??
+                  'Not Available', // Use the diseaseName parameter here
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 4),
             Text(
-              "Virus",
+              disease?.diseaseType ?? 'Not Available',
               style: TextStyle(fontSize: 16, color: Colors.green),
             ),
             SizedBox(height: 12),
@@ -61,13 +60,32 @@ class DiseaseView extends StatelessWidget {
                       enableInfiniteScroll: true,
                       enlargeCenterPage: true,
                       autoPlay: true),
-                  items: imagePaths.map((path) {
+                  items: disease?.suggestedImageUrls.map((path) {
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
+                      child: Image.network(
                         path,
                         width: double.infinity,
                         fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[300],
+                            child: const Center(
+                              child: Icon(Icons.error, color: Colors.red),
+                            ),
+                          );
+                        },
                       ),
                     );
                   }).toList(),
@@ -87,7 +105,7 @@ class DiseaseView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text("${imagePaths.length} photos",
+                Text("${disease?.suggestedImageUrls.length} photos",
                     style: TextStyle(color: Colors.grey)),
               ],
             ),
@@ -104,8 +122,8 @@ class DiseaseView extends StatelessWidget {
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      "Virus caused by Aphids, treat this pest to cure the disease.",
-                      style: TextStyle(color: Colors.black),
+                      disease?.description ?? 'Not Available',
+                      style: TextStyle(color: AppColors.textSecondary),
                     ),
                   ),
                 ],
@@ -127,7 +145,7 @@ class DiseaseView extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              title: Text(diseaseName),
+              title: Text(disease?.name ?? 'Not Available'),
               subtitle: Text("Insect"),
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: () {},
