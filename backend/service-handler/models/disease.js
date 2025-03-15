@@ -18,7 +18,7 @@ const diseaseSchema = new Schema({
   disease_type: {
     type: String,
     required: true,
-    enum: ["viral", "bacterial", "fungal", "parasitic"],
+    enum: ["viral", "bacterial", "fungal", "parasitic","pest"],
   },
   description: {
     type: String,
@@ -34,6 +34,10 @@ const diseaseSchema = new Schema({
     required: true,
     trim: true,
   },
+  suggested_image_urls:[{
+    type: String,
+    required: true,
+  }],
   created_at: {
     type: Date,
     default: Date.now,

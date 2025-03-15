@@ -9,6 +9,7 @@ const createNewDisease = asyncHandler(async (req, res) => {
     disease_type,
     description,
     preventive_measures,
+    suggested_image_urls
   } = req.body;
 
   if (
@@ -17,7 +18,8 @@ const createNewDisease = asyncHandler(async (req, res) => {
     !symptoms ||
     !disease_type ||
     !description ||
-    !preventive_measures
+    !preventive_measures ||
+    suggested_image_urls.length === 0
   ) {
     res.status(400);
     throw new Error("All fields are required");
@@ -30,6 +32,7 @@ const createNewDisease = asyncHandler(async (req, res) => {
     disease_type,
     description,
     preventive_measures,
+    suggested_image_urls
   };
 
   const disease = await Disease.create(diseaseObject);
