@@ -1,29 +1,51 @@
 const History = require("../models/History");
+const cloudinary = require("../config/cloudinary");
+const fs = require("fs");
 
 const createNewPredictionHistory = async (req, res) => {
-    try {
-        const { userid, treatmentId, diseaseId, suggested_image_list_id } = req.body;
-        if (!diseaseId || !userid) {
-            return res.status(400).json({ message: "diseaseId and userid are required" });
-        }
-        const historyObject = {
-            uploaded_img_url,
-            userid,
-            treatmentId: treatmentId || [],
-            diseaseId: diseaseId || null,
-            suggested_image_list_id: suggested_image_list_id || {}
-        };
-        const createdHistory = await History.create(historyObject);
+  try {
+    const { userId, diseaseId } = req.body;
+    const uploaded_img = req.file;
 
-        if (createdHistory) {
-            res.status(201).json({ message: `New history created`, history: createdHistory });
-        } else {
-            res.status(400).json({ message: "Invalid history data received" });
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+    if (!diseaseId || !userId) {
+      return res.status(400).json({ message: "diseaseId and userId are required" });
     }
-}
+
+    if (!uploaded_img) {
+      return res.status(400).json({ message: "No image provided in the request body" });
+    }
+
+    let uploaded_img_url;
+    try {
+      const result = await cloudinary.uploader.upload(uploaded_img.path, {
+        folder: "prediction_history",
+        resource_type: "auto",
+      });
+
+      fs.unlinkSync(uploaded_img.path);
+      uploaded_img_url = result.secure_url;
+    } catch (error) {
+      if (uploaded_img && uploaded_img.path && fs.existsSync(uploaded_img.path)) {
+        fs.unlinkSync(uploaded_img.path);
+      }
+      return res.status(500).json({ message: "Error uploading image to Cloudinary", error: error.message });
+    }
+
+    const historyObject = {
+      uploaded_img_url,
+      userId,
+      diseaseId,
+    };
+    const createdHistory = await History.create(historyObject);
+    if (createdHistory) {
+      res.status(201).json({ message: `New history created`, history: createdHistory });
+    } else {
+      res.status(400).json({ message: "Invalid history data received" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 const getHistoryByUserId = async (req, res) => {
     try {

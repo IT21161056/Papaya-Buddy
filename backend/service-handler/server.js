@@ -29,6 +29,9 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
 }
 
+//cloudinary routes
+app.use(`${BASE_URL}/upload`, cloudinaryRoutes);
+
 // external services routes
 app.use(`${BASE_URL}/service`, cloudinaryRoutes);
 

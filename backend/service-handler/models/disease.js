@@ -34,6 +34,10 @@ const diseaseSchema = new Schema({
     required: true,
     trim: true,
   },
+  suggested_image_urls:[{
+    type: String,
+    required: true,
+  }],
   created_at: {
     type: Date,
     default: Date.now,
