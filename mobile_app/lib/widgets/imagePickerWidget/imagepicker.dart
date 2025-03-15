@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
 import 'package:mobile_app/views/healthyView/healthy_view.dart';
+import 'package:mobile_app/services/diseaseService.dart';
+import 'package:mobile_app/models/diseaseModel.dart';
 
 class ImagePickerPage extends StatefulWidget {
   const ImagePickerPage({super.key});
@@ -72,22 +74,33 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
         String diseaseName =
             jsonResponse['DenseNet']['label']; // Extract disease name
 
-        // Navigate after Healthy prediction
-        if (diseaseName == "Healthy Leaf" || diseaseName == "Healthy Fruit") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HealthyView(diseaseName: diseaseName),
-            ),
+        Disease? diseaseData = await DiseaseService.getDiseaseData(diseaseName);
+
+        if (diseaseData != null) {
+          // Create DiseaseDisplayModel
+          DiseaseDisplayModel diseaseDisplay = DiseaseDisplayModel(
+            disease: diseaseData,
+            imageFile: null, // Pass the selected image file
           );
+
+          // Navigate to the appropriate view based on the disease name
+          if (diseaseName == "Healthy Leaf" || diseaseName == "Healthy Fruit") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HealthyView(disease: diseaseDisplay),
+              ),
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DiseaseView(disease: diseaseDisplay),
+              ),
+            );
+          }
         } else {
-          // Navigate to DiseaseView for disease predictions
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DiseaseView(disease: null),
-            ),
-          );
+          _handleError("No data found for $diseaseName");
         }
       } else {
         _handleError("Error predicting disease");

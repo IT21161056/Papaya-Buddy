@@ -9,7 +9,7 @@ const diseaseSchema = new Schema({
   affected_area: {
     type: String,
     required: true,
-    enum: ["leaves", "stem", "fruit", "root"],
+    enum: ["leaves", "stem", "fruit", "root","leaf"],
   },
   symptoms: {
     type: [String],
@@ -18,7 +18,7 @@ const diseaseSchema = new Schema({
   disease_type: {
     type: String,
     required: true,
-    enum: ["viral", "bacterial", "fungal", "parasitic","pest"],
+    enum: ["viral", "bacterial", "fungal", "parasitic","pest","healthy"],
   },
   description: {
     type: String,
