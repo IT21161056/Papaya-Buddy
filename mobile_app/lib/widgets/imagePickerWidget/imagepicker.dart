@@ -85,7 +85,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DiseaseView(diseaseName: diseaseName),
+              builder: (context) => DiseaseView(disease: null),
             ),
           );
         }

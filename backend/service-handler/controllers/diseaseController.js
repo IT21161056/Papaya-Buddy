@@ -9,7 +9,7 @@ const createNewDisease = asyncHandler(async (req, res) => {
     disease_type,
     description,
     preventive_measures,
-    suggested_image_urls
+    suggested_image_urls,
   } = req.body;
 
   if (
@@ -32,7 +32,7 @@ const createNewDisease = asyncHandler(async (req, res) => {
     disease_type,
     description,
     preventive_measures,
-    suggested_image_urls
+    suggested_image_urls,
   };
 
   const disease = await Disease.create(diseaseObject);
@@ -107,6 +107,7 @@ const updateDisease = asyncHandler(async (req, res) => {
     disease_type,
     description,
     preventive_measures,
+    suggested_image_urls,
   } = req.body;
 
   if (
@@ -115,7 +116,8 @@ const updateDisease = asyncHandler(async (req, res) => {
     !symptoms &&
     !disease_type &&
     !description &&
-    !preventive_measures
+    !preventive_measures &&
+    !suggested_image_urls
   ) {
     res.status(400);
     throw new Error("Please provide at least one field to update");
@@ -128,6 +130,8 @@ const updateDisease = asyncHandler(async (req, res) => {
   if (disease_type) updateData.disease_type = disease_type;
   if (description) updateData.description = description;
   if (preventive_measures) updateData.preventive_measures = preventive_measures;
+  if (suggested_image_urls.length)
+    updateData.suggested_image_urls = suggested_image_urls;
 
   const updatedDisease = await Disease.findByIdAndUpdate(id, updateData, {
     new: true,

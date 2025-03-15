@@ -70,7 +70,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
           context,
           MaterialPageRoute(
             builder: (context) => DiseaseView(
-              diseaseName: diseaseName,
+              disease: null,
             ),
           ),
         );

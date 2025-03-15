@@ -3,11 +3,12 @@ import 'package:http/http.dart' as http;
 import 'package:mobile_app/models/diseaseModel.dart';
 
 class DiseaseService {
-  static const String baseUrl = "https://192.168.1.100:5080/disease";
+  static const String baseUrl = "http://192.168.187.155:5080/disease";
 
-  static Future<Disease?> getDiseaseData({required String diseaseName}) async {
-    final String url = "$baseUrl?name=$diseaseName";
-
+  static Future<Disease?> getDiseaseData(String diseaseName) async {
+    final String url =
+        'http://192.168.187.155:5080/api/v1/disease?name=$diseaseName';
+    print(diseaseName);
     try {
       final response = await http.get(Uri.parse(url));
 

@@ -58,7 +58,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://192.168.1.100:5000/predict'),
+        Uri.parse('http://192.168.187.155:5000/predict'),
       );
 
       request.files
@@ -73,15 +73,19 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
         _disease = jsonResponse['disease'];
         _confidence = jsonResponse['confidence'];
 
-        Disease? data =
-            await DiseaseService.getDiseaseData(diseaseName: _disease);
+        Disease? data = await DiseaseService.getDiseaseData(_disease);
 
         if (data != null) {
           if (mounted) {
+            DiseaseDisplayModel diseaseDisplay = DiseaseDisplayModel(
+              disease: data,
+              imageFile: null, // Replace with actual image file if available
+            );
+
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DiseaseView(diseaseName: data.name),
+                builder: (context) => DiseaseView(disease: diseaseDisplay),
               ),
             );
           }
