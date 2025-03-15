@@ -19,7 +19,7 @@ const createNewDisease = asyncHandler(async (req, res) => {
     !disease_type ||
     !description ||
     !preventive_measures ||
-    suggested_image_urls.length != 0
+    suggested_image_urls.length == 0
   ) {
     res.status(400);
     throw new Error("All fields are required");
