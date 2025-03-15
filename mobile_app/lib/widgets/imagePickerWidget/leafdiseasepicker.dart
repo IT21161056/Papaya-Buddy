@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile_app/models/diseaseModel.dart';
+import 'package:mobile_app/services/diseaseService.dart';
+import 'package:mobile_app/theme/colors.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
 
 class LeafDiseasePicker extends StatefulWidget {
@@ -15,9 +18,9 @@ class LeafDiseasePicker extends StatefulWidget {
 
 class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
   File? _image;
-  String? _category;
-  String? _predictionLabel;
-  double? _confidence;
+  String _healthStatus = '';
+  String _disease = '';
+  double _confidence = 0;
   bool _isLoading = false;
   final ImagePicker _picker = ImagePicker();
 
@@ -33,14 +36,19 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
 
   void _resetPrediction() {
     setState(() {
-      _category = null;
-      _predictionLabel = null;
-      _confidence = null;
+      _disease = '';
+      _healthStatus = '';
+      _confidence = 0;
     });
   }
 
   Future<void> _predictDisease() async {
-    if (_image == null) return;
+    if (_image == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select an image first")),
+      );
+      return;
+    }
 
     setState(() {
       _isLoading = true;
@@ -50,8 +58,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(
-            'http://10.0.2.2:8000/predict'), // Added trailing slash to match your FastAPI endpoint
+        Uri.parse('http://192.168.187.155:5000/predict'),
       );
 
       request.files
@@ -62,39 +69,59 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(await response.stream.bytesToString());
 
-        // Use 'disease_prediction' instead of 'CNN' to match your FastAPI response
-        String diseaseName = jsonResponse['disease_prediction'];
+        _healthStatus = jsonResponse['health_status'];
+        _disease = jsonResponse['disease'];
+        _confidence = jsonResponse['confidence'];
 
-        // Navigate to Disease Details Screen
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DiseaseView(
-              diseaseName: diseaseName,
-            ),
-          ),
-        );
+        Disease? data = await DiseaseService.getDiseaseData(_disease);
+
+        if (data != null) {
+          if (mounted) {
+            DiseaseDisplayModel diseaseDisplay = DiseaseDisplayModel(
+              disease: data,
+              imageFile: null, // Replace with actual image file if available
+            );
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DiseaseView(disease: diseaseDisplay),
+              ),
+            );
+          }
+        } else {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("No data found for $_disease")),
+            );
+          }
+        }
       } else {
         _handleError("Error predicting disease: ${response.statusCode}");
       }
     } catch (e) {
       _handleError("Network error: ${e.toString()}");
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
   void _handleError(String message) {
-    setState(() {
-      _category = "Error";
-      _predictionLabel = message;
-    });
+    if (mounted) {
+      setState(() {
+        _healthStatus = "";
+        _disease = "";
+        _confidence = 0;
+      });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    }
   }
 
   @override
@@ -141,7 +168,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
               width: double.infinity,
               height: 290,
               decoration: BoxDecoration(
-                color: const Color(0xFFF8FAFC),
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: _image == null
@@ -187,7 +214,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFFF8FAFC),
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
@@ -202,12 +229,10 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
                             color: const Color(0xFFDDEEFF),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: SvgPicture.asset(
-                            'assets/icons/camera.svg',
-                            height: 20,
-                            width: 24,
-                            color: const Color(0xFF1A73E8),
-                          ),
+                          child: SvgPicture.asset('assets/icons/camera.svg',
+                              height: 24,
+                              width: 24,
+                              color: const Color(0xFF1A73E8)),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -227,8 +252,9 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.shade600,
-                                overflow: TextOverflow.ellipsis,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
@@ -272,8 +298,9 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.shade600,
-                                overflow: TextOverflow.ellipsis,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
@@ -325,7 +352,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
                               alignment: Alignment.center,
                               child: Text(
                                 '${index + 1}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: Color(0xFF0284C7),
@@ -359,14 +386,15 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
                 onPressed: _isLoading ? null : _predictDisease,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromRGBO(37, 100, 235, 1),
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   elevation: 0,
                 ),
                 child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 300), // Smooth transition
+                  duration:
+                      const Duration(milliseconds: 300), // Smooth transition
                   child: _isLoading
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -380,9 +408,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
                                     AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             ),
-                            SizedBox(
-                                width:
-                                    10), // Add spacing between loader and text
+                            const SizedBox(width: 10),
                             Text(
                               "Predicting...",
                               style: TextStyle(
@@ -405,7 +431,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            SizedBox(width: 6),
+                            const SizedBox(width: 6),
                             SvgPicture.asset(
                               'assets/icons/magic.svg',
                               height: 16,
@@ -419,42 +445,6 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildTip(int number, String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              color: Colors.blue.shade100,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                number.toString(),
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: const Color.fromARGB(255, 176, 176, 176)),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 14,
-                color: const Color.fromARGB(255, 162, 161, 161),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
