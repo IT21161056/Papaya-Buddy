@@ -1,53 +1,55 @@
 // File: server.js
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
 const fs = require("fs");
+const cors = require("cors");
 const path = require("path");
-const cloudinaryRoutes = require("./routes/cloudinaryRoutes");
-const errorMiddleware = require("./middleware/errorMiddleware");
+const dotenv = require("dotenv");
+const express = require("express");
 const diseaseRoutes = require("./routes/diseaseRoutes");
 const connectMongoDb = require("./config/dbConnection");
-const suggestedImageRoutes = require("./routes/suggestedImageRoute");
-const treatmentRoutes = require("./routes/treatmentRoutes");
 const historyRoutes = require("./routes/historyRoutes");
+const treatmentRoutes = require("./routes/treatmentRoutes");
+const cloudinaryRoutes = require("./routes/cloudinaryRoutes");
+const errorMiddleware = require("./middleware/errorMiddleware");
+const suggestedImageRoutes = require("./routes/suggestedImageRoute");
 
-connectMongoDb()
+connectMongoDb();
 
-// Load environment variables
 dotenv.config();
 
-// Initialize Express app
 const app = express();
+
+const BASE_URL = process.env.API_BASE_URL || "/api/v1";
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
 }
 
+//cloudinary routes
+app.use(`${BASE_URL}/upload`, cloudinaryRoutes);
+
 // external services routes
-app.use("/api", cloudinaryRoutes);
+app.use(`${BASE_URL}/service`, cloudinaryRoutes);
 
+// disease routes
+app.use(`${BASE_URL}/disease`, diseaseRoutes);
 
+app.use(`${BASE_URL}/suggested_image`, suggestedImageRoutes);
 
-//disease routes
-app.use("/disease", diseaseRoutes);
+app.use(`${BASE_URL}/treatment`, treatmentRoutes);
 
-//suggested image routes
-app.use("/suggested_image",suggestedImageRoutes);
+app.use(`${BASE_URL}/history`, historyRoutes);
 
-//treatment routes
-app.use("/treatment", treatmentRoutes);
-
-//history routes
-app.use("/history", historyRoutes);
-
-
+app.get(`${BASE_URL}`, (req, res) => {
+  res.json({
+    status: "success",
+    message: "API is running",
+  });
+});
 
 // Error handling middleware
 app.use(errorMiddleware);
@@ -56,4 +58,5 @@ app.use(errorMiddleware);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`API base URL: ${BASE_URL}`);
 });
