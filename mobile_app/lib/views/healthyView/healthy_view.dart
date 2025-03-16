@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mobile_app/models/diseaseModel.dart';
-import 'package:mobile_app/services/predictionService';
+import 'package:mobile_app/services/predictionService.dart';
 import 'package:mobile_app/views/treatment_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
