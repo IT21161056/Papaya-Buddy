@@ -1,10 +1,9 @@
-import 'package:mongo_dart/mongo_dart.dart' show ObjectId;
 
 class Treatment {
   final String id;
   final String method;
   final String description;
-  final ObjectId diseaseId;
+  final String diseaseId;
   final List<String> treatmentType;
   final List<String> effectiveness;
   final String sideEffects;
@@ -44,7 +43,7 @@ class Treatment {
       id: map['_id'].toString(),
       method: map['method'] as String,
       description: map['description'] as String,
-      diseaseId: map['diseaseId'] as ObjectId,
+      diseaseId: map['diseaseId'] as String,
       treatmentType: List<String>.from(map['treatment_type']),
       effectiveness: List<String>.from(map['effectiveness']),
       sideEffects: map['side_effects'] as String,
@@ -58,7 +57,7 @@ class Treatment {
     String? id,
     String? method,
     String? description,
-    ObjectId? diseaseId,
+    String? diseaseId,
     List<String>? treatmentType,
     List<String>? effectiveness,
     String? sideEffects,
