@@ -80,7 +80,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
           // Create DiseaseDisplayModel
           DiseaseDisplayModel diseaseDisplay = DiseaseDisplayModel(
             disease: diseaseData,
-            imageFile: null, // Pass the selected image file
+            imageFile: _image, // Pass the selected image file
           );
 
           // Navigate to the appropriate view based on the disease name
