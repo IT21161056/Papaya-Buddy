@@ -37,7 +37,7 @@ eff_model = tf.keras.models.load_model("D:/papaya_diseases/training/efficientNet
 
 # Define class labels
 eff_class_labels = {0: "fruit", 1: "leaf", 2: "other"}  # EfficientNet classes
-dense_class_labels = {0: "Healthy Fruit", 1: "Healthy Leaf", 2: "Mealy Bug", 3: "Mite Bug"}  # DenseNet classes
+dense_class_labels = {0: "Healthy Fruit", 1: "Healthy Leaf", 2: "Mealy", 3: "Mite"}  # DenseNet classes
 
 eff_threshold = 0.9  # Threshold for EfficientNet
 
