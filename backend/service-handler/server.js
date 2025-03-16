@@ -25,6 +25,12 @@ const BASE_URL = process.env.API_BASE_URL || "/api/v1";
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  const timestamp = new Date().toISOString();
+  console.log(`[${timestamp}] ${req.method} ${req.url}`);
+  next();
+});
+
 const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);

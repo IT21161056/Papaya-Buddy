@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
+import 'package:mobile_app/services/diseaseService.dart';
+import 'package:mobile_app/models/diseaseModel.dart';
 
 class FruitDiseasePicker extends StatefulWidget {
   const FruitDiseasePicker({super.key});
@@ -15,10 +17,9 @@ class FruitDiseasePicker extends StatefulWidget {
 
 class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
   File? _image;
-  String? _category;
-  String? _predictionLabel;
-  double? _confidence;
+  String? disease_prediction;
   bool _isLoading = false;
+  bool _isImageLoading = false;
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage(ImageSource source) async {
@@ -33,14 +34,17 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
 
   void _resetPrediction() {
     setState(() {
-      _category = null;
-      _predictionLabel = null;
-      _confidence = null;
+      disease_prediction = null;
     });
   }
 
   Future<void> _predictDisease() async {
-    if (_image == null) return;
+    if (_image == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select an image first")),
+      );
+      return;
+    }
 
     setState(() {
       _isLoading = true;
@@ -50,8 +54,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(
-            'http://10.0.2.2:8000/predict'), // Added trailing slash to match your FastAPI endpoint
+        Uri.parse('http://10.0.2.2:5000/predict'),
       );
 
       request.files
@@ -62,22 +65,38 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(await response.stream.bytesToString());
 
-        // Use 'disease_prediction' instead of 'CNN' to match your FastAPI response
-        String diseaseName = jsonResponse['disease_prediction'];
+        String diseaseName =
+            jsonResponse['disease_prediction']; // Extract disease name
 
-        // Navigate to Disease Details Screen
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DiseaseView(
-              disease: null,
-            ),
-          ),
-        );
+        Disease? data = await DiseaseService.getDiseaseData(diseaseName);
+
+        if (data != null) {
+          if (mounted) {
+            DiseaseDisplayModel diseaseDisplay = DiseaseDisplayModel(
+              disease: data,
+              imageFile: null, // Replace with actual image file if available
+            );
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DiseaseView(disease: diseaseDisplay),
+              ),
+            );
+          }
+        } else {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("No data found for $diseaseName")),
+            );
+          }
+        }
       } else {
         _handleError("Error predicting disease: ${response.statusCode}");
       }
     } catch (e) {
+      print("Exception details: $e");
+
       _handleError("Network error: ${e.toString()}");
     } finally {
       setState(() {
@@ -87,10 +106,15 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
   }
 
   void _handleError(String message) {
-    setState(() {
-      _category = message;
-      _predictionLabel = message;
-    });
+    if (mounted) {
+      setState(() {
+        disease_prediction = null;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    }
   }
 
   @override
