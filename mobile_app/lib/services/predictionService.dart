@@ -49,8 +49,7 @@ class SavePredictionHistory {
       // Send the request
       final response = await request.send();
 
-      // Check the response status code
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         final responseData = await response.stream.bytesToString();
         final Map<String, dynamic> responseBody = jsonDecode(responseData);
 

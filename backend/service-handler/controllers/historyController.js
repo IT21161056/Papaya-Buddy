@@ -38,9 +38,9 @@ const createNewPredictionHistory = async (req, res) => {
     };
     const createdHistory = await History.create(historyObject);
     if (createdHistory) {
-      res.status(201).json({ message: `New history created`, history: createdHistory });
+      res.status(201).json({  success: true, message: `New history created`, history: createdHistory });
     } else {
-      res.status(400).json({ message: "Invalid history data received" });
+      res.status(400).json({  success: false, message: "Invalid history data received" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
