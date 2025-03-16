@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pages = [
     const DashboardView(),
-    CommunityView(),
+    DiseaseView(),
     FirebaseAuth.instance.currentUser == null
         ? const LoginView()
         : const ProfileScreen(),
