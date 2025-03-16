@@ -8,6 +8,7 @@ const diseaseRoutes = require("./routes/diseaseRoutes");
 const connectMongoDb = require("./config/dbConnection");
 const historyRoutes = require("./routes/historyRoutes");
 const treatmentRoutes = require("./routes/treatmentRoutes");
+const maturityRoutes = require("./routes/maturityRoutes");
 const cloudinaryRoutes = require("./routes/cloudinaryRoutes");
 const errorMiddleware = require("./middleware/errorMiddleware");
 const suggestedImageRoutes = require("./routes/suggestedImageRoute");
@@ -43,6 +44,8 @@ app.use(`${BASE_URL}/suggested_image`, suggestedImageRoutes);
 app.use(`${BASE_URL}/treatment`, treatmentRoutes);
 
 app.use(`${BASE_URL}/history`, historyRoutes);
+
+app.use(`${BASE_URL}/maturity`, maturityRoutes);
 
 app.get(`${BASE_URL}`, (req, res) => {
   res.json({
