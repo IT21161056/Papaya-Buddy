@@ -145,9 +145,25 @@ const updateDisease = asyncHandler(async (req, res) => {
   });
 });
 
+const deleteDisease = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    res.status(400);
+    throw new Error("Disease id is required.");
+  }
+  const result = await Disease.findOneAndDelete(id);
+
+  res.status(200).json({
+    success: true,
+    message: `${result.name} disease deleted successfully`,
+  });
+});
+
 module.exports = {
   createNewDisease,
   getAllDiseases,
   getDiseaseById,
   updateDisease,
+  deleteDisease,
 };
