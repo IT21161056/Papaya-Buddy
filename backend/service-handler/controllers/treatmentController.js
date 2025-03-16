@@ -1,6 +1,21 @@
 const asyncHandler = require("express-async-handler");
 const Treatment = require("../models/Treatment");
 
+const getAllTreatments = asyncHandler(async (req, res) => {
+  const treatments = await Treatment.find().lean();
+
+  if (!treatments?.length) {
+    res.status(400);
+    throw new Error("No treatments found");
+  }
+
+  res.status(200).json({
+    success: true,
+    count: treatments.length,
+    data: treatments,
+  });
+});
+
 const createNewTreatment = asyncHandler(async (req, res) => {
   const {
     method,
@@ -104,6 +119,7 @@ const getTreatmentById = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  getAllTreatments,
   createNewTreatment,
   getTreatmentsByDisease,
   getTreatmentById,

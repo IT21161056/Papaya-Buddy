@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const Disease = require("../models/Disease");
+const Disease = require("../models/disease");
 
 const createNewDisease = asyncHandler(async (req, res) => {
   const {
@@ -12,6 +12,8 @@ const createNewDisease = asyncHandler(async (req, res) => {
     suggested_image_urls,
   } = req.body;
 
+  console.log(">>>", req.body);
+
   if (
     !name ||
     !affected_area ||
@@ -19,7 +21,7 @@ const createNewDisease = asyncHandler(async (req, res) => {
     !disease_type ||
     !description ||
     !preventive_measures ||
-    suggested_image_urls.length == 0
+    (!Array.isArray(suggested_image_urls) && suggested_image_urls.length === 0)
   ) {
     res.status(400);
     throw new Error("All fields are required");
@@ -34,7 +36,7 @@ const createNewDisease = asyncHandler(async (req, res) => {
     preventive_measures,
     suggested_image_urls,
   };
-
+  console.log(diseaseObject);
   const disease = await Disease.create(diseaseObject);
 
   if (disease) {
@@ -145,9 +147,25 @@ const updateDisease = asyncHandler(async (req, res) => {
   });
 });
 
+const deleteDisease = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    res.status(400);
+    throw new Error("Disease id is required.");
+  }
+  const result = await Disease.findOneAndDelete(id);
+
+  res.status(200).json({
+    success: true,
+    message: `${result.name} disease deleted successfully`,
+  });
+});
+
 module.exports = {
   createNewDisease,
   getAllDiseases,
   getDiseaseById,
   updateDisease,
+  deleteDisease,
 };

@@ -25,19 +25,21 @@ const diseaseSchema = new Schema({
     required: true,
     trim: true,
   },
-  transmission_method: {
-    type: String,
-    enum: ["airborne", "soilborne", "waterborne", "vector-borne"],
-  },
+  // transmission_method: {
+  //   type: String,
+  //   enum: ["airborne", "soilborne", "waterborne", "vector-borne"],
+  // },
   preventive_measures: {
     type: String,
     required: true,
     trim: true,
   },
-  suggested_image_urls:[{
-    type: String,
-    required: true,
-  }],
+  suggested_image_urls: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
   created_at: {
     type: Date,
     default: Date.now,
