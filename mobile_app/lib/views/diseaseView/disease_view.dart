@@ -197,15 +197,15 @@ class _DiseaseViewState extends State<DiseaseView> {
                   SizedBox(height: 12),
                   Row(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          'assets/r2.jpg',
-                          width: 60,
-                          height: 60,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      // ClipRRect(
+                      //   borderRadius: BorderRadius.circular(8),
+                      //   child: Image.asset(
+                      //     'assets/r2.jpg',
+                      //     width: 60,
+                      //     height: 60,
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      // ),
                       SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
