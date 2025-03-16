@@ -1,13 +1,77 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:mobile_app/models/diseaseModel.dart'; // Import DiseaseDisplayModel
-import 'package:mobile_app/views/treatment_view.dart'; // Ensure this import is correct
+import 'package:mobile_app/models/diseaseModel.dart';
+import 'package:mobile_app/services/predictionService';
+import 'package:mobile_app/views/treatment_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class HealthyView extends StatelessWidget {
-  final DiseaseDisplayModel? disease; // Accept DiseaseDisplayModel
+class HealthyView extends StatefulWidget {
+  final DiseaseDisplayModel? disease;
 
-  // Constructor to accept DiseaseDisplayModel
   const HealthyView({Key? key, required this.disease}) : super(key: key);
+
+  @override
+  _HealthyViewState createState() => _HealthyViewState();
+}
+
+class _HealthyViewState extends State<HealthyView> {
+  User? _currentUser;
+  bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentUser();
+  }
+
+  void _getCurrentUser() {
+    _currentUser = FirebaseAuth.instance.currentUser;
+  }
+
+  //save prediction 
+  Future<void> _savePrediction() async {
+    if (_currentUser == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please login to proceed!")),
+      );
+      return;
+    }
+    if (widget.disease == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No disease data found to save!")),
+      );
+      return;
+    }
+    setState(() {
+      _isSaving = true; 
+    });
+    try {
+      final File? imageFile = widget.disease!.imageFile;
+      if (imageFile == null) {
+        print("No image file available");
+        return;
+      }
+      await SavePredictionHistory.savePrediction(
+        userId: _currentUser!.uid,
+        diseaseId: widget.disease!.disease.id,
+        imageFile: imageFile, // Pass the File object directly
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Prediction details saved successfully!")),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to save prediction:")),
+      );
+    } finally {
+      setState(() {
+        _isSaving = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +104,7 @@ class HealthyView extends StatelessWidget {
           children: [
             // Disease Name
             Text(
-              disease?.disease.name ?? 'Healthy Plant',
+              widget.disease?.disease.name ?? 'Healthy Plant',
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
@@ -60,7 +124,7 @@ class HealthyView extends StatelessWidget {
                     enlargeCenterPage: true,
                     autoPlay: true,
                   ),
-                  items: disease?.disease.suggestedImageUrls.map((path) {
+                  items: widget.disease?.disease.suggestedImageUrls.map((path) {
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.network(
@@ -94,7 +158,7 @@ class HealthyView extends StatelessWidget {
                   bottom: 8,
                   right: 8,
                   child: Icon(
-                    Icons.swipe, // Hand icon for scroll indicator
+                    Icons.swipe,
                     color: Colors.white,
                     size: 24,
                   ),
@@ -107,7 +171,7 @@ class HealthyView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  "${disease?.disease.suggestedImageUrls.length ?? 0} photos",
+                  "${widget.disease?.disease.suggestedImageUrls.length ?? 0} photos",
                   style: const TextStyle(color: Colors.grey),
                 ),
               ],
@@ -126,7 +190,8 @@ class HealthyView extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      disease?.disease.description ?? 'Your plant is healthy! Keep up the good work.',
+                      widget.disease?.disease.description ??
+                          'Your plant is healthy! Keep up the good work.',
                       style: const TextStyle(color: Colors.black),
                     ),
                   ),
@@ -178,20 +243,31 @@ class HealthyView extends StatelessWidget {
                 backgroundColor: Colors.green,
                 minimumSize: const Size(double.infinity, 50),
               ),
-              onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => TreatmentScreen(
-                //       disease: disease, // Pass disease data to TreatmentScreen
-                //     ),
-                //   ),
-                // );
-              },
-              child: const Text(
-                "Save to your diagnoses",
-                style: TextStyle(color: Colors.white),
-              ),
+              onPressed: _isSaving ? null : _savePrediction,
+              child: _isSaving
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          "Saving...",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    )
+                  : const Text(
+                      "Save to your diagnoses",
+                      style: TextStyle(color: Colors.white),
+                    ),
             ),
           ],
         ),
