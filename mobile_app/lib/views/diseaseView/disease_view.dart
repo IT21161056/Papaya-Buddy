@@ -174,6 +174,7 @@ class _DiseaseViewState extends State<DiseaseView> {
             const SizedBox(height: 16),
 
             // Information box
+// Information box with vertically centered icon
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -181,8 +182,14 @@ class _DiseaseViewState extends State<DiseaseView> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start, // Align items to the top
                 children: [
-                  const Icon(Icons.info_outline, color: Colors.blue),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 2), // Small top padding to align with first line
+                    child: const Icon(Icons.info_outline, color: Colors.blue),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -229,8 +236,8 @@ class _DiseaseViewState extends State<DiseaseView> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => TreatmentScreen(
-                        // diseaseId: widget.disease?.id,
-                        // diseaseName: widget.disease?.name,
+                        // id: widget.disease?.id,
+                        // name: widget.disease?.name,
                         ),
                   ),
                 );

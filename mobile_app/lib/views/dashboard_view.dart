@@ -87,7 +87,7 @@ class _DashboardViewState extends State<DashboardView> {
               ),
             ),
             // Wether widget
-            ExpandableWeatherCard(),
+            // ExpandableWeatherCard(),
             // "Cure Your Crop" Section
             Expanded(
                 child: SingleChildScrollView(
