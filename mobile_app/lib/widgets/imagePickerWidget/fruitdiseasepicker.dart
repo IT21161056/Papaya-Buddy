@@ -8,6 +8,7 @@ import 'package:mobile_app/theme/colors.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
 import 'package:mobile_app/services/diseaseService.dart';
 import 'package:mobile_app/models/diseaseModel.dart';
+import 'package:mobile_app/theme/colors.dart';
 
 class FruitDiseasePicker extends StatefulWidget {
   const FruitDiseasePicker({super.key});
@@ -55,7 +56,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://10.0.2.2:5000/predict'),
+        Uri.parse('http://192.168.1.3:5000/predict'),
       );
 
       request.files
@@ -466,40 +467,5 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
             ))
           ],
         )));
-  }
-
-  Widget _buildTip(int number, String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Container(
-            width: 24,
-            decoration: BoxDecoration(
-              color: Colors.blue.shade100,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                number.toString(),
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: const Color.fromARGB(255, 176, 176, 176)),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 14,
-                color: const Color.fromARGB(255, 162, 161, 161),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
