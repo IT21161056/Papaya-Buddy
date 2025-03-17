@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/theme/colors.dart';
 import 'package:mobile_app/views/auth/login_view.dart';
 import 'package:mobile_app/views/auth/profile_view.dart';
 import 'package:mobile_app/views/auth/signup_view.dart';
@@ -53,8 +54,8 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Colors.white,
             currentIndex: _selectedIndex,
             onTap: _onItemTapped,
-            selectedItemColor: Color.fromRGBO(100, 116, 139, 1),
-            unselectedItemColor: Color(0xFFCBD5E1),
+            selectedItemColor: AppColors.textSecondary,
+            unselectedItemColor: Color.fromRGBO(100, 116, 139, 0.8),
             selectedLabelStyle: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 12,

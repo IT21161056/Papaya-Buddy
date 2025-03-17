@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/diagonosisView/diagnosis_list.dart';
 import 'package:mobile_app/views/diagonosisView/disease_details.dart';
+import 'package:mobile_app/views/maturityView/PapayaMaturityInfoScreen.dart';
 import 'package:mobile_app/widgets/dashboard.widgets/crop_card.dart';
 import 'package:mobile_app/widgets/weather.widgets/weather_widget.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/fruitdiseasepicker.dart';
@@ -31,7 +32,7 @@ final List<Map<String, dynamic>> cropCards = [
   {
     'name': 'Maturity Level',
     'icon': 'assets/icons/lucide_chart.svg',
-    'picker': MaturityPicker(),
+    'picker': MaturityScreen(),
     'color': Colors.blue
   },
   {
@@ -47,44 +48,44 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-            iconSize: 16,
-            alignment: Alignment.center,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Welcome back,",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Color.fromRGBO(100, 116, 139, 1),
-                  fontSize: 14,
-                ),
-              ),
-              Text(
-                "Alex",
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          ),
-        ),
         backgroundColor: Color(0xFFF8FAFC),
         body: SafeArea(
             child: Column(
           children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFF1F5F9),
+                    width: 1,
+                  ),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    "Welcome back,",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromRGBO(100, 116, 139, 1),
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    "Alex",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             // Wether widget
             ExpandableWeatherCard(),
             // "Cure Your Crop" Section
