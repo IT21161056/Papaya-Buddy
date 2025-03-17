@@ -56,7 +56,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://192.168.1.3:5000/predict'),
+        Uri.parse('http://192.168.1.4:5000/predict'),
       );
 
       request.files
