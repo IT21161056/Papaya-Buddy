@@ -1,6 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const Treatment = require("../models/Treatment");
 
+// @desc Get all treatments
+// @route GET/treatment
+
 const getAllTreatments = asyncHandler(async (req, res) => {
   const treatments = await Treatment.find().lean();
 
@@ -15,6 +18,9 @@ const getAllTreatments = asyncHandler(async (req, res) => {
     data: treatments,
   });
 });
+
+// @desc Create new treatment
+// @route POST/treatment
 
 const createNewTreatment = asyncHandler(async (req, res) => {
   const {
@@ -86,6 +92,9 @@ const createNewTreatment = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Get treatment by disease
+// @route GET/treatment/:diseaseId
+
 const getTreatmentsByDisease = asyncHandler(async (req, res) => {
   const { diseaseId } = req.params;
 
@@ -102,6 +111,9 @@ const getTreatmentsByDisease = asyncHandler(async (req, res) => {
     data: treatments,
   });
 });
+
+// @desc Get treatment by ID
+// @route GET/treatment/:id
 
 const getTreatmentById = asyncHandler(async (req, res) => {
   const treatment = await Treatment.findById(req.params.id).populate({
