@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/models/treatmentModel.dart';
 
-class DiseaseService {
-  static const String baseUrl = "http://192.168.1.3:5080/treatment";
+class TreatmentService {
+  static const String baseUrl = "http://192.168.1.4:5080/treatment";
 
-  static Future<Treatment?> getTreatmentData(String treatmentName) async {
+  static Future<List<Treatment>?> getTreatmentDataByDisease(
+      String diseaseId) async {
     final String url =
-        'http://192.168.1.3:5080/api/v1/treatment?name=$treatmentName';
+        'http://192.168.1.4:5080/api/v1/treatment/by-disease/67d831e2feacec6a44777146';
     try {
       final response = await http.get(Uri.parse(url));
 
@@ -17,9 +18,14 @@ class DiseaseService {
         if (responseData['success'] == true &&
             responseData['data'] != null &&
             responseData['data'].isNotEmpty) {
-          return Treatment.fromJson(responseData['data'][0]);
+          // Parse the array of treatments and return as a List
+          List<Treatment> treatments = [];
+          for (var treatmentData in responseData['data']) {
+            treatments.add(Treatment.fromJson(treatmentData));
+          }
+          return treatments;
         } else {
-          print("No data found for treatments: $treatmentName");
+          print("No data found for treatments");
           return null;
         }
       } else {
