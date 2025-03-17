@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/services/auth_services.dart';
-import 'package:mobile_app/views/diagonosisView/diagnosis_list.dart';
-import 'package:mobile_app/views/diagonosisView/disease_details.dart';
-import 'package:mobile_app/views/maturityView/PapayaMaturityInfoScreen.dart';
 import 'package:mobile_app/widgets/dashboard.widgets/crop_card.dart';
 import 'package:mobile_app/widgets/dashboard.widgets/predisctionsList.dart';
 import 'package:mobile_app/widgets/weather.widgets/weather_widget.dart';
@@ -197,7 +194,7 @@ class _DashboardViewState extends State<DashboardView> {
 
                   // Old Prediction List
                   PredictionsList(
-                    userId: userUID ?? "CbpeWI3KPue25bAn6VEH1XrE6ok2",
+                    userId: userUID ?? '',
                     height: 300,
                     onLoadingChanged: (isLoading) {},
                   ),
