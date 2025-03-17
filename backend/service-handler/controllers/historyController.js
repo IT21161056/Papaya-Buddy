@@ -53,7 +53,7 @@ const getHistoryByUserId = async (req, res) => {
         if (!userid) {
             return res.status(400).json({ message: "userid is required" });
         }
-        const historyList = await History.find({ userid });
+        const historyList = await History.find({ userid }).sort({ createdAt: -1 });
 
         if (historyList.length > 0) {
             res.status(200).json({ message: "History list retrieved successfully", historyList });
