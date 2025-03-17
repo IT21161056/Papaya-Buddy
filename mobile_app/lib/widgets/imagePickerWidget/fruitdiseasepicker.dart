@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
 import 'package:mobile_app/services/diseaseService.dart';
 import 'package:mobile_app/models/diseaseModel.dart';
+import 'package:mobile_app/theme/colors.dart';
 
 class FruitDiseasePicker extends StatefulWidget {
   const FruitDiseasePicker({super.key});
@@ -54,7 +55,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://10.0.2.2:5000/predict'),
+        Uri.parse('http://192.168.1.3:5000/predict'),
       );
 
       request.files
@@ -151,7 +152,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,7 +162,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
               width: double.infinity,
               height: 290,
               decoration: BoxDecoration(
-                color: const Color(0xFFF8FAFC),
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: _image == null
@@ -207,7 +208,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFFF8FAFC),
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
@@ -222,12 +223,10 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                             color: const Color(0xFFDDEEFF),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: SvgPicture.asset(
-                            'assets/icons/camera.svg',
-                            height: 20,
-                            width: 24,
-                            color: const Color(0xFF1A73E8),
-                          ),
+                          child: SvgPicture.asset('assets/icons/camera.svg',
+                              height: 24,
+                              width: 24,
+                              color: const Color(0xFF1A73E8)),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -247,8 +246,9 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.shade600,
-                                overflow: TextOverflow.ellipsis,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
@@ -292,8 +292,9 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.shade600,
-                                overflow: TextOverflow.ellipsis,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
@@ -306,11 +307,10 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
             const SizedBox(height: 10),
             // Tips for Better Detection
             Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -322,9 +322,53 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  _buildTip(1, "Ensure good lighting conditions"),
-                  _buildTip(2, "Keep the camera steady and focused"),
-                  _buildTip(3, "Capture the affected area clearly"),
+                  const SizedBox(height: 12),
+                  ...List.generate(
+                    3,
+                    (index) {
+                      final tips = [
+                        'Ensure good lighting conditions',
+                        'Keep the camera steady and focused',
+                        'Capture the affected area clearly',
+                      ];
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFE0F2FE),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '${index + 1}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF0284C7),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                tips[index],
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF1A1A1A),
+                                  height: 1.4,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -336,14 +380,15 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                 onPressed: _isLoading ? null : _predictDisease,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromRGBO(37, 100, 235, 1),
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   elevation: 0,
                 ),
                 child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 300), // Smooth transition
+                  duration:
+                      const Duration(milliseconds: 300), // Smooth transition
                   child: _isLoading
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -357,9 +402,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                                     AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             ),
-                            SizedBox(
-                                width:
-                                    10), // Add spacing between loader and text
+                            const SizedBox(width: 10),
                             Text(
                               "Predicting...",
                               style: TextStyle(
@@ -382,7 +425,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            SizedBox(width: 6),
+                            const SizedBox(width: 6),
                             SvgPicture.asset(
                               'assets/icons/magic.svg',
                               height: 16,
@@ -396,41 +439,6 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildTip(int number, String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Container(
-            width: 24,
-            decoration: BoxDecoration(
-              color: Colors.blue.shade100,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                number.toString(),
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: const Color.fromARGB(255, 176, 176, 176)),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 14,
-                color: const Color.fromARGB(255, 162, 161, 161),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
