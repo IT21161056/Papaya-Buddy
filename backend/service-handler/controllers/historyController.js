@@ -1,4 +1,5 @@
 const History = require("../models/History");
+const asyncHandler = require("express-async-handler");
 const cloudinary = require("../config/cloudinary");
 const fs = require("fs");
 
@@ -8,11 +9,15 @@ const createNewPredictionHistory = async (req, res) => {
     const uploaded_img = req.file;
 
     if (!diseaseId || !userId) {
-      return res.status(400).json({ message: "diseaseId and userId are required" });
+      return res
+        .status(400)
+        .json({ message: "diseaseId and userId are required" });
     }
 
     if (!uploaded_img) {
-      return res.status(400).json({ message: "No image provided in the request body" });
+      return res
+        .status(400)
+        .json({ message: "No image provided in the request body" });
     }
 
     let uploaded_img_url;
@@ -25,10 +30,17 @@ const createNewPredictionHistory = async (req, res) => {
       fs.unlinkSync(uploaded_img.path);
       uploaded_img_url = result.secure_url;
     } catch (error) {
-      if (uploaded_img && uploaded_img.path && fs.existsSync(uploaded_img.path)) {
+      if (
+        uploaded_img &&
+        uploaded_img.path &&
+        fs.existsSync(uploaded_img.path)
+      ) {
         fs.unlinkSync(uploaded_img.path);
       }
-      return res.status(500).json({ message: "Error uploading image to Cloudinary", error: error.message });
+      return res.status(500).json({
+        message: "Error uploading image to Cloudinary",
+        error: error.message,
+      });
     }
 
     const historyObject = {
@@ -38,9 +50,15 @@ const createNewPredictionHistory = async (req, res) => {
     };
     const createdHistory = await History.create(historyObject);
     if (createdHistory) {
-      res.status(201).json({  success: true, message: `New history created`, history: createdHistory });
+      res.status(201).json({
+        success: true,
+        message: `New history created`,
+        history: createdHistory,
+      });
     } else {
-      res.status(400).json({  success: false, message: "Invalid history data received" });
+      res
+        .status(400)
+        .json({ success: false, message: "Invalid history data received" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -48,24 +66,38 @@ const createNewPredictionHistory = async (req, res) => {
 };
 
 const getHistoryByUserId = async (req, res) => {
-    try {
-        const { userid } = req.params;
-        if (!userid) {
-            return res.status(400).json({ message: "userid is required" });
-        }
-        const historyList = await History.find({ userid });
-
-        if (historyList.length > 0) {
-            res.status(200).json({ message: "History list retrieved successfully", historyList });
-        } else {
-            res.status(404).json({ message: "No history found for this user" });
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+  try {
+    const { userId } = req.params;
+    if (!userId) {
+      return res.status(400).json({ message: "userid is required" });
     }
+    const historyList = await History.find({ userId }).populate({
+      path: "diseaseId",
+      model: "Disease",
+      select: "name description", // Select which disease fields to include
+    });
+
+    if (historyList.length > 0) {
+      res.status(200).json(historyList);
+    } else {
+      res.status(404).json({ message: "No history found for this user" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
+const getHistories = asyncHandler(async (req, res) => {
+  const histories = await History.find().populate({
+    path: "diseaseId",
+    model: "Disease",
+    select: "name affected_area disease_type description", // Select which disease fields to include
+  });
+  res.json(histories);
+});
+
 module.exports = {
-    createNewPredictionHistory,
-    getHistoryByUserId
-}
+  createNewPredictionHistory,
+  getHistoryByUserId,
+  getHistories,
+};

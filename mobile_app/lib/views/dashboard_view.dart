@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/views/diagonosisView/diagnosis_list.dart';
-import 'package:mobile_app/views/diagonosisView/disease_details.dart';
-import 'package:mobile_app/views/maturityView/PapayaMaturityInfoScreen.dart';
+import 'package:mobile_app/services/auth_services.dart';
 import 'package:mobile_app/widgets/dashboard.widgets/crop_card.dart';
+import 'package:mobile_app/widgets/dashboard.widgets/predisctionsList.dart';
 import 'package:mobile_app/widgets/weather.widgets/weather_widget.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/fruitdiseasepicker.dart';
 import 'package:mobile_app/widgets/imagePickerWidget/imagepicker.dart';
@@ -44,7 +43,25 @@ final List<Map<String, dynamic>> cropCards = [
 ];
 
 class _DashboardViewState extends State<DashboardView> {
+  final AuthService _authService = AuthService();
+  bool _isLoading = true;
   bool isExpanded = false;
+  bool isPredictionsLoading = false;
+  String? userUID;
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+  }
+
+  Future<void> loadUserData() async {
+    userUID = _authService.getUserUID();
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,37 +191,12 @@ class _DashboardViewState extends State<DashboardView> {
                   const SizedBox(
                     height: 12,
                   ),
-                  ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: pastDiagnoses.length,
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 10,
-                    ),
-                    itemBuilder: (context, index) {
-                      return DiagnosisListItem(
-                        title: pastDiagnoses[index]['title'],
-                        date: pastDiagnoses[index]['date'],
-                        result: pastDiagnoses[index]['result'],
-                        onDetailsPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DiseaseDetailsPage(
-                                diseaseName: pastDiagnoses[index]['title'] ??
-                                    'No Title Available',
-                                description: pastDiagnoses[index]
-                                        ['description'] ??
-                                    'No description available',
-                                remedy: pastDiagnoses[index]['remedy'] ??
-                                    'No remedy available',
-                                images: pastDiagnoses[index]['images'] ?? [],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
+
+                  // Old Prediction List
+                  PredictionsList(
+                    userId: userUID ?? '',
+                    height: 300,
+                    onLoadingChanged: (isLoading) {},
                   ),
                 ],
               ),

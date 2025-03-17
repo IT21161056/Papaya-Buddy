@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mobile_app/models/diseaseModel.dart';
@@ -5,6 +6,8 @@ import 'package:mobile_app/theme/colors.dart';
 import 'package:mobile_app/views/treatment_view.dart';
 import 'package:mobile_app/widgets/disease_view.widgets/descriptionWidget.dart';
 import 'package:mobile_app/widgets/disease_view.widgets/symptomsWidget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mobile_app/services/predictionService.dart';
 
 class DiseaseView extends StatefulWidget {
   final String? diseaseId;
@@ -18,6 +21,61 @@ class DiseaseView extends StatefulWidget {
 
 class _DiseaseViewState extends State<DiseaseView> {
   int _currentImageIndex = 0;
+  User? _currentUser;
+  bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentUser();
+  }
+
+  void _getCurrentUser() {
+    _currentUser = FirebaseAuth.instance.currentUser;
+  }
+
+  //save prediction
+  Future<void> _savePrediction() async {
+    if (_currentUser == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please login to proceed!")),
+      );
+      return;
+    }
+    if (widget.disease == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No disease data found to save!")),
+      );
+      return;
+    }
+    setState(() {
+      _isSaving = true;
+    });
+    try {
+      final File? imageFile = widget.disease!.imageFile;
+      if (imageFile == null) {
+        print("No image file available");
+        return;
+      }
+      await HistoryService.savePrediction(
+        userId: _currentUser!.uid,
+        diseaseId: widget.disease!.disease.id,
+        imageFile: imageFile, // Pass the File object directly
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Prediction details saved successfully!")),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to save prediction:")),
+      );
+    } finally {
+      setState(() {
+        _isSaving = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +318,7 @@ class _DiseaseViewState extends State<DiseaseView> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              onPressed: () {},
+              onPressed: _isSaving ? null : _savePrediction,
               child: const Text(
                 "Save to Diagnoses",
                 style: TextStyle(fontSize: 16),

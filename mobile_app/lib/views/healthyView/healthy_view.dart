@@ -30,7 +30,7 @@ class _HealthyViewState extends State<HealthyView> {
     _currentUser = FirebaseAuth.instance.currentUser;
   }
 
-  //save prediction 
+  //save prediction
   Future<void> _savePrediction() async {
     if (_currentUser == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -45,7 +45,7 @@ class _HealthyViewState extends State<HealthyView> {
       return;
     }
     setState(() {
-      _isSaving = true; 
+      _isSaving = true;
     });
     try {
       final File? imageFile = widget.disease!.imageFile;
@@ -53,7 +53,7 @@ class _HealthyViewState extends State<HealthyView> {
         print("No image file available");
         return;
       }
-      await SavePredictionHistory.savePrediction(
+      await HistoryService.savePrediction(
         userId: _currentUser!.uid,
         diseaseId: widget.disease!.disease.id,
         imageFile: imageFile, // Pass the File object directly
