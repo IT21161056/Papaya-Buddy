@@ -12,8 +12,6 @@ const createNewDisease = asyncHandler(async (req, res) => {
     suggested_image_urls,
   } = req.body;
 
-  console.log(">>>", req.body);
-
   if (
     !name ||
     !affected_area ||
@@ -36,7 +34,7 @@ const createNewDisease = asyncHandler(async (req, res) => {
     preventive_measures,
     suggested_image_urls,
   };
-  console.log(diseaseObject);
+
   const disease = await Disease.create(diseaseObject);
 
   if (disease) {

@@ -5,3 +5,7 @@ class ApiConstants {
   static const String OPENWEATHERMAP_BASE_URL =
       'https://api.openweathermap.org/data/2.5';
 }
+
+class BaseURL {
+  static const String BASE_URL = 'http://10.0.2.2:5080';
+}
