@@ -7,5 +7,6 @@ class ApiConstants {
 }
 
 class BaseURL {
-  static const String BASE_URL = 'http://10.0.2.2:5080';
+  static const String IP = "192.168.176.155";
+  static const String BASE_URL = "http://$IP";
 }

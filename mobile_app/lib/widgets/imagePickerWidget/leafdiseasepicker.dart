@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/models/diseaseModel.dart';
 import 'package:mobile_app/services/diseaseService.dart';
 import 'package:mobile_app/theme/colors.dart';
+import 'package:mobile_app/utils/constants.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
 
 class LeafDiseasePicker extends StatefulWidget {
@@ -58,7 +59,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://192.168.187.155:5000/predict'),
+        Uri.parse('${BaseURL.BASE_URL}:5000/predict'),
       );
 
       request.files
@@ -79,7 +80,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
           if (mounted) {
             DiseaseDisplayModel diseaseDisplay = DiseaseDisplayModel(
               disease: data,
-              imageFile: null, // Replace with actual image file if available
+              imageFile: _image, // Replace with actual image file if available
             );
 
             Navigator.push(

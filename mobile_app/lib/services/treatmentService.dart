@@ -1,40 +1,80 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/models/treatmentModel.dart';
+import 'package:mobile_app/utils/constants.dart';
 
 class TreatmentService {
-  static const String baseUrl = "http://192.168.1.4:5080/treatment";
-
-  static Future<List<Treatment>?> getTreatmentDataByDisease(
+  static Future<List<Treatment>> getTreatmentDataByDisease(
       String diseaseId) async {
     final String url =
-        'http://192.168.1.4:5080/api/v1/treatment/by-disease/67d831e2feacec6a44777146';
+        '${BaseURL.BASE_URL}:5080/api/v1/treatment/by-disease/$diseaseId';
+
     try {
-      final response = await http.get(Uri.parse(url));
+      print("Fetching from URL: $url");
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      print("Response status code: ${response.statusCode}");
+      print("Response body: ${response.body}");
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        // Check if the response body is empty
+        if (response.body.isEmpty) {
+          print("Response body is empty");
+          return [];
+        }
 
-        if (responseData['success'] == true &&
-            responseData['data'] != null &&
-            responseData['data'].isNotEmpty) {
-          // Parse the array of treatments and return as a List
-          List<Treatment> treatments = [];
-          for (var treatmentData in responseData['data']) {
-            treatments.add(Treatment.fromJson(treatmentData));
+        final dynamic decodedData = json.decode(response.body);
+        print("Decoded data type: ${decodedData.runtimeType}");
+
+        if (decodedData == null) {
+          print("Decoded data is null");
+          return [];
+        }
+
+        if (decodedData is Map) {
+          print("Available keys in response: ${decodedData.keys.toList()}");
+
+          if (decodedData.containsKey('data')) {
+            final data = decodedData['data'];
+            print("Data type: ${data?.runtimeType}");
+
+            if (data == null) {
+              print("'data' field is null");
+              return [];
+            }
+
+            if (data is List) {
+              print("Data list length: ${data.length}");
+              try {
+                return data.map((item) => Treatment.fromJson(item)).toList();
+              } catch (e) {
+                print("Error mapping data to Treatment objects: $e");
+                return [];
+              }
+            } else {
+              print("'data' is not a List: $data");
+              return [];
+            }
+          } else {
+            print("Response does not contain 'data' key");
+            return [];
           }
-          return treatments;
         } else {
-          print("No data found for treatments");
-          return null;
+          print("Decoded data is not a Map: $decodedData");
+          return [];
         }
       } else {
-        print("Failed to load data: ${response.statusCode}");
-        return null;
+        print("Failed to load treatments. Status code: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        return [];
       }
     } catch (error) {
-      print("Error fetching treatment data: $error");
-      return null;
+      print("Error fetching treatments: $error");
+      print("Stack trace: ${StackTrace.current}");
+      return [];
     }
   }
 }
