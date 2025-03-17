@@ -28,10 +28,13 @@ class TreatmentScreen extends StatelessWidget {
           ),
         ),
         actions: [
-          SvgPicture.asset(
-            'assets/icons/leaf.svg', // Replace with correct icon
-            height: 24,
-            width: 24,
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: SvgPicture.asset(
+              'assets/icons/leaf.svg',
+              height: 24,
+              width: 24,
+            ),
           ),
         ],
       ),
@@ -52,9 +55,10 @@ class TreatmentScreen extends StatelessWidget {
               child: Text(
                 "Treatment Instructions",
                 style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Color.fromRGBO(22, 101, 52, 1)),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color.fromRGBO(22, 101, 52, 1),
+                ),
               ),
             ),
             SizedBox(height: 16),
@@ -70,6 +74,35 @@ class TreatmentScreen extends StatelessWidget {
               description:
                   "Spray a mix of baking soda, water, and neem oil weekly to control powdery mildew organically.",
               cardBackgroundColor: Colors.white, // White card
+              extraContent: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Divider(
+                    color: Colors.grey.shade300,
+                    thickness: 1,
+                    height: 20,
+                  ),
+                  _buildInfoSection(
+                    icon: Icons.stars,
+                    title: "Effectiveness",
+                    description: "Low",
+                    iconColor: Color.fromRGBO(34, 197, 94, 1),
+                  ),
+                  _buildInfoSection(
+                    icon: Icons.warning_amber_rounded,
+                    title: "Side Effects",
+                    description: "Strong odor, may need frequent application.",
+                    iconColor: Color.fromRGBO(34, 197, 94, 1),
+                  ),
+                  _buildInfoSection(
+                    icon: Icons.shield,
+                    title: "Precautions",
+                    description:
+                        "Apply during early morning or late evening to avoid leaf burn.",
+                    iconColor: Color.fromRGBO(34, 197, 94, 1),
+                  ),
+                ],
+              ),
             ),
 
             SizedBox(height: 16),
@@ -88,9 +121,29 @@ class TreatmentScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Divider(
-                    color: Colors.grey.shade300, // Line color
-                    thickness: 1, // Line thickness
-                    height: 20, // Spacing around the line
+                    color: Colors.grey.shade300,
+                    thickness: 1,
+                    height: 20,
+                  ),
+                  _buildInfoSection(
+                    icon: Icons.stars,
+                    title: "Effectiveness",
+                    description: "High",
+                    iconColor: Color(0xFF6366F1),
+                  ),
+                  _buildInfoSection(
+                    icon: Icons.warning_amber_rounded,
+                    title: "Side Effects",
+                    description:
+                        "Potential toxicity to beneficial insects, environmental impact.",
+                    iconColor: Color(0xFF6366F1),
+                  ),
+                  _buildInfoSection(
+                    icon: Icons.shield,
+                    title: "Precautions",
+                    description:
+                        "Use protective gear, avoid application near water sources.",
+                    iconColor: Color(0xFF6366F1),
                   ),
                   SizedBox(height: 12),
                   Row(
@@ -120,30 +173,18 @@ class TreatmentScreen extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
-                        padding: EdgeInsets.symmetric(
-                            vertical: 20), // Adjust vertical padding
+                        padding: EdgeInsets.symmetric(vertical: 20),
                         shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(12), // Rounded corners
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        elevation: 0, // Removes shadow for flat design
+                        elevation: 0,
                       ),
-                      child: Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.center, // Center content
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "See how to use",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(width: 6),
-                          Icon(Icons.arrow_right_alt, color: Colors.white),
-                        ],
+                      child: Text(
+                        "Apply Treatment",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
@@ -152,6 +193,41 @@ class TreatmentScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // Helper method to build info sections
+  Widget _buildInfoSection({
+    required IconData icon,
+    required String title,
+    required String description,
+    required Color iconColor,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 20, color: iconColor),
+              SizedBox(width: 8),
+              Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8),
+          Text(
+            description,
+            style: TextStyle(fontSize: 14),
+          ),
+        ],
       ),
     );
   }

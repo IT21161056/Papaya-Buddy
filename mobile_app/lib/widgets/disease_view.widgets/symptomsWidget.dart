@@ -35,9 +35,15 @@ class _SymptomsWidgetState extends State<SymptomsWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Symptoms",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          Row(
+            children: [
+              const Icon(Icons.health_and_safety, color: Colors.orange),
+              const SizedBox(width: 8),
+              const Text(
+                "Symptoms",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
           const SizedBox(height: 12),
 
@@ -50,7 +56,7 @@ class _SymptomsWidgetState extends State<SymptomsWidget> {
               (index) => _symptomItem(symptoms[index]),
             )
           else
-            const Text("No symptoms available"),
+            const Text("No Symptoms Available!"),
 
           // Show "See more" button if there are more symptoms
           if (symptoms.length > widget.collapsedCount)
@@ -63,7 +69,7 @@ class _SymptomsWidgetState extends State<SymptomsWidget> {
                   });
                 },
                 child: Text(
-                  _isExpanded ? "Show less" : "See more",
+                  _isExpanded ? "Show less" : "Show more",
                   style: const TextStyle(color: Colors.indigo),
                 ),
               ),

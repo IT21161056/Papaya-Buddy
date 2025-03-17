@@ -42,9 +42,15 @@ class _DescriptionWidgetState extends State<DescriptionWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Description",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          Row(
+            children: [
+              const Icon(Icons.description, color: Colors.blue),
+              const SizedBox(width: 8),
+              const Text(
+                "Description",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
           const SizedBox(height: 12),
           Text(
@@ -62,7 +68,7 @@ class _DescriptionWidgetState extends State<DescriptionWidget> {
                   });
                 },
                 child: Text(
-                  _isExpanded ? "Show less" : "See more...",
+                  _isExpanded ? "Show less" : "Show more",
                   style: const TextStyle(color: Colors.indigo),
                 ),
               ),

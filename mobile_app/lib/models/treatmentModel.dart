@@ -1,4 +1,3 @@
-
 class Treatment {
   final String id;
   final String method;
@@ -22,58 +21,46 @@ class Treatment {
     required this.createdAt,
   });
 
-  // Convert Treatment instance to a map
-  Map<String, dynamic> toMap() {
-    return {
-      '_id': id,
-      'method': method,
-      'description': description,
-      'diseaseId': diseaseId,
-      'treatment_type': treatmentType,
-      'effectiveness': effectiveness,
-      'side_effects': sideEffects,
-      'precautions': precautions,
-      'created_at': createdAt,
-    };
-  }
-
   // Create Treatment instance from a map
-  factory Treatment.fromJson(Map<String, dynamic> map) {
+  factory Treatment.fromJson(Map<String, dynamic> json) {
     return Treatment(
-      id: map['_id'].toString(),
-      method: map['method'] as String,
-      description: map['description'] as String,
-      diseaseId: map['diseaseId'] as String,
-      treatmentType: List<String>.from(map['treatment_type']),
-      effectiveness: List<String>.from(map['effectiveness']),
-      sideEffects: map['side_effects'] as String,
-      precautions: map['precautions'] as String,
-      createdAt: map['created_at'] as DateTime,
+      id: json['_id'],
+      method: json['method'],
+      description: json['description'],
+      diseaseId: json['diseaseId'],
+      treatmentType: List<String>.from(json['treatment_type']),
+      effectiveness: List<String>.from(json['effectiveness']),
+      sideEffects: json['side_effects'],
+      precautions: json['precautions'],
+      createdAt: DateTime.parse(json["created_at"]),
     );
   }
+}
 
-  // Create a copy of this Treatment with the given field values updated
-  Treatment copyWith({
-    String? id,
-    String? method,
-    String? description,
-    String? diseaseId,
-    List<String>? treatmentType,
-    List<String>? effectiveness,
-    String? sideEffects,
-    String? precautions,
-    DateTime? createdAt,
+class TreatmentDisplayModel {
+  final Treatment treatment;
+
+  TreatmentDisplayModel({
+    required this.treatment,
+  });
+
+  // Helper getters to access treatment properties directly
+  String get id => treatment.id;
+  String get method => treatment.method;
+  String get description => treatment.description;
+  String get diseaseId => treatment.diseaseId;
+  List<String> get treatmentType => treatment.treatmentType;
+  List<String> get effectiveness => treatment.effectiveness;
+  String get sideEffects => treatment.sideEffects;
+  String get precautions => treatment.precautions;
+  DateTime get createdAt => treatment.createdAt;
+
+  // Create a copy with optional changes
+  TreatmentDisplayModel copyWith({
+    Treatment? treatment,
   }) {
-    return Treatment(
-      id: id ?? this.id,
-      method: method ?? this.method,
-      description: description ?? this.description,
-      diseaseId: diseaseId ?? this.diseaseId,
-      treatmentType: treatmentType ?? this.treatmentType,
-      effectiveness: effectiveness ?? this.effectiveness,
-      sideEffects: sideEffects ?? this.sideEffects,
-      precautions: precautions ?? this.precautions,
-      createdAt: createdAt ?? this.createdAt,
+    return TreatmentDisplayModel(
+      treatment: treatment ?? this.treatment,
     );
   }
 }
