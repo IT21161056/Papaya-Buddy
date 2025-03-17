@@ -3,7 +3,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<User?> signUp(
@@ -59,6 +59,10 @@ class AuthService {
 
   User? getCurrentUser() {
     return _auth.currentUser;
+  }
+
+  String? getUserUID() {
+    return _auth.currentUser?.uid;
   }
 
   // Get user details from Firestore

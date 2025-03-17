@@ -87,14 +87,18 @@ const createNewTreatment = asyncHandler(async (req, res) => {
 });
 
 const getTreatmentsByDisease = asyncHandler(async (req, res) => {
-  const { diseaseId } = req.params;
+  const { id } = req.params;
 
-  if (!diseaseId) {
+  if (!id) {
     res.status(400);
     throw new Error("Disease ID is required");
   }
 
-  const treatments = await Treatment.find({ diseaseId });
+  const treatments = await Treatment.find({ diseaseId: id }).populate({
+    path: "diseaseId",
+    model: "Disease",
+    select: "name affected_area disease_type description",
+  });
 
   res.status(200).json({
     success: true,

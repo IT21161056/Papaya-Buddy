@@ -39,13 +39,8 @@ if (!fs.existsSync(uploadsDir)) {
 //cloudinary routes
 app.use(`${BASE_URL}/upload`, cloudinaryRoutes);
 
-// external services routes
-app.use(`${BASE_URL}/service`, cloudinaryRoutes);
-
 // disease routes
 app.use(`${BASE_URL}/disease`, diseaseRoutes);
-
-app.use(`${BASE_URL}/suggested_image`, suggestedImageRoutes);
 
 app.use(`${BASE_URL}/treatment`, treatmentRoutes);
 
