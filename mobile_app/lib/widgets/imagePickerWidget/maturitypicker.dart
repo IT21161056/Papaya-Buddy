@@ -34,7 +34,7 @@ class _MaturityScreenState extends State<MaturityScreen> {
         timeToReach: "3–4 months after fruit set",
         timeGapToNextStage: "3–7 days",
         bestTimeToHarvest: "Ideal time to harvest for best flavor and texture",
-        suggestedImageUrls: [
+        image_urls: [
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvabyEg9ytOEh1IEBVRfIe3Vl4gRmit4HcOQ&s'
         ]),
     imageFile: null, // Replace with actual File object when needed

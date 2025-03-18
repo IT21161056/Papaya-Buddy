@@ -57,7 +57,7 @@ class _MaturityViewState extends State<MaturityView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.maturityStage?.stage ?? 'Mature',
+                        widget.maturityStage?.stage ?? 'Not Available',
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
@@ -89,7 +89,7 @@ class _MaturityViewState extends State<MaturityView> {
                       });
                     },
                   ),
-                  items: widget.maturityStage?.suggestedImageUrls.map((path) {
+                  items: widget.maturityStage?.image_urls.map((path) {
                         return Container(
                           width: MediaQuery.of(context).size.width,
                           margin: EdgeInsets.symmetric(horizontal: 5.0),
@@ -142,7 +142,7 @@ class _MaturityViewState extends State<MaturityView> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      "${_currentImageIndex + 1}/${widget.maturityStage?.suggestedImageUrls.length ?? 0} photos",
+                      "${_currentImageIndex + 1}/${widget.maturityStage?.image_urls.length ?? 0} photos",
                       style: TextStyle(fontSize: 12),
                     ),
                   ),
@@ -234,8 +234,6 @@ class _MaturityViewState extends State<MaturityView> {
                           ),
                         ),
                         onPressed: () {
-                          // Navigate to all maturity stages view
-                          // This will be implemented in the future
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {

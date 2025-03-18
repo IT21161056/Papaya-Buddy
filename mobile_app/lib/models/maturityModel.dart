@@ -6,10 +6,9 @@ class MaturityStage {
   final String timeToReach;
   final String timeGapToNextStage;
   final String bestTimeToHarvest;
-  final List<String> suggestedImageUrls;
-  String? id; // For MongoDB ObjectId
+  final List<String> image_urls;
+  String? id;
 
-  // Valid stages enumeration
   static const List<String> validStages = [
     "Not Mature",
     "Partially Mature",
@@ -17,18 +16,16 @@ class MaturityStage {
     "Rotten"
   ];
 
-  // Constructor
   MaturityStage({
     required this.stage,
     required this.description,
     required this.timeToReach,
     required this.timeGapToNextStage,
     required this.bestTimeToHarvest,
-    required this.suggestedImageUrls,
+    required this.image_urls,
     this.id,
   }) : assert(validStages.contains(stage), 'Invalid stage value');
 
-  // Create from JSON (when fetching from API)
   factory MaturityStage.fromJson(Map<String, dynamic> json) {
     return MaturityStage(
       id: json['_id'],
@@ -37,7 +34,7 @@ class MaturityStage {
       timeToReach: json['timeToReach'],
       timeGapToNextStage: json['timeGapToNextStage'],
       bestTimeToHarvest: json['bestTimeToHarvest'],
-      suggestedImageUrls: json['suggestedImageUrls'],
+      image_urls: json['image_urls'],
     );
   }
 }
@@ -57,7 +54,7 @@ class MaturityStageDisplayModel {
   String get timeToReach => maturityStage.timeToReach;
   String get timeGapToNextStage => maturityStage.timeGapToNextStage;
   String get bestTimeToHarvest => maturityStage.bestTimeToHarvest;
-  List<String> get suggestedImageUrls => maturityStage.suggestedImageUrls;
+  List<String> get image_urls => maturityStage.image_urls;
 
   MaturityStageDisplayModel copyWith({
     MaturityStage? maturityStage,
