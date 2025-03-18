@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile_app/models/predictionModel.dart';
 import 'package:mobile_app/services/predictionService.dart';
 import 'package:mobile_app/views/auth/login_view.dart';
+import 'package:mobile_app/views/predictionView/predictionView.dart';
 import 'package:mobile_app/widgets/dashboard.widgets/noPredictions.dart';
 
 import 'package:mobile_app/widgets/dashboard.widgets/predictionListItem.dart';
@@ -96,7 +97,6 @@ class _PredictionsListState extends State<PredictionsList> {
   }
 
   Widget _buildContent() {
-    // Check if user is logged in
     if (!isUserLoggedIn) {
       return UserNotLoggedInView(
           onLoginPressed: () => {
@@ -148,8 +148,7 @@ class _PredictionsListState extends State<PredictionsList> {
   Widget _buildPredictionListItem(Prediction prediction) {
     final dateFormat = DateFormat('MMM d, yyyy');
     final image_url = prediction.uploadedImgUrl;
-    final formattedDate =
-        dateFormat.format(DateTime.parse(prediction.createdAt));
+    final formattedDate = dateFormat.format(prediction.createdAt);
 
     final diseaseName = prediction.disease?.name ?? 'Unknown';
     final isHealthy = diseaseName.toLowerCase().contains('healthy');
@@ -161,7 +160,12 @@ class _PredictionsListState extends State<PredictionsList> {
       result: resultStatus,
       image: image_url,
       onDetailsPressed: () {
-        // Handle details action
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  PredictionDetailScreen(prediction: prediction)),
+        );
       },
     );
   }
