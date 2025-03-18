@@ -99,7 +99,7 @@ class PredictionDetailScreen extends StatelessWidget {
                             Text(
                               prediction.disease.name,
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.textPrimary,
                               ),
