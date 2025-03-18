@@ -3,6 +3,8 @@ import 'package:mobile_app/models/treatmentModel.dart';
 import 'package:mobile_app/services/treatmentService.dart';
 import 'package:mobile_app/widgets/treatment/noTreatmentsView.dart';
 import 'package:mobile_app/widgets/treatment/treatment_card.dart';
+import 'package:mobile_app/utils/helper.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class TreatmentView extends StatefulWidget {
   final String? diseaseId;
@@ -19,6 +21,41 @@ class _TreatmentViewState extends State<TreatmentView> {
   List<Treatment> treatments = [];
   bool isLoading = true;
   String errorMessage = '';
+
+  Map<String, dynamic> _getTreatmentTypeStyles(String treatmentType) {
+    switch (treatmentType.toLowerCase()) {
+      case "chemical":
+        return {
+          'color': const Color.fromARGB(255, 59, 100, 246),
+          'iconPath': 'assets/icons/flusk.svg',
+        };
+      case "biological":
+        return {
+          'color': const Color.fromRGBO(34, 197, 94, 1),
+          'iconPath': 'assets/icons/lucide_leaf.svg',
+        };
+      case "cultural":
+        return {
+          'color': const Color.fromRGBO(168, 85, 247, 1),
+          'iconPath': 'assets/icons/user.svg',
+        };
+      case "mechanical":
+        return {
+          'color': const Color.fromRGBO(245, 158, 11, 1),
+          'iconPath': 'assets/icons/octicon_tools.svg',
+        };
+      case "organic":
+        return {
+          'color': const Color.fromRGBO(16, 185, 129, 1),
+          'iconPath': 'assets/icons/lucide_leaf.svg',
+        };
+      default:
+        return {
+          'color': const Color.fromRGBO(75, 85, 99, 1),
+          'iconPath': 'assets/icons/lucide_circle_help.svg',
+        };
+    }
+  }
 
   @override
   void initState() {
@@ -98,78 +135,81 @@ class _TreatmentViewState extends State<TreatmentView> {
                             width: double.infinity,
                             padding: EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Color.fromRGBO(220, 252, 231, 1),
+                              color: Colors.blue[50],
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Text(
-                              "Treatment Instructions",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromRGBO(22, 101, 52, 1),
-                              ),
+                            child: Row(
+                              children: [
+                                //
+                                SvgPicture.asset(
+                                    'icon_park_outline_instruction.svg',
+                                    height: 14,
+                                    width: 16,
+                                    color: Colors.blue),
+                                Text(
+                                  "Treatment Instructions",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           SizedBox(height: 16),
-                          // Loop through treatments to display each treatment
-                          ...treatments
-                              .map((treatment) => Column(
+
+                          ...treatments.map((treatment) {
+                            final styles = _getTreatmentTypeStyles(
+                                treatment.treatmentType);
+
+                            return Column(
+                              children: [
+                                TreatmentCard(
+                                  iconPath: styles['iconPath'],
+                                  title:
+                                      capitalizeText(treatment.treatmentType),
+                                  titleColor: styles['color'],
+                                  methodLabel: treatment.method,
+                                  methodIconPath: 'assets/icons/spray.svg',
+                                  methodColor: styles['color'].withOpacity(0.8),
+                                  description: treatment.description,
+                                  cardBackgroundColor: Colors.white,
+                                  extraContent: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      TreatmentCard(
-                                        iconPath:
-                                            'assets/icons/lucide_leaf.svg',
-                                        title: treatment.treatmentType,
-                                        titleColor:
-                                            Color.fromRGBO(34, 197, 94, 1),
-                                        methodLabel: treatment.method,
-                                        methodIconPath:
-                                            'assets/icons/spray.svg',
-                                        methodColor:
-                                            Color.fromARGB(255, 19, 144, 65),
-                                        description: treatment.description,
-                                        cardBackgroundColor: Colors.white,
-                                        extraContent: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Divider(
-                                              color: Colors.grey.shade300,
-                                              thickness: 1,
-                                              height: 20,
-                                            ),
-                                            _buildInfoSection(
-                                              icon: Icons.stars,
-                                              title: "Effectiveness",
-                                              description:
-                                                  treatment.effectiveness,
-                                              iconColor: Color.fromRGBO(
-                                                  34, 197, 94, 1),
-                                            ),
-                                            _buildInfoSection(
-                                              icon: Icons.warning_amber_rounded,
-                                              title: "Side Effects",
-                                              description:
-                                                  treatment.sideEffects,
-                                              iconColor: Color.fromRGBO(
-                                                  34, 197, 94, 1),
-                                            ),
-                                            _buildInfoSection(
-                                              icon: Icons.shield,
-                                              title: "Precautions",
-                                              description:
-                                                  treatment.precautions,
-                                              iconColor: Color.fromRGBO(
-                                                  34, 197, 94, 1),
-                                            ),
-                                          ],
-                                        ),
+                                      Divider(
+                                        color: Colors.grey.shade300,
+                                        thickness: 1,
+                                        height: 20,
                                       ),
-                                      SizedBox(
-                                          height:
-                                              16.0), // Adds space between cards
+                                      _buildInfoSection(
+                                        icon: Icons.stars,
+                                        title: "Effectiveness",
+                                        description: treatment.effectiveness,
+                                        iconColor: styles['color'],
+                                      ),
+                                      _buildInfoSection(
+                                        icon: Icons.warning_amber_rounded,
+                                        title: "Side Effects",
+                                        description: treatment.sideEffects,
+                                        iconColor: styles['color'],
+                                      ),
+                                      _buildInfoSection(
+                                        icon: Icons.shield,
+                                        title: "Precautions",
+                                        description: treatment.precautions,
+                                        iconColor: styles['color'],
+                                      ),
                                     ],
-                                  ))
-                              .toList(),
+                                  ),
+                                ),
+                                SizedBox(
+                                    height: 16.0), // Adds space between cards
+                              ],
+                            );
+                          }).toList(),
                         ],
                       ),
                     ),

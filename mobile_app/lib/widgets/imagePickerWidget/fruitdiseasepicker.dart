@@ -422,8 +422,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                         elevation: 0,
                       ),
                       child: AnimatedSwitcher(
-                        duration:
-                            Duration(milliseconds: 300), // Smooth transition
+                        duration: Duration(milliseconds: 300),
                         child: _isLoading
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -437,9 +436,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                                           Colors.white),
                                     ),
                                   ),
-                                  SizedBox(
-                                      width:
-                                          10), // Add spacing between loader and text
+                                  SizedBox(width: 10),
                                   Text(
                                     "Predicting...",
                                     style: TextStyle(
