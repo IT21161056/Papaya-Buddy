@@ -99,7 +99,7 @@ class PredictionDetailScreen extends StatelessWidget {
                             Text(
                               prediction.disease.name,
                               style: TextStyle(
-                                fontSize: 24,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.textPrimary,
                               ),
@@ -108,7 +108,7 @@ class PredictionDetailScreen extends StatelessWidget {
                             Text(
                               prediction.disease.description,
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                                 color: AppColors.textSecondary,
                               ),
                               textAlign: TextAlign.justify,
