@@ -13,6 +13,7 @@ const createPapayaStage = asyncHandler(async (req, res) => {
     timeToReach,
     timeGapToNextStage,
     bestTimeToHarvest,
+    image_urls,
   } = req.body;
 
   if (
@@ -26,12 +27,22 @@ const createPapayaStage = asyncHandler(async (req, res) => {
     throw new Error("All fields are required");
   }
 
+  // Validate allowed enum values
+  const allowedStages = ["Not Mature", "Partially Mature", "Mature", "Rotten"];
+  if (!allowedStages.includes(stage)) {
+    res.status(400);
+    throw new Error(
+      `Invalid stage. Allowed values are: ${allowedStages.join(", ")}`
+    );
+  }
+
   const papayaStageObject = {
     stage,
     description,
     timeToReach,
     timeGapToNextStage,
     bestTimeToHarvest,
+    image_urls: image_urls || [],
   };
 
   const papayaStage = await Maturity.create(papayaStageObject);
@@ -44,6 +55,10 @@ const createPapayaStage = asyncHandler(async (req, res) => {
         id: papayaStage._id,
         stage: papayaStage.stage,
         description: papayaStage.description,
+        timeToReach: papayaStage.timeToReach,
+        timeGapToNextStage: papayaStage.timeGapToNextStage,
+        bestTimeToHarvest: papayaStage.bestTimeToHarvest,
+        image_urls: papayaStage.image_urls,
       },
     });
   } else {
@@ -92,18 +107,56 @@ const getPapayaStageById = asyncHandler(async (req, res) => {
  * @access  Private
  */
 const updatePapayaStage = asyncHandler(async (req, res) => {
-  const papayaStage = await Maturity.findById(req.params.id);
+  const { id } = req.params;
+  const {
+    stage,
+    description,
+    timeToReach,
+    timeGapToNextStage,
+    bestTimeToHarvest,
+    image_urls,
+  } = req.body;
+
+  const papayaStage = await Maturity.findById(id);
 
   if (!papayaStage) {
     res.status(404);
     throw new Error("Papaya stage not found");
   }
 
+  if (stage) {
+    const allowedStages = [
+      "Not Mature",
+      "Partially Mature",
+      "Mature",
+      "Rotten",
+    ];
+    if (!allowedStages.includes(stage)) {
+      res.status(400);
+      throw new Error(
+        `Invalid stage. Allowed values are: ${allowedStages.join(", ")}`
+      );
+    }
+  }
+
+  const updateFields = {};
+  if (stage) updateFields.stage = stage;
+  if (description) updateFields.description = description;
+  if (timeToReach) updateFields.timeToReach = timeToReach;
+  if (timeGapToNextStage) updateFields.timeGapToNextStage = timeGapToNextStage;
+  if (bestTimeToHarvest) updateFields.bestTimeToHarvest = bestTimeToHarvest;
+  if (image_urls) updateFields.image_urls = image_urls;
+
   const updatedPapayaStage = await Maturity.findByIdAndUpdate(
-    req.params.id,
-    req.body,
+    id,
+    updateFields,
     { new: true, runValidators: true }
   );
+
+  if (!updatedPapayaStage) {
+    res.status(400);
+    throw new Error("Failed to update papaya stage");
+  }
 
   res.status(200).json({
     success: true,

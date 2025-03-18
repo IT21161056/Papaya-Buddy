@@ -23,6 +23,7 @@ const maturityStageSchema = new Schema({
     type: String,
     required: true,
   },
+  image_urls: [String],
 });
 
 module.exports = mongoose.model("Maturity", maturityStageSchema);
