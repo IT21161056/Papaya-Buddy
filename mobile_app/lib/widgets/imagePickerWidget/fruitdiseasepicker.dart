@@ -77,7 +77,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
           if (mounted) {
             DiseaseDisplayModel diseaseDisplay = DiseaseDisplayModel(
               disease: data,
-              imageFile: null, // Replace with actual image file if available
+              imageFile: _image, // Replace with actual image file if available
             );
 
             // Navigate to the appropriate view based on the disease name
