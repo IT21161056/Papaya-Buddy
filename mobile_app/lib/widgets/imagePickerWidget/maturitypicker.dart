@@ -298,61 +298,63 @@ class _MaturityScreenState extends State<MaturityScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: AppColors.background,
+                        color: const Color(0xFFF8FAFC),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Column(
                         children: [
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () => _pickImage(ImageSource.camera),
-                                child: Container(
+                          GestureDetector(
+                            onTap: () => _pickImage(ImageSource.camera),
+                            child: Row(
+                              children: [
+                                Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFDDEEFF),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: SvgPicture.asset(
-                                      'assets/icons/camera.svg',
-                                      height: 24,
-                                      width: 24,
-                                      color: const Color(0xFF1A73E8)),
+                                    'assets/icons/camera.svg',
+                                    height: 20,
+                                    width: 24,
+                                    color: const Color(0xFF1A73E8),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "Take Photo",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Take Photo",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      "Use your camera to capture the disease",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey.shade600,
+                                      Text(
+                                        "Use your camera to capture the disease",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 10),
                           const Divider(),
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () => _pickImage(ImageSource.gallery),
-                                child: Container(
+                          GestureDetector(
+                            onTap: () => _pickImage(ImageSource.gallery),
+                            child: Row(
+                              children: [
+                                Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFE5F8E6),
@@ -365,32 +367,33 @@ class _MaturityScreenState extends State<MaturityScreen> {
                                     color: const Color(0xFF23C55E),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "Choose from Gallery",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Choose from Gallery",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      "Select an existing photo from your device",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey.shade600,
+                                      Text(
+                                        "Select an existing photo from your device",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
