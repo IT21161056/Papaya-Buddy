@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/models/diseaseModel.dart';
+import 'package:mobile_app/utils/constants.dart';
 
 class DiseaseService {
-  static const String baseUrl = "http://192.168.1.3:5080/disease";
-
   static Future<Disease?> getDiseaseData(String diseaseName) async {
     final String url =
-        'http://192.168.1.3:5080/api/v1/disease?name=$diseaseName';
+        '${BaseURL.BASE_URL}:5080/api/v1/disease?name=$diseaseName';
     print(diseaseName);
     try {
       final response = await http.get(Uri.parse(url));
