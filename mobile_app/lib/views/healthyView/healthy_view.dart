@@ -19,6 +19,7 @@ class HealthyView extends StatefulWidget {
 }
 
 class _HealthyViewState extends State<HealthyView> {
+  int _currentImageIndex = 0;
   User? _currentUser;
   bool _isSaving = false;
 
@@ -121,64 +122,92 @@ class _HealthyViewState extends State<HealthyView> {
               children: [
                 CarouselSlider(
                   options: CarouselOptions(
-                    height: 180,
-                    enableInfiniteScroll: true,
+                    height: 200,
+                    enableInfiniteScroll:
+                        (widget.disease?.suggestedImageUrls.length ?? 0) > 1,
                     enlargeCenterPage: true,
-                    autoPlay: true,
+                    autoPlay:
+                        (widget.disease?.suggestedImageUrls.length ?? 0) > 1,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _currentImageIndex = index;
+                      });
+                    },
                   ),
-                  items: widget.disease?.disease.suggestedImageUrls.map((path) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        path,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
+                  items: widget.disease?.suggestedImageUrls.isNotEmpty == true
+                      ? widget.disease!.suggestedImageUrls.map((path) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 2.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                path,
+                                fit: BoxFit.cover,
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value:
+                                          loadingProgress.expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                    ),
+                                  );
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                      color: Colors.grey[300],
+                                      child: const Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.error,
+                                                color: Colors.red),
+                                            Text("Failed to load Image!"),
+                                          ],
+                                        ),
+                                      ));
+                                },
+                              ),
                             ),
                           );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
+                        }).toList()
+                      : [
+                          Container(
+                            width: MediaQuery.of(context).size.width,
                             color: Colors.grey[300],
                             child: const Center(
-                              child: Icon(Icons.error, color: Colors.red),
-                            ),
-                          );
-                        },
+                                child: Text("No images available...!")),
+                          )
+                        ],
+                ),
+                if (widget.disease?.suggestedImageUrls.isNotEmpty == true)
+                  Positioned(
+                    right: 10,
+                    bottom: 10,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    );
-                  }).toList(),
-                ),
-                const Positioned(
-                  bottom: 8,
-                  right: 8,
-                  child: Icon(
-                    Icons.swipe,
-                    color: Colors.white,
-                    size: 24,
+                      child: Text(
+                        "${_currentImageIndex + 1}/${widget.disease?.suggestedImageUrls.length} photos",
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ),
                   ),
-                ),
               ],
             ),
-            const SizedBox(height: 8),
-            // Number of Photos
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  "${widget.disease?.disease.suggestedImageUrls.length ?? 0} photos",
-                  style: const TextStyle(color: Colors.grey),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             // Description
             Container(
               padding: const EdgeInsets.all(12),
