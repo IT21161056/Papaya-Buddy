@@ -34,7 +34,7 @@ class MaturityStage {
       timeToReach: json['timeToReach'],
       timeGapToNextStage: json['timeGapToNextStage'],
       bestTimeToHarvest: json['bestTimeToHarvest'],
-      image_urls: json['image_urls'],
+      image_urls: List<String>.from(json['image_urls']), // Convert to List
     );
   }
 }

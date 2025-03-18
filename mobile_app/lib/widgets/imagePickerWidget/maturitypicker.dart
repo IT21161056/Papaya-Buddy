@@ -99,7 +99,7 @@ class _MaturityScreenState extends State<MaturityScreen> {
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(
-          'http://127.0.0.1:5000/predict', // Added trailing slash to match your FastAPI endpoint
+          'http://10.0.2.2:5000/predict', // Added trailing slash to match your FastAPI endpoint
         ),
       );
 
@@ -132,7 +132,7 @@ class _MaturityScreenState extends State<MaturityScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    MaturityView(maturityStage: dummyMaturityStageDisplay),
+                    MaturityView(maturityStage: maturityDisplay),
               ),
             );
           }
@@ -471,16 +471,7 @@ class _MaturityScreenState extends State<MaturityScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        // onPressed: _isLoading ? null : _predictDisease,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MaturityView(
-                                  maturityStage: dummyMaturityStageDisplay),
-                            ),
-                          );
-                        },
+                        onPressed: _isLoading ? null : _predictDisease,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromRGBO(37, 100, 235, 1),
                           padding: const EdgeInsets.symmetric(vertical: 20),

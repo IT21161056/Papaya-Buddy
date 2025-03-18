@@ -73,8 +73,16 @@ const createPapayaStage = asyncHandler(async (req, res) => {
  * @access  Public
  */
 const getAllPapayaStages = asyncHandler(async (req, res) => {
-  const papayaStages = await Maturity.find().sort({ _id: 1 });
-
+  const { stage } = req.query;
+ 
+  let query = {};
+ 
+  if (stage) {
+    query.stage = { $regex: new RegExp(`^${stage}$`, "i") };
+  }
+ 
+  const papayaStages = await Maturity.find(query).sort({ _id: 1 });
+ 
   res.status(200).json({
     success: true,
     count: papayaStages.length,
