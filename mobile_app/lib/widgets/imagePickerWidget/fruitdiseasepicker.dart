@@ -246,11 +246,11 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                     ),
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () => _pickImage(ImageSource.camera),
-                              child: Container(
+                        GestureDetector(
+                          onTap: () => _pickImage(ImageSource.camera),
+                          child: Row(
+                            children: [
+                              Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFDDEEFF),
@@ -263,39 +263,40 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                                   color: const Color(0xFF1A73E8),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Take Photo",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Take Photo",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "Use your camera to capture the disease",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey.shade600,
+                                    Text(
+                                      "Use your camera to capture the disease",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                      maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         const SizedBox(height: 10),
                         const Divider(),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () => _pickImage(ImageSource.gallery),
-                              child: Container(
+                        GestureDetector(
+                          onTap: () => _pickImage(ImageSource.gallery),
+                          child: Row(
+                            children: [
+                              Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFE5F8E6),
@@ -308,31 +309,32 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                                   color: const Color(0xFF23C55E),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Choose from Gallery",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Choose from Gallery",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "Select an existing photo from your device",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey.shade600,
+                                    Text(
+                                      "Select an existing photo from your device",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                      maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -420,8 +422,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                         elevation: 0,
                       ),
                       child: AnimatedSwitcher(
-                        duration:
-                            Duration(milliseconds: 300), // Smooth transition
+                        duration: Duration(milliseconds: 300),
                         child: _isLoading
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -435,9 +436,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
                                           Colors.white),
                                     ),
                                   ),
-                                  SizedBox(
-                                      width:
-                                          10), // Add spacing between loader and text
+                                  SizedBox(width: 10),
                                   Text(
                                     "Predicting...",
                                     style: TextStyle(
