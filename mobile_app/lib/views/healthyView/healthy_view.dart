@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/theme/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mobile_app/models/diseaseModel.dart';
 import 'package:mobile_app/services/predictionService.dart';
 import 'package:mobile_app/views/treatment_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mobile_app/widgets/disease_view.widgets/symptomsWidget.dart';
 
 class HealthyView extends StatefulWidget {
   final DiseaseDisplayModel? disease;
@@ -185,14 +187,18 @@ class _HealthyViewState extends State<HealthyView> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.info, color: Colors.blue),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: const Icon(Icons.info_outline, color: Colors.blue),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      widget.disease?.disease.description ??
-                          'Your plant is healthy! Keep up the good work.',
-                      style: const TextStyle(color: Colors.black),
+                      widget.disease?.description ??
+                          'Description not available!',
+                      style: TextStyle(color: AppColors.textSecondary),
                     ),
                   ),
                 ],
@@ -200,42 +206,12 @@ class _HealthyViewState extends State<HealthyView> {
             ),
             const SizedBox(height: 12),
             // Tips to Keep It Healthy
-            const Text(
-              "Tips to keep it healthy",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            SymptomsWidget(
+              symptoms: widget.disease?.symptoms ?? [],
+              collapsedCount: 3,
+              diseaseModel: widget.disease,
             ),
-            const SizedBox(height: 8),
-            // Tips List
-            ListTile(
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  'assets/r2.jpg',
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              title: const Text("Proper Watering"),
-              subtitle: const Text("Ensure the plant gets adequate water."),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  'assets/r2.jpg',
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              title: const Text("Sunlight"),
-              subtitle: const Text("Provide sufficient sunlight."),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onTap: () {},
-            ),
+
             const SizedBox(height: 16),
             // Save Button
             ElevatedButton(
