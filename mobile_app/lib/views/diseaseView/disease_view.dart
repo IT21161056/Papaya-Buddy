@@ -10,10 +10,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobile_app/services/predictionService.dart';
 
 class DiseaseView extends StatefulWidget {
-  final String? diseaseId;
   final DiseaseDisplayModel? disease;
 
-  DiseaseView({Key? key, this.diseaseId, this.disease}) : super(key: key);
+  DiseaseView({Key? key, this.disease}) : super(key: key);
 
   @override
   _DiseaseViewState createState() => _DiseaseViewState();
@@ -280,13 +279,10 @@ class _DiseaseViewState extends State<DiseaseView> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start, // Align items to the top
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(
-                                top:
-                                    2), // Small top padding to align with first line
+                            padding: const EdgeInsets.only(top: 2),
                             child: const Icon(Icons.info_outline,
                                 color: Colors.blue),
                           ),
@@ -316,8 +312,7 @@ class _DiseaseViewState extends State<DiseaseView> {
                     SymptomsWidget(
                       symptoms: widget.disease?.symptoms ?? [],
                       collapsedCount: 3,
-                      diseaseModel:
-                          widget.disease, // Using the same value as before
+                      diseaseModel: widget.disease,
                     ),
 
                     const SizedBox(height: 16),
@@ -337,8 +332,8 @@ class _DiseaseViewState extends State<DiseaseView> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => TreatmentView(
-                              diseaseId:
-                                  '67d7ad6b56855e7ef308cf61', // TODO: This needs to be removed
+                              diseaseId: widget.disease
+                                  ?.id, // TODO: This needs to be removed
                             ),
                           ),
                         );

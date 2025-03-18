@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/models/treatmentModel.dart';
 import 'package:mobile_app/services/treatmentService.dart';
+import 'package:mobile_app/widgets/treatment/noTreatmentsView.dart';
 import 'package:mobile_app/widgets/treatment/treatment_card.dart';
 
 class TreatmentView extends StatefulWidget {
   final String? diseaseId;
-  final ValueChanged<bool>? onLoadingChanged; // Optional callback
+  final ValueChanged<bool>? onLoadingChanged;
 
   TreatmentView({Key? key, this.diseaseId = '', this.onLoadingChanged})
       : super(key: key);
@@ -22,10 +23,10 @@ class _TreatmentViewState extends State<TreatmentView> {
   @override
   void initState() {
     super.initState();
-    _loadPredictions();
+    _loadTreatments();
   }
 
-  Future<void> _loadPredictions() async {
+  Future<void> _loadTreatments() async {
     setState(() {
       isLoading = true;
       errorMessage = '';
@@ -86,7 +87,7 @@ class _TreatmentViewState extends State<TreatmentView> {
           : errorMessage.isNotEmpty
               ? Center(child: Text(errorMessage))
               : treatments.isEmpty
-                  ? Center(child: Text('No treatments available'))
+                  ? NoTreatmentsView(onRefresh: _loadTreatments)
                   : SingleChildScrollView(
                       padding: const EdgeInsets.all(20),
                       child: Column(

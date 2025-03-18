@@ -2,18 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/models/predictionModel.dart';
 import 'package:mobile_app/services/predictionService.dart';
+import 'package:mobile_app/views/auth/login_view.dart';
+import 'package:mobile_app/widgets/dashboard.widgets/noPredictions.dart';
+
 import 'package:mobile_app/widgets/dashboard.widgets/predictionListItem.dart';
+import 'package:mobile_app/widgets/dashboard.widgets/userNotLogged.dart';
 
 class PredictionsList extends StatefulWidget {
-  final String userId;
+  final String? userId;
   final double height;
   final Function(bool)? onLoadingChanged;
+  final VoidCallback? onLoginPressed;
+  final VoidCallback? onScanPressed;
 
   const PredictionsList({
     Key? key,
-    required this.userId,
+    this.userId,
     this.height = 300,
     this.onLoadingChanged,
+    this.onLoginPressed,
+    this.onScanPressed,
   }) : super(key: key);
 
   @override
@@ -24,11 +32,28 @@ class _PredictionsListState extends State<PredictionsList> {
   List<Prediction> predictions = [];
   bool isLoading = true;
   String errorMessage = '';
+  bool get isUserLoggedIn => widget.userId != null && widget.userId!.isNotEmpty;
 
   @override
   void initState() {
     super.initState();
-    _loadPredictions();
+    if (isUserLoggedIn) {
+      _loadPredictions();
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      widget.onLoadingChanged?.call(false);
+    }
+  }
+
+  @override
+  void didUpdateWidget(PredictionsList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.userId != oldWidget.userId && isUserLoggedIn) {
+      _loadPredictions();
+    }
   }
 
   Future<void> _loadPredictions() async {
@@ -41,7 +66,7 @@ class _PredictionsListState extends State<PredictionsList> {
 
     try {
       List<Prediction> fetchedPredictions = await HistoryService.getDiagnosis(
-        userId: widget.userId,
+        userId: widget.userId!,
       );
 
       if (mounted) {
@@ -71,6 +96,17 @@ class _PredictionsListState extends State<PredictionsList> {
   }
 
   Widget _buildContent() {
+    // Check if user is logged in
+    if (!isUserLoggedIn) {
+      return UserNotLoggedInView(
+          onLoginPressed: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginView()),
+                )
+              });
+    }
+
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -92,12 +128,7 @@ class _PredictionsListState extends State<PredictionsList> {
     }
 
     if (predictions.isEmpty) {
-      return const Center(
-        child: Text(
-          'No diagnoses found.\nGet started by scanning your first plant!',
-          textAlign: TextAlign.center,
-        ),
-      );
+      return NoPredictionsView(onScanPressed: widget.onScanPressed);
     }
 
     return RefreshIndicator(
