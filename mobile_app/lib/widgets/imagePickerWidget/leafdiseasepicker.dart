@@ -9,6 +9,7 @@ import 'package:mobile_app/services/diseaseService.dart';
 import 'package:mobile_app/theme/colors.dart';
 import 'package:mobile_app/utils/constants.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
+import 'package:mobile_app/views/healthyView/healthy_view.dart';
 
 class LeafDiseasePicker extends StatefulWidget {
   const LeafDiseasePicker({super.key});
@@ -71,30 +72,62 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
         var jsonResponse = jsonDecode(await response.stream.bytesToString());
 
         _healthStatus = jsonResponse['health_status'];
-        _disease = jsonResponse['disease'];
         _confidence = jsonResponse['confidence'];
 
-        Disease? data = await DiseaseService.getDiseaseData(_disease);
+        // Check if the leaf is healthy or has disease
+        if (_healthStatus == "Healthy") {
+          Disease? data = await DiseaseService.getDiseaseData('healthy leaf');
+          if (data != null) {
+            if (mounted) {
+              DiseaseDisplayModel diseaseDisplay = DiseaseDisplayModel(
+                disease: data,
+                imageFile: _image,
+              );
 
-        if (data != null) {
-          if (mounted) {
-            DiseaseDisplayModel diseaseDisplay = DiseaseDisplayModel(
-              disease: data,
-              imageFile: _image, // Replace with actual image file if available
-            );
-
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DiseaseView(disease: diseaseDisplay),
-              ),
-            );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HealthyView(disease: diseaseDisplay),
+                ),
+              );
+            }
+          } else {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("No data found for $_disease")),
+              );
+            }
           }
         } else {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("No data found for $_disease")),
-            );
+          // For unhealthy leaves, get the disease
+          _disease = jsonResponse['disease'];
+
+          if (_disease != null) {
+            Disease? data = await DiseaseService.getDiseaseData(_disease);
+
+            if (data != null) {
+              if (mounted) {
+                DiseaseDisplayModel diseaseDisplay = DiseaseDisplayModel(
+                  disease: data,
+                  imageFile: _image,
+                );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DiseaseView(disease: diseaseDisplay),
+                  ),
+                );
+              }
+            } else {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("No data found for $_disease")),
+                );
+              }
+            }
+          } else {
+            _handleError("Disease information missing in the response");
           }
         }
       } else {
@@ -230,7 +263,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
                             ),
                     ),
                     const SizedBox(height: 10),
-                    // Image Selection Options
+
                     // Image Selection Options
                     Container(
                       width: double.infinity,
