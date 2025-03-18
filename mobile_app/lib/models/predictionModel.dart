@@ -23,7 +23,7 @@ class Prediction {
   final String uploadedImgUrl;
   final String userId;
   final Disease disease;
-  final String createdAt;
+  final DateTime createdAt;
 
   Prediction({
     required this.id,
@@ -39,7 +39,7 @@ class Prediction {
       uploadedImgUrl: json['uploaded_img_url'],
       userId: json['userId'],
       disease: Disease.fromJson(json['diseaseId']), // Handling nested diseaseId
-      createdAt: json['created_at'],
+      createdAt: DateTime.parse(json['created_at']),
     );
   }
 }
