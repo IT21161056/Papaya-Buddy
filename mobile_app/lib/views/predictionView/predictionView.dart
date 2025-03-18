@@ -9,6 +9,11 @@ class PredictionDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formattedDate =
+        "${prediction.createdAt.toLocal().year}-${prediction.createdAt.toLocal().month.toString().padLeft(2, '0')}-${prediction.createdAt.toLocal().day.toString().padLeft(2, '0')}";
+    final formattedTime =
+        "${prediction.createdAt.toLocal().hour.toString().padLeft(2, '0')}:${prediction.createdAt.toLocal().minute.toString().padLeft(2, '0')}";
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -119,14 +124,14 @@ class PredictionDetailScreen extends StatelessWidget {
                                 Icon(
                                   Icons.calendar_today,
                                   size: 18,
-                                  color: Colors.grey.shade500,
+                                  color: Colors.grey.shade600,
                                 ),
-                                const SizedBox(width: 8), // Spacing
+                                const SizedBox(width: 8),
                                 Text(
-                                  'Predicted on: ${prediction.createdAt.toLocal()}',
+                                  'Predicted on: $formattedDate at $formattedTime',
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey.shade500,
+                                    color: Colors.grey.shade600,
                                   ),
                                 ),
                               ],
