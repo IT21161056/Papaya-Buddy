@@ -160,36 +160,6 @@ class _MaturityScreenState extends State<MaturityScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        // appBar: AppBar(
-        //   backgroundColor: Colors.white,
-        //   elevation: 0,
-        //   leading: GestureDetector(
-        //     onTap: () {
-        //       Navigator.pop(context);
-        //     },
-        //     child: Container(
-        //       margin: const EdgeInsets.all(10),
-        //       decoration: BoxDecoration(
-        //         color: Colors.grey.shade200,
-        //         shape: BoxShape.circle,
-        //       ),
-        //       child: const Icon(
-        //         Icons.arrow_back_ios_new,
-        //         color: Colors.black,
-        //         size: 16,
-        //       ),
-        //     ),
-        //   ),
-        //   title: const Text(
-        //     "Maturity Stage Detection",
-        //     style: TextStyle(
-        //       fontWeight: FontWeight.bold,
-        //       color: Colors.black,
-        //       fontSize: 20,
-        //     ),
-        //   ),
-        //   centerTitle: true,
-        // ),
         body: SafeArea(
             child: Column(
           children: [
