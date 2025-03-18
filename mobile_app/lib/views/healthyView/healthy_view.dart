@@ -245,8 +245,12 @@ class _HealthyViewState extends State<HealthyView> {
             // Save Button
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
                 minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
               onPressed: _isSaving ? null : _savePrediction,
               child: _isSaving
