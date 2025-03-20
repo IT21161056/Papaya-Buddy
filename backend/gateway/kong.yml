@@ -10,30 +10,14 @@ services:
           - /api/users
         strip_path: true
 
-  # - name: orders-service
-  #   url: http://orders-service:8000
-  #   routes:
-  #     - name: orders-route
-  #       paths:
-  #         - /api/orders
-  #       strip_path: true
-
-  # - name: user-orders-route
-  #   url: http://orders-service:8000
-  #   routes:
-  #     - name: user-orders-route
-  #       paths:
-  #         - /api/users/*/orders
-  #       strip_path: false
-
-  # Refer this section add your service (personal Fast API)
-  # - name: disease-service
-  #   url: http://host.docker.internal:5050 # run your application in a selected port.
-  #   routes:
-  #     - name: disease-route
-  #       paths:
-  #         - /predict # define a base path in your API
-  #       strip_path: false
+  #Refer this section add your service (personal Fast API)
+  - name: leaf-disease-service
+    url: http://host.docker.internal:5005 # run your application in a selected port.
+    routes:
+      - name: leaf-disease-service
+        paths:
+          - /leaf-disease-predict # define a base path in your API
+        strip_path: false
 
   - name: fruit-disease-service
     url: http://host.docker.internal:8000 # run your application in a selected port.
