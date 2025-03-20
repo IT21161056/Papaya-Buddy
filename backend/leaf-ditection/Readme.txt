@@ -1,1 +1,0 @@
-Leaf disease identification service.
