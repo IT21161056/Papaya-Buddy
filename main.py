@@ -22,6 +22,8 @@ app.include_router(disease_router)
 origins = [
     "http://localhost",
     "http://localhost:3000",
+    "http://192.168.8.166",  # Add your machine's IP
+    "http://192.168.8.166:8000",
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -111,4 +113,4 @@ async def predict(file: UploadFile = File(...)):
     return response
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8000) #host = 0.0.0.0 when connect with android emulator
+    uvicorn.run(app,  host="0.0.0.0", port=8000) #host = 0.0.0.0 when connect with android emulator
