@@ -8,15 +8,9 @@ from io import BytesIO
 from PIL import Image
 import tensorflow as tf
 import uvicorn
-from routes.route import router
-from routes.disease_route import disease_router
 
 # Initialize the FastAPI app
 app = FastAPI()
-
-#mongo connection
-app.include_router(router)
-app.include_router(disease_router)
 
 # Enable CORS
 origins = [
