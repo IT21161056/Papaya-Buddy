@@ -4,3 +4,5 @@ numpy
 pydantic
 tensorflow
 scikit-learn
+Pillow==11.0.0
+python-multipart==0.0.20

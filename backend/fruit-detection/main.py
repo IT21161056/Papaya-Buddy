@@ -18,7 +18,7 @@ app.add_middleware(
 )
 
 # Load the CNN model
-cnn_model = load_model("models/custom_cnn_papaya_model.h5")  # Replace with your actual CNN model file
+cnn_model = load_model("./models/custom_cnn_papaya_model.h5")  # Replace with your actual CNN model file
 
 # Define class labels for CNN with proper formatting
 CNN_CLASSES = {
