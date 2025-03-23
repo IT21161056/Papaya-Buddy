@@ -12,17 +12,33 @@ services:
 
   #Refer this section add your service (personal Fast API)
   - name: leaf-disease-service
-    url: http://host.docker.internal:5005 # run your application in a selected port.
+    url: http://host.docker.internal:5010 # run your application in a selected port.
     routes:
-      - name: leaf-disease-service
+      - name: leaf-disease-route
         paths:
-          - /leaf-disease-predict # define a base path in your API
+          - /predict-leaf-disease # define a base path in your API
         strip_path: false
 
   - name: fruit-disease-service
-    url: http://host.docker.internal:8000 # run your application in a selected port.
+    url: http://host.docker.internal:5011
     routes:
       - name: fruit-disease-route
         paths:
-          - /predict # define a base path in your API
+          - /predict-fruit-disease
+        strip_path: false
+
+  - name: pest-disease-service
+    url: http://host.docker.internal:5014
+    routes:
+      - name: pest-disease-route
+        paths:
+          - /predict-pest-disease
+        strip_path: false
+
+  - name: maturity-service
+    url: http://host.docker.internal:5015
+    routes:
+      - name: maturity-route
+        paths:
+          - /predict-maturity
         strip_path: false

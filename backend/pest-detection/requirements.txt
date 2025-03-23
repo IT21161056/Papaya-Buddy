@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+numpy
+tensorflow-macos==2.9.0
+pillow
+python-multipart
+keras==2.9.0
