@@ -53,7 +53,7 @@ def predict_disease(image: Image.Image):
     disease_name = disease_labels.get(predicted_class.item(), "Unknown")
     return disease_name, confidence.item()
 
-@app.post("/leaf-disease-predict")
+@app.post("/predict-leaf-disease")
 async def predict(file: UploadFile = File(...)):
     try:
         image = Image.open(BytesIO(await file.read())).convert("RGB")
@@ -77,4 +77,4 @@ async def predict(file: UploadFile = File(...)):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5005)
+    uvicorn.run(app, host="0.0.0.0", port=5010)

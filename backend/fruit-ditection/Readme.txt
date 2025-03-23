@@ -1,1 +1,0 @@
-Fruit disease identification service.

@@ -20,7 +20,7 @@ dotenv.config();
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5016;
 const BASE_URL = process.env.API_BASE_URL || "/api/v1";
 
 const swaggerOptions = {

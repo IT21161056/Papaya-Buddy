@@ -1,2 +1,86 @@
+#### Services files ####
+
+# Leaf disease service
 backend/leaf-detection/models
 backend/leaf-detection/.venv
+
+# Fruit disease service
+backend/fruit-detection/models
+backend/fruit-detection/.venv
+
+# Pest disease service
+backend/pest-detection/models
+backend/pest-detection/.venv
+
+# Maturity detection service
+backend/maturity-detection/models
+backend/maturity-detection/.venv
+
+
+
+##### Service handler files ####
+
+# Node dependencies
+backend/node_modules
+backend/package-lock.json
+
+# Logs
+backend/logs/
+backend/*.log
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/pnpm-debug.log*
+
+# Environment variables
+backend/.env
+
+
+#### Mobile application files ####
+
+# Miscellaneous
+mobile_app/*.class
+mobile_app/*.log
+mobile_app/*.pyc
+mobile_app/*.swp
+mobile_app/.DS_Store
+mobile_app/.atom/
+mobile_app/.build/
+mobile_app/.buildlog/
+mobile_app/.history
+mobile_app/.svn/
+mobile_app/.swiftpm/
+mobile_app/migrate_working_dir/
+mobile_app/.env
+
+# IntelliJ related
+mobile_app/*.iml
+mobile_app/*.ipr
+mobile_app/*.iws
+mobile_app/.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+mobile_app/**/doc/api/
+mobile_app/**/ios/Flutter/.last_build_id
+mobile_app/.dart_tool/
+mobile_app/.flutter-plugins
+mobile_app/.flutter-plugins-dependencies
+mobile_app/.pub-cache/
+mobile_app/.pub/
+mobile_app/build/
+mobile_app/pubspec.lock
+
+# Symbolication related
+mobile_app/app.*.symbols
+
+# Obfuscation related
+mobile_app/app.*.map.json
+
+# Android Studio will place build artifacts here
+mobile_app/android/app/debug
+mobile_app/android/app/profile
+mobile_appandroid/app/release
