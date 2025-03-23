@@ -76,7 +76,7 @@ def predict_dense(img_array):
 async def ping():
     return {"message": "Server is running"}
 
-@app.post("/predict-maturity")
+@app.post("/predict-pest-disease")
 async def predict(file: UploadFile = File(...)):
     img_data = await file.read()
 
