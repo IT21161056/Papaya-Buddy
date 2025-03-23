@@ -55,6 +55,12 @@ pip install -r requirements.txt
 Once the setup is complete, you can run the FastAPI application:
 
 ```bash
+python main.py
+```
+
+Alternatively, you can run it with Uvicorn manually:
+
+```bash
 uvicorn main:app --host 0.0.0.0 --port 5005 --reload
 ```
 

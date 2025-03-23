@@ -1,9 +1,9 @@
-fastapi
-uvicorn
-torch
-torchvision==0.16.2
-Pillow
-python-multipart
+fastapi==0.115.11
+uvicorn==0.34.0
+torch==2.2.2
+torchvision==0.17.2
+Pillow==11.0.0
+python-multipart==0.0.20
 efficientnet-pytorch
 numpy==1.26.4
-transformers
+transformers==4.46.3
