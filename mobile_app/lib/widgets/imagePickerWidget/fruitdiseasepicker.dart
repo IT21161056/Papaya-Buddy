@@ -5,11 +5,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/theme/colors.dart';
+import 'package:mobile_app/utils/constants.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
 import 'package:mobile_app/views/healthyView/healthy_view.dart';
 import 'package:mobile_app/services/diseaseService.dart';
 import 'package:mobile_app/models/diseaseModel.dart';
-import 'package:mobile_app/theme/colors.dart';
 
 class FruitDiseasePicker extends StatefulWidget {
   const FruitDiseasePicker({super.key});
@@ -57,7 +57,7 @@ class _FruitDiseasePickerState extends State<FruitDiseasePicker> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://192.168.1.4:5000/predict'),
+        Uri.parse('${BaseURL.BASE_URL}/predict-fruit-disease'),
       );
 
       request.files

@@ -11,7 +11,7 @@ class HistoryService {
     required String diseaseId,
     required File imageFile, // Pass the File object directly
   }) async {
-    final String url = '${BaseURL.BASE_URL}:5080/api/v1/history/create_history';
+    final String url = '${BaseURL.BASE_URL}/api/v1/history/create_history';
     try {
       // Create a multipart request
       final request = http.MultipartRequest('POST', Uri.parse(url));
@@ -70,7 +70,7 @@ class HistoryService {
 
   static Future<List<Prediction>> getDiagnosis({required String userId}) async {
     final String url =
-        '${BaseURL.BASE_URL}:5080/api/v1/history/get_user_history/$userId';
+        '${BaseURL.BASE_URL}/api/v1/history/get_user_history/$userId';
 
     try {
       final response = await http.get(

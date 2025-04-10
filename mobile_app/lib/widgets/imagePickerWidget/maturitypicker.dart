@@ -8,9 +8,8 @@ import 'package:mobile_app/models/maturityModel.dart';
 import 'package:mobile_app/services/maturityServices.dart';
 import 'package:mobile_app/theme/colors.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mobile_app/views/diseaseView/disease_view.dart';
+import 'package:mobile_app/utils/constants.dart';
 import 'package:mobile_app/views/maturityView/maturityView.dart';
-import '../../views/maturityView/PapayaMaturityInfoScreen.dart';
 
 class MaturityScreen extends StatefulWidget {
   @override
@@ -23,22 +22,6 @@ class _MaturityScreenState extends State<MaturityScreen> {
   String? _result;
   final ImagePicker _picker = ImagePicker();
   bool _isLoading = false;
-
-  final MaturityStageDisplayModel dummyMaturityStageDisplay =
-      MaturityStageDisplayModel(
-    maturityStage: MaturityStage(
-        id: "3",
-        stage: "Mature",
-        description:
-            "The fruit has reached its typical color. Skin yields slightly to pressure and has a sweet aroma. The flesh is juicy and flavorful.",
-        timeToReach: "3–4 months after fruit set",
-        timeGapToNextStage: "3–7 days",
-        bestTimeToHarvest: "Ideal time to harvest for best flavor and texture",
-        image_urls: [
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvabyEg9ytOEh1IEBVRfIe3Vl4gRmit4HcOQ&s'
-        ]),
-    imageFile: null, // Replace with actual File object when needed
-  );
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
@@ -99,7 +82,7 @@ class _MaturityScreenState extends State<MaturityScreen> {
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(
-          'http://10.0.2.2:5000/predict', // Added trailing slash to match your FastAPI endpoint
+          '${BaseURL.BASE_URL}/predict-maturity', // Added trailing slash to match your FastAPI endpoint
         ),
       );
 

@@ -5,8 +5,7 @@ import 'package:mobile_app/utils/constants.dart';
 
 class DiseaseService {
   static Future<Disease?> getDiseaseData(String diseaseName) async {
-    final String url =
-        '${BaseURL.BASE_URL}:5080/api/v1/disease?name=$diseaseName';
+    final String url = '${BaseURL.BASE_URL}/api/v1/disease?name=$diseaseName';
     print(diseaseName);
     try {
       final response = await http.get(Uri.parse(url));

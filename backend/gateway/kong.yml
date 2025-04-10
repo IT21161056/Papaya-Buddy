@@ -42,3 +42,11 @@ services:
         paths:
           - /predict-maturity
         strip_path: false
+
+  - name: background-service
+    url: http://host.docker.internal:5080
+    routes:
+      - name: background-service-route
+        paths:
+          - /api
+        strip_path: false
