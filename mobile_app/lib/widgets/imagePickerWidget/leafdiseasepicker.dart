@@ -60,7 +60,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://192.168.1.100:5000/predict-leaf-disease'),
+        Uri.parse('${BaseURL.BASE_URL}/predict-leaf-disease'),
       );
 
       request.files
@@ -94,7 +94,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
           } else {
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("No data found for $_disease")),
+                SnackBar(content: Text("No data found for $_healthStatus")),
               );
             }
           }
