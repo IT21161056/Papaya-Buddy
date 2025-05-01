@@ -7,7 +7,7 @@ class TreatmentService {
   static Future<List<Treatment>> getTreatmentDataByDisease(
       String diseaseId) async {
     final String url =
-        '${BaseURL.BASE_URL}:5080/api/v1/treatment/by-disease/$diseaseId';
+        '${BaseURL.BASE_URL}/api/v1/treatment/by-disease/$diseaseId';
 
     try {
       print("Fetching from URL: $url");

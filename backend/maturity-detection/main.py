@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for Flutter Web
 
 # Load your trained model
-model = tf.keras.models.load_model("models/papaya_maturity_model.h5")  # Update with your model path
+model = tf.keras.models.load_model("./models/papaya_maturity_model.h5")  # Update with your model path
 
 # Define class labels
 class_labels = ['mature', 'not_mature', 'partially_mature', 'rotten']
@@ -24,7 +24,7 @@ def predict_maturity(image):
 
     return predicted_class
 
-@app.route('/maturity-predict', methods=['POST'])
+@app.route('/predict-maturity', methods=['POST'])
 def predict():
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400

@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/theme/colors.dart';
+import 'package:mobile_app/utils/constants.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
 import 'package:mobile_app/views/healthyView/healthy_view.dart';
 import 'package:mobile_app/services/diseaseService.dart';
@@ -63,7 +64,8 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://10.0.2.2:5014/predict-pest-disease'),
+        Uri.parse('${BaseURL.BASE_URL}/predict-pest-disease'),
+
       );
       request.files
           .add(await http.MultipartFile.fromPath('file', _image!.path));

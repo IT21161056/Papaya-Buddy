@@ -1,13 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile_app/theme/colors.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mobile_app/utils/constants.dart';
 import 'package:mobile_app/models/diseaseModel.dart';
 import 'package:mobile_app/services/diseaseService.dart';
-import 'package:mobile_app/theme/colors.dart';
-import 'package:mobile_app/utils/constants.dart';
 import 'package:mobile_app/views/diseaseView/disease_view.dart';
 import 'package:mobile_app/views/healthyView/healthy_view.dart';
 
@@ -60,7 +60,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('${BaseURL.BASE_URL}:5000/predict'),
+        Uri.parse('${BaseURL.BASE_URL}/predict-leaf-disease'),
       );
 
       request.files
@@ -94,7 +94,7 @@ class _LeafDiseasePickerState extends State<LeafDiseasePicker> {
           } else {
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("No data found for $_disease")),
+                SnackBar(content: Text("No data found for $_healthStatus")),
               );
             }
           }

@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/models/maturityModel.dart';
+import 'package:mobile_app/utils/constants.dart';
 
 class MaturityServices {
   static Future<MaturityStage?> getMaturityData(String stage) async {
-    final String url = 'http://10.0.2.2:5080/api/v1/maturity?stage=$stage';
-    print("Stage: ${stage}");
+    final String url = '${BaseURL.BASE_URL}/api/v1/maturity?stage=$stage';
 
     try {
       final response = await http.get(Uri.parse(url));
-      print("response: ${response}");
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
