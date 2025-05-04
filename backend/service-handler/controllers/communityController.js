@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const createNewPost = async (req, res) => {
     try {
-        const { userId, question, description } = req.body;
+        const { userId, question, description, name } = req.body;
         const uploaded_img = req.file;
 
         if (!userId || !question || !description) {
@@ -34,6 +34,7 @@ const createNewPost = async (req, res) => {
         }
         const postObject = {
             userId,
+            name,
             question,
             description,
             uploaded_img: uploaded_img_url,
