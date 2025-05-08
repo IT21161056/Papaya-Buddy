@@ -32,6 +32,7 @@ python3.11 -m venv .venv
 
 ```bash
 source .venv/bin/activate
+.venv\Scripts\activate
 ```
 
 ### **4. Upgrade Pip**
