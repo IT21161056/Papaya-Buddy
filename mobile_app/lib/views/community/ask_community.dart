@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class AskCommunityView extends StatefulWidget {
   @override
@@ -8,6 +10,24 @@ class AskCommunityView extends StatefulWidget {
 class _AskCommunityScreenState extends State<AskCommunityView> {
   TextEditingController questionController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  File? _selectedImage;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  void _removeImage() {
+    setState(() {
+      _selectedImage = null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +50,42 @@ class _AskCommunityScreenState extends State<AskCommunityView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (_selectedImage != null)
+                Column(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          height: 200,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            image: DecorationImage(
+                              image: FileImage(_selectedImage!),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: IconButton(
+                            icon: Icon(Icons.close, color: Colors.white),
+                            onPressed: _removeImage,
+                            style: IconButton.styleFrom(
+                              backgroundColor: Colors.black54,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                  ],
+                ),
               ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: _pickImage,
                 icon: Icon(Icons.add_photo_alternate),
-                label: Text("Add Image"),
+                label: Text(_selectedImage == null ? "Add Image" : "Change Image"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.black,
@@ -41,19 +93,7 @@ class _AskCommunityScreenState extends State<AskCommunityView> {
                 ),
               ),
               SizedBox(height: 16),
-              Text("Improve the probability of receiving the right answer",
-                  style: TextStyle(color: Colors.grey.shade700)),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text("Add Crop"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
-                  side: BorderSide(color: Colors.grey.shade300),
-                ),
-              ),
-              SizedBox(height: 24),
+             
               Text("Your question to the community",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               SizedBox(height: 8),

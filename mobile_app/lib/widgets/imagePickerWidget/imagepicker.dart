@@ -65,6 +65,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
       var request = http.MultipartRequest(
         'POST',
         Uri.parse('${BaseURL.BASE_URL}/predict-pest-disease'),
+
       );
       request.files
           .add(await http.MultipartFile.fromPath('file', _image!.path));

@@ -13,6 +13,7 @@ const maturityRoutes = require("./routes/maturityRoutes");
 const cloudinaryRoutes = require("./routes/cloudinaryRoutes");
 const errorMiddleware = require("./middleware/errorMiddleware");
 const suggestedImageRoutes = require("./routes/suggestedImageRoute");
+const communityRoutes = require("./routes/communityRoutes");
 
 connectMongoDb();
 
@@ -117,6 +118,8 @@ app.use(`${BASE_URL}/maturity`, maturityRoutes);
 
 // suggested image routes (commented out in your original code)
 app.use(`${BASE_URL}/suggested-images`, suggestedImageRoutes);
+
+app.use(`${BASE_URL}/community`,communityRoutes);
 
 // Error handling middleware
 app.use(errorMiddleware);

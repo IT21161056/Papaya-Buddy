@@ -19,7 +19,7 @@ class _CommunityViewState extends State<CommunityView> {
       'author': 'Pasindu',
       'location': 'Sri Lanka',
       'timeAgo': '30 m',
-      'category': '🌴 Papaya',
+      'category': 'Papaya',
       'title': 'Help identifying problem with my Papaya',
       'description':
           'Flowers are not becoming fruit, it is drying before fruiting and dropping.',
@@ -81,7 +81,7 @@ class _CommunityViewState extends State<CommunityView> {
               SizedBox(height: 10),
               Row(
                 children: [
-                  Chip(label: Text('🌴 Papaya')),
+                  Chip(label: Text('Papaya')),
                   SizedBox(width: 5),
                   Chip(label: Text('Popular')),
                 ],
