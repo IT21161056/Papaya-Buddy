@@ -21,6 +21,10 @@ const communitySchema = new Schema({
     type: String,
     required: true
   },
+  name:{
+    type: String,
+    default: "Anonymous"
+  },
   uploaded_img: {
     type: String,
   },
