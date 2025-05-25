@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/auth/signup_view.dart';
 import 'package:mobile_app/views/home/home_view.dart';
+import 'package:mobile_app/views/subscription/subscription_screen.dart';
 import '../views/splash_view.dart';
 import '../views/auth/login_view.dart';
 
@@ -15,6 +16,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => SignUpScreen());
       case '/signin':
         return MaterialPageRoute(builder: (_) => const LoginView());
+      case '/subscription':
+        return MaterialPageRoute(builder: (_) => const SubscriptionScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

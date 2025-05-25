@@ -6,12 +6,16 @@ class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<User?> signUp(
-      {required String email,
-      required String password,
-      required String fullName,
-      required String phoneNumber,
-      required String city}) async {
+  // Add this constant for subscription plan IDs
+  static const String freePlanId = 'fPayFpAmqocLTmtzC1r3';
+
+  Future<User?> signUp({
+    required String email,
+    required String password,
+    required String fullName,
+    required String phoneNumber,
+    required String city,
+  }) async {
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -22,12 +26,16 @@ class AuthService {
       User? user = userCredential.user;
 
       if (user != null) {
+        // Updated user document with subscription info
         await _firestore.collection("users").doc(user.uid).set({
           "fullName": fullName,
           "email": email,
           "phoneNumber": phoneNumber,
           "city": city,
           "uid": user.uid,
+          "active_plan_id": freePlanId, // Assign free plan by default
+          "subscription_expiry": null, // No expiry for free plan
+          "created_at": FieldValue.serverTimestamp(),
         });
       }
 
@@ -36,6 +44,22 @@ class AuthService {
       print("Signup Error: $e");
       return null;
     }
+  }
+
+  Future<Map<String, dynamic>?> getSubscriptionDetails() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentSnapshot doc =
+          await _firestore.collection("users").doc(user.uid).get();
+      if (doc.exists) {
+        final userData = doc.data() as Map<String, dynamic>;
+        return {
+          'active_plan_id': userData['active_plan_id'] ?? freePlanId,
+          'subscription_expiry': userData['subscription_expiry'],
+        };
+      }
+    }
+    return null;
   }
 
   Future<User?> signIn(
@@ -78,11 +102,11 @@ class AuthService {
     return null;
   }
 
-  // Google Sign-In
+  // Updated Google Sign-In to include subscription info
   Future<User?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) return null; // User canceled sign-in
+      if (googleUser == null) return null;
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
@@ -94,6 +118,30 @@ class AuthService {
 
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
+
+      if (userCredential.user != null) {
+        // Check if user exists, if not create with free plan
+        final userDoc = await _firestore
+            .collection("users")
+            .doc(userCredential.user!.uid)
+            .get();
+        if (!userDoc.exists) {
+          await _firestore
+              .collection("users")
+              .doc(userCredential.user!.uid)
+              .set({
+            "fullName": googleUser.displayName,
+            "email": googleUser.email,
+            "phoneNumber": "",
+            "city": "",
+            "uid": userCredential.user!.uid,
+            "active_plan_id": freePlanId,
+            "subscription_expiry": null,
+            "created_at": FieldValue.serverTimestamp(),
+          });
+        }
+      }
+
       return userCredential.user;
     } catch (e) {
       print("Google Sign-In Error: $e");

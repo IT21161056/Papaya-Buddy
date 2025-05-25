@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile_app/services/auth_services.dart';
+import 'package:mobile_app/services/plan_service.dart';
 import 'package:mobile_app/theme/colors.dart';
+import 'package:mobile_app/views/subscription/subscription_screen.dart';
 import 'package:mobile_app/widgets/loader.widget/loading_overlay.dart';
 import 'package:mobile_app/widgets/profile.widgets/accout_settings_widget.dart';
 import 'package:mobile_app/widgets/profile.widgets/contact_info_widget.dart';
@@ -20,7 +24,9 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final AuthService _authService = AuthService();
+  final PlanService _planService = PlanService();
   Map<String, dynamic>? userData;
+  Map<String, dynamic>? currentPlanDetails;
 
   bool notificationsEnabled = true;
   bool locationEnabled = true;
@@ -36,9 +42,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> loadUserData() async {
     userData = await _authService.getUserDetails();
-    setState(() {
-      _isLoading = false;
-    });
+    if (userData != null) {
+      // Fetch the current plan details
+      currentPlanDetails = await _planService
+          .getPlanById(userData!['active_plan_id'] ?? AuthService.freePlanId);
+    }
+    setState(() => _isLoading = false);
   }
 
   Timer? _logoutTimeout;
@@ -81,6 +90,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         userData!['profilePicture'] = newImageUrl;
       });
+    }
+  }
+
+  Future<void> _refreshData() async {
+    setState(() => _isLoading = true);
+    await loadUserData();
+    if (mounted) {
+      setState(() => _isLoading = false);
     }
   }
 
@@ -133,14 +150,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 24),
                   AccountSettingsCard(),
                   const SizedBox(height: 24),
+
                   SubscriptionPlanCard(
-                    currentPlan: "Premium Plan",
-                    description:
-                        'Access to all premium features including unlimited plant scans and detailed treatment plans.',
-                    renewalDate: 'June 15, 2025',
-                    plan: "Annual (\$59.99/year)",
+                    currentPlan: currentPlanDetails?['name'] ?? 'Free Plan',
+                    description: currentPlanDetails?['features']?.join(', ') ??
+                        'Basic features with limited scans',
+                    renewalDate: userData?['subscription_expiry'] != null
+                        ? DateFormat('MMM dd, yyyy').format(
+                            (userData!['subscription_expiry'] as Timestamp)
+                                .toDate())
+                        : 'Never expires',
+                    plan: currentPlanDetails?['price'] == 0
+                        ? 'Free'
+                        : '${currentPlanDetails?['price']} LKR/${userData?['active_plan_id']?.contains('monthly') ? 'month' : 'year'}',
                     active: true,
-                    onTap: () {},
+                    onTap: () async {
+                      final planUpdated = await Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SubscriptionScreen(),
+                        ),
+                      );
+
+                      if (planUpdated == true && mounted) {
+                        await _refreshData();
+                      }
+                    },
                   ),
 
                   const SizedBox(height: 24),

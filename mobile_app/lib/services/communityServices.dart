@@ -12,10 +12,9 @@ class CommunityService {
     String name = '',
     File? uploadedImg,
   }) async {
-    final String url = '${BaseURL.BASE_URL}:5080/api/v1/community';
-    
-    try {
+    final String url = '${BaseURL.BASE_URL}/api/v1/community';
 
+    try {
       final request = http.MultipartRequest('POST', Uri.parse(url));
 
       request.fields['userId'] = userId;
@@ -40,12 +39,11 @@ class CommunityService {
         }
 
         final contentType = getContentType(uploadedImg.path);
-        
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'uploaded_img',
-            uploadedImg.path,
-            contentType: MediaType.parse(contentType),
+
+        request.files.add(await http.MultipartFile.fromPath(
+          'uploaded_img',
+          uploadedImg.path,
+          contentType: MediaType.parse(contentType),
         ));
       }
 
@@ -68,10 +66,7 @@ class CommunityService {
         };
       }
     } catch (error) {
-      return {
-        'success': false,
-        'message': 'Error creating post: $error'
-      };
+      return {'success': false, 'message': 'Error creating post: $error'};
     }
   }
 }
