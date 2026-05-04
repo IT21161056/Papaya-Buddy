@@ -1,4 +1,4 @@
-# 🌿 Papaya Buddy
+<img width="192" height="150" alt="papaya_buddy_architecture" src="https://github.com/user-attachments/assets/4dbc607c-8ec5-444c-8660-7e076196a5a0" /># 🌿 Papaya Buddy
 
 > **IT4010 Research Project** — An AI-powered mobile application for comprehensive papaya plant health monitoring, disease detection, and maturity assessment.
 
@@ -29,10 +29,7 @@ Papaya Buddy is a cross-platform mobile application built with **Flutter** that 
 
 Papaya Buddy follows a **microservices architecture** with a Flutter frontend communicating through a Kong API Gateway.
 
-```
-<img width="1440" height="1060" alt="image" src="https://github.com/user-attachments/assets/f170f1d6-2ca7-426b-9c71-b910a98d7be2" />
-
-```
+<img width="2125" height="1656" alt="papaya_buddy_architecture" src="https://github.com/user-attachments/assets/ebb01214-1b11-41e1-a8ef-6be8aa8ef344" />
 
 ---
 
