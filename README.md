@@ -30,20 +30,8 @@ Papaya Buddy is a cross-platform mobile application built with **Flutter** that 
 Papaya Buddy follows a **microservices architecture** with a Flutter frontend communicating through a Kong API Gateway.
 
 ```
-Flutter Mobile App
-        │
-        ▼
-  Kong API Gateway  (Port 5000)
-        │
-   ┌────┴────────────────────────────────┐
-   │                │                    │
-Users Service   Service Handler    ML Services
-(Node.js)       (Node.js/Express)  ┌─────────────────┐
-Port 5001       MongoDB/Cloudinary  │ Leaf Detection   │ Port 5005
-                                   │ Fruit Detection  │ Port 5006
-                                   │ Pest Detection   │ Port 5007
-                                   │ Maturity Detect  │ Port 5015
-                                   └─────────────────┘
+<img width="1440" height="1060" alt="image" src="https://github.com/user-attachments/assets/f170f1d6-2ca7-426b-9c71-b910a98d7be2" />
+
 ```
 
 ---
