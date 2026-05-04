@@ -1,7 +1,7 @@
-<img width="192" height="150" alt="papaya_buddy_architecture" src="https://github.com/user-attachments/assets/4dbc607c-8ec5-444c-8660-7e076196a5a0" /># 🌿 Papaya Buddy
-
+# 🌿 Papaya Buddy
+ 
 > **IT4010 Research Project** — An AI-powered mobile application for comprehensive papaya plant health monitoring, disease detection, and maturity assessment.
-
+ 
 ---
 
 ## 📖 Overview
